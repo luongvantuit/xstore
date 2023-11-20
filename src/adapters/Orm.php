@@ -1,0 +1,5 @@
+<?php
+
+namespace Adapters\Orm;
+
+?>
