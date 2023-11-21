@@ -1,13 +1,20 @@
 <?php
-require_once __DIR__ . "/ServiceLayers/Handlers/Events.php";
-require_once __DIR__ . "/ServiceLayers/Handlers/Commands.php";
-require_once __DIR__ . "/ServiceLayers/UnitOfWork.php";
-require_once __DIR__ . "/ServiceLayers/MessageBus.php";
 
+namespace Bootstrap;
+
+use ReflectionFunction;
+use ServiceLayers\MessageBus;
+use UnitOfWork\AbstractUnitOfWork;
+
+use const ServiceLayers\Handlers\COMMAND_HANDLERS;
+use const ServiceLayers\Handlers\EVENT_HANDLERS;
+
+require_once __DIR__ . "/ServiceLayers/Handlers/Commands.php";
+require_once __DIR__ . "/ServiceLayers/Handlers/Events.php";
 
 function bootstrap(
-    Abstract_Unit_Of_Work $uow,
-): Message_Bus {
+    AbstractUnitOfWork $uow
+): MessageBus {
     # Dependencies pattern
     $dependencies = array("uow" => $uow);
     # Inject event handlers
@@ -20,14 +27,14 @@ function bootstrap(
     $injected_command_handlers = array_map(function ($handler) use ($dependencies) {
         return inject_dependencies($handler, $dependencies);
     }, COMMAND_HANDLERS);
-    return new Message_Bus(
+    return new MessageBus(
         uow: $uow,
         event_handlers: $injected_event_handlers,
         command_handlers: $injected_command_handlers,
     );
 }
 
-function inject_dependencies($handler, $dependencies)
+function inject_dependencies($handler, $dependencies): callable
 {
     $reflection = new ReflectionFunction($handler);
     $params = $reflection->getParameters();

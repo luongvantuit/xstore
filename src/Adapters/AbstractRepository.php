@@ -1,6 +1,8 @@
 <?php
 
-class Abstract_Repository
+namespace Adapters;
+
+class AbstractRepository
 {
     private array $cached = [];
 

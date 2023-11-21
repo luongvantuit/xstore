@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../../Domains/Commands.php";
-
-
+namespace ServiceLayers\Handlers;
 
 const COMMAND_HANDLERS = array();

@@ -1,7 +1,8 @@
 <?php
 
+namespace Response;
 
-class HttpResponseCode
+class HttpStatusCode
 {
     public const OK = 200;
     public const CREATED = 201;

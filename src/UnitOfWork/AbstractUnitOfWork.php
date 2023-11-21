@@ -1,9 +1,13 @@
 <?php
 
-abstract class Abstract_Unit_Of_Work
+namespace UnitOfWork;
+
+use Adapters\AbstractRepository;
+
+abstract class AbstractUnitOfWork
 {
 
-    private Abstract_Repository $repo;
+    private AbstractRepository $repo;
 
     public function collect_new_events()
     {
@@ -12,12 +16,5 @@ abstract class Abstract_Unit_Of_Work
                 yield array_shift($cached->events);
             }
         }
-    }
-}
-
-class Php_Unit_Of_Work extends Abstract_Unit_Of_Work
-{
-    public function __construct()
-    {
     }
 }

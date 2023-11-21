@@ -1,22 +1,23 @@
 <?php
 
-require_once __DIR__ . "/UnitOfWork.php";
-require_once __DIR__ . "/../Domains/Commands.php";
-require_once __DIR__ . "/../Domains/Events.php";
+namespace ServiceLayers;
 
+use Domains\Commands\Command;
+use Domains\Events\Event;
 use Exception;
+use UnitOfWork\AbstractUnitOfWork;
 
-class Message_Bus
+class MessageBus
 {
 
-    private Abstract_Unit_Of_Work $uow;
+    private AbstractUnitOfWork $uow;
 
     private array $event_handlers;
     private array $command_handlers;
 
     private array $queue = [];
 
-    public function __construct(Abstract_Unit_Of_Work $uow, array $event_handlers, array $command_handlers)
+    public function __construct(AbstractUnitOfWork $uow, array $event_handlers, array $command_handlers)
     {
         $this->uow = $uow;
         $this->event_handlers = $event_handlers;
@@ -44,7 +45,7 @@ class Message_Bus
         foreach ($handlers as $handler) {
             try {
                 $handler($event);
-                array_merge($this->queue, $this->uow->collect_new_events());
+                // array_merge($this->queue, $this->uow->collect_new_events());
             } catch (Exception $e) {
                 continue;
             }
@@ -55,6 +56,6 @@ class Message_Bus
     {
         $handler = $this->command_handlers[$command::class];
         $handler($command);
-        array_merge($this->queue, $this->uow->collect_new_events());
+        // array_merge($this->queue, $this->uow->collect_new_events());
     }
 }

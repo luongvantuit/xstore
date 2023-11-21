@@ -1,5 +1,5 @@
 <?php
 
-require_once __DIR__ . "/../../Domains/Events.php";
+namespace ServiceLayers\Handlers;
 
 const EVENT_HANDLERS = array();
