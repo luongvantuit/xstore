@@ -4,7 +4,4 @@ namespace Domains\Events;
 
 class Event
 {
-
 }
-
-?>

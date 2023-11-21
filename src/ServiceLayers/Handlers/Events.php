@@ -3,6 +3,4 @@
 namespace ServiceLayers\Handlers\Events;
 
 
-$EVENT_HANDLERS = array();
-
-?>
+const EVENT_HANDLERS = array();

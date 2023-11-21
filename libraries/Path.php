@@ -10,41 +10,38 @@ class Path
     {
     }
 
-    public static function compare(string $origin_path, string $path): bool
+    public static function compare(string $path_origin, string $path): bool
     {
-        $origin_path_explode = explode("/", $origin_path);
+        $path_origin_explore = explode("/", $path_origin);
         $path_explode = explode("/", $path);
-        for ($counter = 0; $counter < count($origin_path_explode); $counter++) {
-            if (strlen($origin_path_explode[$counter]) > 0 && $origin_path_explode[$counter][1] == ":") {
+        for ($counter = 0; $counter < count($path_origin_explore); $counter++) {
+            if (strlen($path_origin_explore[$counter]) > 0 && $path_origin_explore[$counter][1] == ":") {
                 continue;
             }
-            if ($origin_path_explode[$counter] != $path_explode[$counter]) {
+            if ($path_origin_explore[$counter] != $path_explode[$counter]) {
                 return false;
             }
         }
         return true;
     }
 
-    public static function has(array $pathMapping, string $path): bool
+    public static function has(array $path_mapping, string $path): bool
     {
-        foreach ($pathMapping as $origin_path => $target) {
-            if (Path::compare($origin_path, $path)) {
+        foreach (array_keys($path_mapping) as $path_origin) {
+            if (Path::compare($path_origin, $path)) {
                 return true;
             }
         }
         return false;
     }
-    public static function target(array $pathMapping, string $path): string
+
+    public static function target(array $path_mapping, string $path): string| bool
     {
-        foreach ($pathMapping as $origin_path => $target) {
-            if (Path::compare($origin_path, $path)) {
+        foreach ($path_mapping as $path_origin => $target) {
+            if (Path::compare($path_origin, $path)) {
                 return $target;
             }
         }
-        return "";
+        return false;
     }
 }
-
-
-
-?>
