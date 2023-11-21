@@ -1,17 +1,16 @@
 <?php
-require_once "../libraries/Path.php";
-require_once "../libraries/HttpResponseCode.php";
-
-use Libraries\HttpResponseCode\HttpResponseCode;
-use Libraries\PathCompare\Path;
+require_once __DIR__ . "/../libraries/Path.php";
+require_once __DIR__ . "/../libraries/HttpResponseCode.php";
 
 
 # Path mapping
 $path_mapping = array(
-    "/" => "../views/Home.php",
-    "/register" => "../views/Register.php",
-    "/login" => "../views/Login.php",
-    "/orders" => "../views/Orders.php",
+    "/" => __DIR__ . "/../views/Home.php",
+    "/register" => __DIR__ . "/../views/Register.php",
+    "/login" => __DIR__ . "/../views/Login.php",
+    "/orders" => __DIR__ . "/../views/Orders.php",
+    "/carts" => __DIR__ . "/../views/Carts.php",
+    "/products" => __DIR__ . "/../views/Products.php",
 );
 
 # Inject to target

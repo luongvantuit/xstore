@@ -1,12 +1,9 @@
 <?php
 
-require_once "../src/Bootstrap.php";
+require_once __DIR__ . "/../src/Bootstrap.php";
 
-use Domains\Commands\PrintHelloWorld;
-use ServiceLayers\UnitOfWork\Php_Unit_Of_Work;
+// $bus = bootstrap(new Php_Unit_Of_Work());
 
-$bus = bootstrap(new Php_Unit_Of_Work());
+// $command = new PrintHelloWorld();
 
-$command = new PrintHelloWorld();
-
-$bus->handle($command);
+// $bus->handle($command);

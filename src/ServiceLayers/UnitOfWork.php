@@ -1,9 +1,5 @@
 <?php
 
-namespace ServiceLayers\UnitOfWork;
-
-use Adapters\Repositories\Abstract_Repository;
-
 abstract class Abstract_Unit_Of_Work
 {
 

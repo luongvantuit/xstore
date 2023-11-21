@@ -1,14 +1,10 @@
 <?php
 
-
-namespace ServiceLayers\MessageBus;
-
 require_once __DIR__ . "/UnitOfWork.php";
+require_once __DIR__ . "/../Domains/Commands.php";
+require_once __DIR__ . "/../Domains/Events.php";
 
-use Domains\Commands\Command;
-use Domains\Events\Event;
 use Exception;
-use ServiceLayers\UnitOfWork\Abstract_Unit_Of_Work;
 
 class Message_Bus
 {
@@ -48,7 +44,7 @@ class Message_Bus
         foreach ($handlers as $handler) {
             try {
                 $handler($event);
-                // array_merge($this->queue, $this->uow->collect_new_events());
+                array_merge($this->queue, $this->uow->collect_new_events());
             } catch (Exception $e) {
                 continue;
             }
@@ -59,6 +55,6 @@ class Message_Bus
     {
         $handler = $this->command_handlers[$command::class];
         $handler($command);
-        // array_merge($this->queue, $this->uow->collect_new_events());
+        array_merge($this->queue, $this->uow->collect_new_events());
     }
 }

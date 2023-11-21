@@ -3,13 +3,7 @@ require_once __DIR__ . "/ServiceLayers/Handlers/Events.php";
 require_once __DIR__ . "/ServiceLayers/Handlers/Commands.php";
 require_once __DIR__ . "/ServiceLayers/UnitOfWork.php";
 require_once __DIR__ . "/ServiceLayers/MessageBus.php";
-require_once __DIR__ . "/Domains/Commands.php";
 
-use ServiceLayers\MessageBus\Message_Bus;
-use ServiceLayers\UnitOfWork\Abstract_Unit_Of_Work;
-
-use const ServiceLayers\Handlers\Commands\COMMAND_HANDLERS;
-use const ServiceLayers\Handlers\Events\EVENT_HANDLERS;
 
 function bootstrap(
     Abstract_Unit_Of_Work $uow,

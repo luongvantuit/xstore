@@ -1,6 +1,5 @@
 <?php
 
-namespace Libraries\PathCompare;
 
 
 class Path
