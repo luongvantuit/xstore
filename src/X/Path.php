@@ -34,13 +34,13 @@ class Path
         return false;
     }
 
-    public static function target(array $path_mapping, string $path): string| bool
+    public static function target(array $path_mapping, string $path): ?string
     {
         foreach ($path_mapping as $path_origin => $target) {
             if (Path::compare($path_origin, $path)) {
                 return $target;
             }
         }
-        return false;
+        return null;
     }
 }

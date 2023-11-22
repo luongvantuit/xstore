@@ -1,6 +1,6 @@
 <?php
 
-namespace Adapters;
+namespace Adapters\Notifications;
 
 abstract class AbstractNotification
 {

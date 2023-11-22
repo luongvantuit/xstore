@@ -2,7 +2,7 @@
 
 namespace UnitOfWork;
 
-use Adapters\AbstractRepository;
+use Adapters\Repositories\AbstractRepository;
 
 abstract class AbstractUnitOfWork
 {
@@ -17,4 +17,6 @@ abstract class AbstractUnitOfWork
             }
         }
     }
+
+    abstract public function commit(): void;
 }

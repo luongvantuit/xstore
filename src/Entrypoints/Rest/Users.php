@@ -1,4 +1,4 @@
 <?php
 
 
-namespace Entrypoints\Rest\Users;
+namespace Entrypoints\Rest;
