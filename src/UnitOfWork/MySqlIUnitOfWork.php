@@ -2,7 +2,9 @@
 
 namespace UnitOfWork;
 
+use Adapters\Repositories\AbstractRepository;
 use mysqli;
+use ReflectionClass;
 
 require_once __DIR__ . "/../Configs.php";
 
@@ -15,15 +17,42 @@ class MySqlIUnitOfWork extends AbstractUnitOfWork
 
     private function __construct(mysqli $conn)
     {
+        parent::__construct();
         $this->conn = $conn;
+    }
+
+    public function session(string $classOfRepository): AbstractRepository
+    {
+        if ($this->repos[$classOfRepository] != null) {
+            $reflection = new ReflectionClass($classOfRepository);
+            $this->repos[$classOfRepository] = $reflection->newInstanceArgs([$this->conn]);
+        }
+        return $this->repos[$classOfRepository];
     }
 
     public function commit(): void
     {
         if (!$this->conn->commit()) {
+            $this->rollback();
             exit();
         }
+        foreach ($this->repos as $repo) {
+            while (!empty($repo->get_cached())) {
+                array_push($this->cached, array_shift($repo->get_cached()));
+            }
+        }
     }
+
+    public function rollback(): void
+    {
+        $this->conn->rollback();
+    }
+
+    public function close(): void
+    {
+        $this->conn->close();
+    }
+
 
     static public function get_instance(): MySqlIUnitOfWork
     {
