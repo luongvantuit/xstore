@@ -13,17 +13,17 @@ class UserMySqlIRepository extends AbstractMySqlIRepository
         parent::__construct($conn);
     }
 
-    protected function find(): ?BaseModel
+    protected function _find(?array $filters = null): ?BaseModel
     {
         return null;
     }
 
-    protected function findAll(): array
+    protected function _findAll(?array $filters = null): array
     {
         return [];
     }
 
-    protected function _add(BaseModel $model): ?object
+    protected function _add(BaseModel $model): ?BaseModel
     {
         if (!$model instanceof User) {
             return null;
@@ -31,12 +31,17 @@ class UserMySqlIRepository extends AbstractMySqlIRepository
         return null;
     }
 
-    protected function remove(array $filters): int
+    protected function _update(?array $filters = null, ?array $v = null): int
     {
         return 0;
     }
 
-    protected function count(array $filters): int
+    protected function _remove(?array $filters = null): int
+    {
+        return 0;
+    }
+
+    protected function count(?array $filters = null): int
     {
         return 0;
     }

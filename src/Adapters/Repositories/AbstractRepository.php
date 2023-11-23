@@ -13,12 +13,25 @@ abstract class AbstractRepository
         $this->cached = [];
     }
 
-    /**
-     * @return T
-     */
-    abstract protected function find(): ?BaseModel;
+    public  function find(?array $filters = null): ?BaseModel
+    {
+        $model = $this->_find($filters);
+        if ($model != null) {
+            array_push($this->cached, $model);
+        }
+        return $model;
+    }
 
-    abstract protected function findAll(): array;
+    abstract protected function _find(?array $filters = null): ?BaseModel;
+
+    public  function findAll(?array $filters = null): array
+    {
+        $models = $this->_findAll($filters);
+        array_merge($this->cached, $models);
+        return $models;
+    }
+
+    abstract protected function _findAll(?array $filters = null): array;
 
     public function add(BaseModel $model): void
     {
@@ -27,11 +40,31 @@ abstract class AbstractRepository
             array_push($this->cached, $model);
         }
     }
-    abstract protected function _add(BaseModel $model): ?object;
 
-    abstract protected function remove(array $filters): int;
+    abstract protected function _add(BaseModel $model): ?BaseModel;
 
-    abstract protected function count(array $filters): int;
+    public function update(?array $filters = null, ?array $v = null): array
+    {
+        $c = $this->_update($filters, $v);
+        if ($c == 0) {
+            return [];
+        }
+        $models = $this->findAll($filters);
+        return $models;
+    }
+
+    abstract protected function _update(?array $filters = null, ?array $v = null): int;
+
+    public function remove(?array $filters = null): int
+    {
+        $models = $this->findAll($filters);
+        $this->_remove($filters);
+        return count($models);
+    }
+
+    abstract protected function _remove(?array $filters = null): int;
+
+    abstract protected function count(?array $filters = null): int;
 
     public function get_cached(): array
     {
