@@ -16,8 +16,8 @@ class BaseModel
         return $this->events;
     }
 
-    public function set_events(array $v = [])
+    public function set_events(array $events = [])
     {
-        $this->events = $v;
+        $this->events = $events;
     }
 }

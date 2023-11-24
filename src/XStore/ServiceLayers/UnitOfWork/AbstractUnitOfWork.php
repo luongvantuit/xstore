@@ -7,10 +7,11 @@ use XStore\Adapters\Repositories\AbstractRepository;
 abstract class AbstractUnitOfWork
 {
 
-    protected ?AbstractRepository $repo = null;
+    protected ?AbstractRepository $repo;
 
     public function __construct()
     {
+        $this->repo = null;
     }
 
     public function collect_new_events()
