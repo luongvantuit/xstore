@@ -5,7 +5,7 @@ namespace XStore\ServiceLayers;
 use Exception;
 use XStore\Domains\Commands\Command;
 use XStore\Domains\Events\Event;
-use XStore\UnitOfWork\AbstractUnitOfWork;
+use XStore\ServiceLayers\UnitOfWork\AbstractUnitOfWork;
 
 class MessageBus
 {

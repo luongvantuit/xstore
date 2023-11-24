@@ -4,7 +4,7 @@ namespace XStore\ServiceLayers\Handlers;
 
 use XStore\Domains\Commands\CreateUserCommand;
 use XStore\Domains\Models\User;
-use XStore\UnitOfWork\AbstractUnitOfWork;
+use XStore\ServiceLayers\UnitOfWork\AbstractUnitOfWork;
 
 require_once __DIR__ . "/../../Adapters/Orm.php";
 

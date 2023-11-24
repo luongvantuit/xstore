@@ -1,6 +1,6 @@
 <?php
 
-namespace XStore\UnitOfWork;
+namespace XStore\ServiceLayers\UnitOfWork;
 
 use XStore\Adapters\Repositories\AbstractRepository;
 

@@ -6,7 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use XStore\Domains\Commands\CreateUserCommand;
-use XStore\UnitOfWork\DoctrineUnitOfWork;
+use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 
 use function XStore\bootstrap;
 use function XStore\get_mysql_info;

@@ -7,8 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use ReflectionFunction;
 use XStore\ServiceLayers\MessageBus;
-use XStore\UnitOfWork\AbstractUnitOfWork;
-use XStore\UnitOfWork\DoctrineUnitOfWork;
+use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 
 use function XStore\Adapters\start_mappers;
 

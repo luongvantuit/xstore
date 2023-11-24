@@ -1,6 +1,6 @@
 <?php
 
-namespace XStore\UnitOfWork;
+namespace XStore\ServiceLayers\UnitOfWork;
 
 use Doctrine\ORM\EntityManagerInterface;
 use XStore\Adapters\Repositories\AbstractRepository;
@@ -33,7 +33,11 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         if ($this->repo == null) {
             $this->repo = new DoctrineRepository($this->entity_manager);
         }
-        $this->entity_manager->beginTransaction();
         return $this->repo;
+    }
+
+    public function get_entity_manager(): EntityManagerInterface
+    {
+        return $this->entity_manager;
     }
 }
