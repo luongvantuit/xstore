@@ -1,4 +1,0 @@
-<?php
-
-
-namespace Entrypoints\Rest;

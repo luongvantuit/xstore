@@ -1,28 +1,18 @@
 <?php
 
-use Response\HttpStatusCode;
-use X\Path;
+use XStore\X\Path;
+use XStore\X\Response\HttpStatusCode;
 
-require_once __DIR__ . "/../autoload.php";
-require_once __DIR__ . "/../src/Configs.php";
-
-$dir_views = __DIR__ . "/../src/Entrypoints/Mvc/";
-
-$mysql_info = get_mysql_info();
-$conn = call_user_func_array('mysqli_connect', $mysql_info);
-if (!$conn && $conn->connect_errno) {
-    exit();
-}
-$conn->autocommit(FALSE);
+require_once __DIR__ . "/../vendor/autoload.php";
 
 # Path mapping
 $path_mapping = array(
-    "/" => $dir_views . "Home.php",
-    "/register" => $dir_views . "Register.php",
-    "/login" => $dir_views . "Login.php",
-    "/orders" => $dir_views . "Orders.php",
-    "/carts" => $dir_views . "Carts.php",
-    "/products" => $dir_views . "Products.php",
+    "/" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Home.php",
+    "/register" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Register.php",
+    "/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Login.php",
+    "/orders" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Orders.php",
+    "/carts" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Carts.php",
+    "/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Products.php",
 );
 
 # Inject to target
