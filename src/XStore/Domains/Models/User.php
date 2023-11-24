@@ -14,7 +14,7 @@ class User extends BaseModel
     private int|null $id = null;
 
     #[ORM\Column(name: "PASSWORD", type: 'string')]
-    private string $password = "hello";
+    private string $password;
 
     public function __construct()
     {

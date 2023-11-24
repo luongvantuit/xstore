@@ -3,8 +3,7 @@
     "doctrine/orm": "^2.11.0",
     "doctrine/dbal": "^3.2",
     "symfony/yaml": "^5.4",
-    "symfony/cache": "^5.4",
-    "apache/log4php": "2.3.0"
+    "symfony/cache": "^5.4"
   },
   "autoload": {
     "psr-4": {

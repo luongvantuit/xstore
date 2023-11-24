@@ -8,6 +8,7 @@ use Doctrine\ORM\ORMSetup;
 use ReflectionFunction;
 use XStore\ServiceLayers\MessageBus;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\X\MappersSingleton;
 
 use function XStore\Adapters\start_mappers;
 
@@ -20,24 +21,29 @@ require_once __DIR__ . "/ServiceLayers/Handlers/Events.php";
 
 function bootstrap(): MessageBus
 {
-    // Mappers
-    start_mappers();
-    // Initial unit of work
-    $config = ORMSetup::createAttributeMetadataConfiguration(
-        paths: [
-            __DIR__ . "../Domains/Models"
-        ],
-        isDevMode: true,
-    );
-    $mysql_info = get_mysql_info();
-    $connection = DriverManager::getConnection(array_merge([
-        'driver' => 'pdo_mysql',
-    ], $mysql_info), $config);
-    // obtaining the entity manager
-    $entity_manager = new EntityManager($connection, $config);
-    $uow = new DoctrineUnitOfWork($entity_manager);
     # Dependencies pattern
-    $dependencies = array("uow" => $uow);
+    $dependencies = array();
+    // Mappers
+    if (!MappersSingleton::get_instance()->created()) {
+        MappersSingleton::get_instance()->create();
+        start_mappers();
+        // Initial unit of work
+        $config = ORMSetup::createAttributeMetadataConfiguration(
+            paths: [
+                __DIR__ . "../Domains/Models"
+            ],
+            isDevMode: true,
+        );
+        $mysql_info = get_mysql_info();
+        $connection = DriverManager::getConnection(array_merge([
+            'driver' => 'pdo_mysql',
+        ], $mysql_info), $config);
+        // obtaining the entity manager
+        $entity_manager = new EntityManager($connection, $config);
+        $uow = new DoctrineUnitOfWork($entity_manager);
+        // Extend unit of work
+        $dependencies = array_merge($dependencies, array("uow" => $uow));
+    }
     # Inject event handlers
     $injected_event_handlers = array_map(function ($event_handlers) use ($dependencies) {
         return array_map(function ($handler) use ($dependencies) {
