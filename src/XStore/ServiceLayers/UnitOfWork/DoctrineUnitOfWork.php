@@ -33,6 +33,7 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         if ($this->repo == null) {
             $this->repo = new DoctrineRepository($this->entity_manager);
         }
+        $this->entity_manager->beginTransaction();
         return $this->repo;
     }
 

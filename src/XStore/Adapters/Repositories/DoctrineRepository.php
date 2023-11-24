@@ -19,7 +19,6 @@ class DoctrineRepository extends AbstractRepository
 
     protected function _add(BaseModel $model): void
     {
-        $this->entity_manager->beginTransaction();
         $this->entity_manager->persist($model);
         $this->entity_manager->flush();
     }
