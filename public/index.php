@@ -7,12 +7,15 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 # Path mapping
 $path_mapping = array(
-    "/" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Home.php",
-    "/register" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Register.php",
-    "/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Login.php",
-    "/orders" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Orders.php",
-    "/carts" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Carts.php",
-    "/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Products.php",
+    # MVC App
+    "/" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Home.php",
+    "/register" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Register.php",
+    "/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Login.php",
+    # MVC Admin
+    # API 
+    "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Healthz.php",
+    # API App
+    # API Admin
 );
 
 # Inject to target

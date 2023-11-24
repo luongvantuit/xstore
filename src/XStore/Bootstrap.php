@@ -24,13 +24,13 @@ function bootstrap(): MessageBus
     # Dependencies pattern
     $dependencies = array();
     // Mappers
-    if (!MappersSingleton::get_instance()->created()) {
-        MappersSingleton::get_instance()->create();
+    if (!MappersSingleton::get_instance()->created) {
+        MappersSingleton::get_instance()->created = true;
         start_mappers();
         // Initial unit of work
         $config = ORMSetup::createAttributeMetadataConfiguration(
             paths: [
-                __DIR__ . "../Domains/Models"
+                __DIR__ . "/Domains/Models"
             ],
             isDevMode: true,
         );
