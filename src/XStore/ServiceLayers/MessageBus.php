@@ -45,7 +45,7 @@ class MessageBus
         foreach ($handlers as $handler) {
             try {
                 $handler($event);
-                array_merge($this->queue, $this->uow->collect_new_events());
+                $this->queue = array_merge($this->queue, $this->uow->collect_new_events());
             } catch (Exception $e) {
                 continue;
             }
@@ -56,6 +56,11 @@ class MessageBus
     {
         $handler = $this->command_handlers[$command::class];
         $handler($command);
-        array_merge($this->queue, $this->uow->collect_new_events());
+        $this->queue = array_merge($this->queue, $this->uow->collect_new_events());
+    }
+
+    public function get_uow(): AbstractUnitOfWork
+    {
+        return $this->uow;
     }
 }

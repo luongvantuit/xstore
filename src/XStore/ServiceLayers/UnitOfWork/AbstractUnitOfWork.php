@@ -20,7 +20,7 @@ abstract class AbstractUnitOfWork
         $events = [];
         foreach ($cached as $c) {
             $_events = $c->get_events();
-            array_merge($events, $_events);
+            $events = array_merge($events, $_events);
             $c->set_events([]);
         }
         return $events;

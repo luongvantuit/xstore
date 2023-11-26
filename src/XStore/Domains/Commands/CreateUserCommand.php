@@ -1,20 +1,14 @@
 <?php
 
-namespace XStore\Domains\Models;
+namespace XStore\Domains\Commands;
 
-use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: 'USERS')]
-class User extends BaseModel
+class CreateUserCommand extends Command
 {
-
-    #[ORM\Column(name: "PASSWORD", type: 'string')]
     private string $password;
 
     public function __construct(string $password)
     {
-        parent::__construct();
         $this->password = $password;
     }
 
