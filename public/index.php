@@ -7,6 +7,11 @@ use XStore\X\Response\HttpStatusCode;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+// define('PROTOCAL','http');
+// $path = str_replace("\\", "/",PROTOCAL ."://" . $_SERVER['SERVER_NAME'] . __DIR__  . "/");
+// $path = str_replace($_SERVER['DOCUMENT_ROOT'], "", $path);
+// echo $path;
+// define('ASSETS', str_replace("app/core", "public/assets", $path));
 # Path mapping
 $path_mapping = array(
     # MVC App
@@ -27,12 +32,15 @@ $path_mapping = array(
     "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
 
     # API Admin
+
+
     "/api/admins" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/AdminController.php",
     "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",
     "/api/admin/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/OrdersController.php",
     "/api/admin/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/ProductsController.php",
     "/api/admin/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/UsersController.php",
 );
+
 
 # Inject to target
 $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
