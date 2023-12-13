@@ -4,6 +4,10 @@
 namespace XStore\Adapters\Rest;
 
 use XStore\ServiceLayers\MessageBus;
+use XStore\X\Request\Method;
+use XStore\X\Response\HttpResponse;
+use XStore\X\Response\HttpResponseJson;
+use XStore\X\Response\HttpStatusCode;
 
 use function XStore\bootstrap;
 
@@ -19,54 +23,52 @@ class Controller
         $this->bus = bootstrap();
     }
 
-    private function execute_default()
+    private function _execute()
     {
-        header("Content-Type: application/json");
-        http_response_code(404);
-        echo json_encode(array(
-            "error" => "Not found"
-        ));
+        $response = new HttpResponse();
+        $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
+            new HttpResponseJson(message: "not found")
+        )->build();
     }
 
     public function execute()
     {
-        $request_method = $_SERVER["REQUEST_METHOD"];
-        switch ($request_method) {
-            case "GET":
+        switch ($_SERVER[Method::PARAM_NAME]) {
+            case Method::GET:
                 $this->execute_get();
                 break;
-            case "POST":
+            case Method::POST:
                 $this->execute_post();
                 break;
-            case "PUT":
+            case Method::PUT:
                 $this->execute_put();
                 break;
-            case "DELETE":
+            case Method::DELETE:
                 $this->execute_delete();
                 break;
             default:
-                $this->execute_default();
+                $this->_execute();
                 break;
         }
     }
 
     public function execute_get()
     {
-        $this->execute_default();
+        $this->_execute();
     }
 
     public function execute_post()
     {
-        $this->execute_default();
+        $this->_execute();
     }
 
     public function execute_put()
     {
-        $this->execute_default();
+        $this->_execute();
     }
 
     public function execute_delete()
     {
-        $this->execute_default();
+        $this->_execute();
     }
 }

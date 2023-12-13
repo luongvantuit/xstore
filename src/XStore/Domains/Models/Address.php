@@ -13,7 +13,6 @@ class Address extends BaseModel
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", onDelete: "CASCADE")]
     private User $user;
 
-
     #[ORM\Column(name: "first_name", type: 'string')]
     private string $first_name;
 
@@ -32,9 +31,15 @@ class Address extends BaseModel
     #[ORM\Column(name: "default_address", type: 'boolean')]
     private bool $default_address;
 
-    public function __construct(User $user, string $first_name, string $last_name,
-        string $address, string $email, string $phone_number, bool $default_address)
-    {
+    public function __construct(
+        User $user,
+        string $first_name,
+        string $last_name,
+        string $address,
+        string $email,
+        string $phone_number,
+        bool $default_address
+    ) {
         parent::__construct();
         $this->user = $user;
         $this->first_name = $first_name;

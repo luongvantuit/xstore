@@ -6,6 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use ReflectionFunction;
+use XStore\Adapters\Hashing\BcryptHashing;
 use XStore\ServiceLayers\MessageBus;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\X\MappersSingleton;
@@ -22,28 +23,30 @@ require_once __DIR__ . "/ServiceLayers/Handlers/Events.php";
 function bootstrap(): MessageBus
 {
     # Dependencies pattern
-    $dependencies = array();
+    $dependencies = array(
+        "hashing" => new BcryptHashing()
+    );
     // Mappers
     if (!MappersSingleton::get_instance()->created) {
         MappersSingleton::get_instance()->created = true;
         start_mappers();
-        // Initial unit of work
-        $config = ORMSetup::createAttributeMetadataConfiguration(
-            paths: [
-                __DIR__ . "/Domains/Models"
-            ],
-            isDevMode: true,
-        );
-        $mysql_info = get_mysql_info();
-        $connection = DriverManager::getConnection(array_merge([
-            'driver' => 'pdo_mysql',
-        ], $mysql_info), $config);
-        // obtaining the entity manager
-        $entity_manager = new EntityManager($connection, $config);
-        $uow = new DoctrineUnitOfWork($entity_manager);
-        // Extend unit of work
-        $dependencies = array_merge($dependencies, array("uow" => $uow));
     }
+    // Initial unit of work
+    $config = ORMSetup::createAttributeMetadataConfiguration(
+        paths: [
+            __DIR__ . "/Domains/Models"
+        ],
+        isDevMode: true,
+    );
+    $mysql_info = get_mysql_info();
+    $connection = DriverManager::getConnection(array_merge([
+        'driver' => 'pdo_mysql',
+    ], $mysql_info), $config);
+    // obtaining the entity manager
+    $entity_manager = new EntityManager($connection, $config);
+    $uow = new DoctrineUnitOfWork($entity_manager);
+    // Extend unit of work
+    $dependencies = array_merge($dependencies, array("uow" => $uow));
     # Inject event handlers
     $injected_event_handlers = array_map(function ($event_handlers) use ($dependencies) {
         return array_map(function ($handler) use ($dependencies) {
@@ -66,6 +69,7 @@ function inject_dependencies($handler, $dependencies): callable
     $reflection = new ReflectionFunction($handler);
     $params = $reflection->getParameters();
     $deps = array_intersect_key($dependencies, array_flip(array_map(function ($param) {
+        error_log($param, LOG_INFO);
         return $param->name;
     }, $params)));
     return function ($message) use ($handler, $deps) {

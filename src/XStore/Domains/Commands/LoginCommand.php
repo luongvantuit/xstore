@@ -9,8 +9,8 @@ class LoginCommand extends Command
 
     public function __construct(string $email, string $password)
     {
-        $this->set_email($email);
-        $this->set_password($password);
+        $this->email = $email;
+        $this->password = $password;
     }
 
     public function set_email(string $email): void

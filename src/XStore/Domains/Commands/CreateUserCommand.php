@@ -11,9 +11,9 @@ class CreateUserCommand extends Command
 
     public function __construct(string $password, string $username, string $email)
     {
-        $this->set_password($password);
-        $this->set_username($username);
-        $this->set_email($email);
+        $this->password = $password;
+        $this->username = $username;
+        $this->email = $email;
     }
 
 

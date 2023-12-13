@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends BaseModel
 {
 
-    #[ORM\Column(name: "username", type: 'string')]
+    #[ORM\Column(name: "username", type: 'string', unique: true)]
     private string $username;
 
     #[ORM\Column(name: "email", type: 'string', unique: true)]
@@ -19,12 +19,12 @@ class User extends BaseModel
     private string $password;
 
 
-    public function __construct(string $password, string $username, string $email)
+    public function __construct(string $username, string $email, string $password)
     {
         parent::__construct();
-        $this->password = $password;
         $this->username = $username;
         $this->email = $email;
+        $this->password = $password;
     }
 
 

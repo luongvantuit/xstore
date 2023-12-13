@@ -15,7 +15,7 @@ $path_mapping = array(
     # API 
     "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Healthz.php",
     # API App
-    "/api/app/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/Login.php",
+    "/api/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/LoginController.php",
     # API Admin
 );
 
