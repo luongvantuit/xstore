@@ -21,3 +21,5 @@ function get_mysql_info(): array
         "dbname" => $dbname,
     );
 }
+
+
