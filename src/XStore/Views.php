@@ -4,13 +4,31 @@ namespace XStore;
 
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 
-function get_user_by_id(DoctrineUnitOfWork $uow, int $id): mixed
+function get_user_by_id(DoctrineUnitOfWork $uow, int $id): array | null
 {
-    $sql = "SELECT ID, CREATED_AT, UPDATED_AT FROM USERS WHERE ID = :id;";
+    $sql = "SELECT id, email, username FROM users WHERE id = :id;";
     $conn = $uow->get_entity_manager()->getConnection();
     $params = [
         "id" => $id
     ];
-    $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
-    return $results;
+    /** @var array $results */
+    $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+    if (!$result) {
+        return null;
+    }
+    return $result;
+}
+
+function get_user_by_email(DoctrineUnitOfWork $uow, string $email): array | null
+{
+    $sql = "SELECT id, email, username FROM users WHERE email = :email;";
+    $conn = $uow->get_entity_manager()->getConnection();
+    $params = [
+        "email" => $email
+    ];
+    $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+    if (!$result) {
+        return null;
+    }
+    return $result;
 }

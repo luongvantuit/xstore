@@ -21,3 +21,9 @@ function get_mysql_info(): array
         "dbname" => $dbname,
     );
 }
+
+function get_secret_key(): string
+{
+    $key = get_env("JWT_SECRET_KEY", "example_key");
+    return $key;
+}

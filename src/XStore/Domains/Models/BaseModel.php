@@ -24,6 +24,9 @@ class BaseModel
 
     public function get_events(): array
     {
+        if (empty($this->events)) {
+            $this->events = [];
+        }
         return $this->events;
     }
 
@@ -36,5 +39,4 @@ class BaseModel
     {
         return $this->id;
     }
-
 }

@@ -2,8 +2,6 @@
 
 namespace XStore\Domains\Models;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -59,6 +57,4 @@ class User extends BaseModel
     {
         return $this->email;
     }
-
-
 }
