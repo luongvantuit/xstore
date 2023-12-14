@@ -24,7 +24,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="img/products/img-1.jpg" alt=""></a>
+                            <a href="#"><img src="./assets/img/products/img-1.jpg" alt=""></a>
                             <div class="p-status">new</div>
                         </figure>
                         <div class="product-text">
@@ -36,7 +36,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="img/products/img-2.jpg" alt=""></a>
+                            <a href="#"><img src="./assets/img/products/img-2.jpg" alt=""></a>
                             <div class="p-status sale">sale</div>
                         </figure>
                         <div class="product-text">
@@ -48,7 +48,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="img/products/img-3.jpg" alt=""></a>
+                            <a href="#"><img src="./assets/img/products/img-3.jpg" alt=""></a>
                             <div class="p-status">new</div>
                         </figure>
                         <div class="product-text">
@@ -60,7 +60,7 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="single-product-item">
                         <figure>
-                            <a href="#"><img src="img/products/img-4.jpg" alt=""></a>
+                            <a href="#"><img src="./assets/img/products/img-4.jpg" alt=""></a>
                             <div class="p-status popular">popular</div>
                         </figure>
                         <div class="product-text">

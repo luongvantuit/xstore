@@ -28,30 +28,44 @@
         <div class="container-fluid">
             <div class="inner-header">
                 <div class="logo">
-                    <img src="public/assets/img/logo.png" alt="">
+                    <img src="./assets/img/logo.png" alt="">
                 </div>
                 <div class="header-right">
-                    <img src="public/assets/img/icons/search.png" alt="" class="search-trigger">
+                    <img src="./assets/img/icons/search.png" alt="" class="search-trigger">
                     <img src="public/assets/img/icons/man.png" alt="">
                     <a href="#">
-                        <img src="public/assets/img/icons/bag.png" alt="">
+                        <img src="./assets/img/icons/bag.png" alt="">
                         <span>2</span>
                     </a>
                 </div>
                 <div class="user-access">
-                    <a href="Resister.php">Register</a>
-                    <a href="Login.php" class="in">Sign in</a>
+                    <a href="/register">Đăng ký</a>
+                    <a href="/login" class="in">Đăng nhập</a>
                 </div>
                 <nav class="main-menu mobile-menu">
                     <ul>
-                        <li><a href="Home.php">Home</a></li>
-                        <li><a href="Products.php">Product Page</a></li>
-                        <li><a href="Shops.php">Shopping Card</a></li>
-                        <li><a href="Products.php">About</a></li>
-                        <li><a href="contact.php">Contact</a></li>
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/products">Sản phẩm </a>
+                            <ul class="sub-menu">
+                                <li><a href="">Top</a></li>
+                                <li><a href="">Bottom</a></li>
+                                <li><a href="">Accessory</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="/shops">Giỏ hàng</a></li>
+                        <li><a href="/contact">Liên hệ</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
 </body>
+<script src="./assets/js/jquery-3.3.1.min.js"></script>
+<script src="./assets/js/bootstrap.min.js"></script>
+<script src="./assets/js/jquery.magnific-popup.min.js"></script>
+<script src="./assets/js/jquery.slicknav.js"></script>
+<script src="./assets/js/owl.carousel.min.js"></script>
+<script src="./assets/js/jquery.nice-select.min.js"></script>
+<script src="./assets/js/mixitup.min.js"></script>
+<script src="./assets/js/main.js"></script>
