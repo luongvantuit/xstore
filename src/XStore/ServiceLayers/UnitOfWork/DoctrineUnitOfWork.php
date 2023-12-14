@@ -18,6 +18,11 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         $this->repo = new DoctrineRepository($this->entity_manager);
     }
 
+    public function begin_transaction(): void
+    {
+        $this->entity_manager->beginTransaction();
+    }
+
     public function commit(): void
     {
         $this->entity_manager->commit();

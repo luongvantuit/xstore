@@ -19,7 +19,6 @@ class DoctrineRepository extends AbstractRepository
 
     protected function _add(BaseModel $model): void
     {
-        $this->entity_manager->beginTransaction();
         $this->entity_manager->persist($model);
         $this->entity_manager->flush();
     }
@@ -31,7 +30,6 @@ class DoctrineRepository extends AbstractRepository
 
     protected function _remove(string $clz, ?array $filters = []): int
     {
-        $this->entity_manager->beginTransaction();
         $entities = $this->entity_manager->getRepository($clz)->findBy($filters);
         foreach ($entities as $entity) {
             $this->entity_manager->remove($entity);

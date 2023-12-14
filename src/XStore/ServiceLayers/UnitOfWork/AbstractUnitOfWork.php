@@ -14,6 +14,8 @@ abstract class AbstractUnitOfWork
         $this->repo = null;
     }
 
+    abstract function begin_transaction(): void;
+
     public function collect_new_events()
     {
         $cached = $this->repo->get_cached();

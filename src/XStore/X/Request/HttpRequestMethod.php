@@ -2,7 +2,7 @@
 
 namespace XStore\X\Request;
 
-class Method
+class HttpRequestMethod
 {
     public const PARAM_NAME = "REQUEST_METHOD";
     public const GET = "GET";

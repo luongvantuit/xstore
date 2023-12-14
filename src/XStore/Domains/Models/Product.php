@@ -2,6 +2,7 @@
 
 namespace XStore\Domains\Models;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -29,6 +30,7 @@ class Product extends BaseModel
     public function set_name(string $name): void
     {
         $this->name = $name;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_name(): string
@@ -39,6 +41,7 @@ class Product extends BaseModel
     public function set_description(string $description): void
     {
         $this->description = $description;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_description(): string
@@ -49,6 +52,7 @@ class Product extends BaseModel
     public function set_path(string $path): void
     {
         $this->path = $path;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_path(): string

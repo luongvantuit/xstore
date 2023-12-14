@@ -2,6 +2,7 @@
 
 namespace XStore\Domains\Models;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -37,6 +38,7 @@ class Order extends BaseModel
     public function set_user(User $user): void
     {
         $this->user = $user;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_user(): User
@@ -47,6 +49,7 @@ class Order extends BaseModel
     public function set_address(Address $address): void
     {
         $this->address = $address;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_address(): Address
@@ -57,6 +60,7 @@ class Order extends BaseModel
     public function set_type_shipping_fee(int $type_shipping_fee): void
     {
         $this->type_shipping_fee = $type_shipping_fee;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_type_shipping_fee(): int
@@ -67,6 +71,7 @@ class Order extends BaseModel
     public function set_status(string $status): void
     {
         $this->status = $status;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_status(): string

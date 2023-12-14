@@ -2,8 +2,16 @@
 
 namespace XStore\X;
 
-function get_env(string $name, mixed $default_value = null): mixed
+class Env
 {
-    $value = getenv($name);
-    return $value !== false ? $value : $default_value;
+
+    private function __construct()
+    {
+    }
+
+    public static function get_env(string $name, mixed $default_value = null): mixed
+    {
+        $value = getenv($name);
+        return $value !== false ? $value : $default_value;
+    }
 }

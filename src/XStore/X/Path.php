@@ -43,4 +43,14 @@ class Path
         }
         return null;
     }
+
+    public static function origin(array $path_mapping, string $path): string
+    {
+        foreach (array_keys($path_mapping) as $path_origin) {
+            if (Path::compare($path_origin, $path)) {
+                return $path_origin;
+            }
+        }
+        return false;
+    }
 }

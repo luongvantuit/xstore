@@ -3,7 +3,7 @@
 namespace XStore\Domains\Commands;
 
 
-class CreateUserCommand extends Command
+class CreateNewUserCommand extends Command
 {
     private string $password;
     private string $username;

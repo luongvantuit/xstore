@@ -2,6 +2,7 @@
 
 namespace XStore\Domains\Models;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -53,6 +54,7 @@ class Address extends BaseModel
     public function set_user(User $user): void
     {
         $this->user = $user;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_user(): User
@@ -63,6 +65,7 @@ class Address extends BaseModel
     public function set_first_name(string $first_name): void
     {
         $this->first_name = $first_name;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_first_name(): string
@@ -73,6 +76,7 @@ class Address extends BaseModel
     public function set_last_name(string $last_name): void
     {
         $this->last_name = $last_name;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_last_name(): string
@@ -83,6 +87,7 @@ class Address extends BaseModel
     public function set_address(string $address): void
     {
         $this->address = $address;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_address(): string
@@ -93,6 +98,7 @@ class Address extends BaseModel
     public function set_email(string $email): void
     {
         $this->email = $email;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_email(): string
@@ -103,6 +109,7 @@ class Address extends BaseModel
     public function set_phone_number(string $phone_number): void
     {
         $this->phone_number = $phone_number;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_phone_number(): string
@@ -113,6 +120,7 @@ class Address extends BaseModel
     public function set_default_address(bool $default_address): void
     {
         $this->default_address = $default_address;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_default_address(): bool

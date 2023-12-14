@@ -2,14 +2,13 @@
 
 use XStore\Adapters\Rest\Controller;
 use XStore\Domains\Commands\LoginCommand;
+use XStore\Domains\Commands\UserLoginCommand;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\ServiceLayers\Exceptions\InvalidPasswordException;
+use XStore\Views;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;
-
-use function XStore\get_user_by_email;
-use function XStore\ServiceLayers\generateJWT;
 
 require_once __DIR__ . "/../../../ServiceLayers/Utils.php";
 require_once __DIR__ . "../../../../Views.php";
@@ -24,12 +23,12 @@ class LoginController extends Controller
         $password = $body['password'];
         $response = new HttpResponse();
         try {
-            $this->bus->handle(new LoginCommand($email, $password));
-            $user = get_user_by_email($this->bus->get_uow(), $email);
+            $this->bus->handle(new UserLoginCommand($email, $password));
+            $user = Views::get_user_by_email($this->bus->get_uow(), $email);
             $response->statusCode(HttpStatusCode::OK)->json(
                 new HttpResponseJson(data: array(
                     "user" => $user,
-                    "jwt" => generateJWT($user)
+                    // "jwt" => generateJWT($user)
                 ))
             );
         } catch (NotFoundException $e) {

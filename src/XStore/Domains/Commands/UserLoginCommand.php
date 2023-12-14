@@ -2,7 +2,7 @@
 
 namespace XStore\Domains\Commands;
 
-class LoginCommand extends Command
+class UserLoginCommand extends Command
 {
     private string $email;
     private string $password;

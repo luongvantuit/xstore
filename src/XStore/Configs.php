@@ -2,28 +2,35 @@
 
 namespace XStore;
 
-use function XStore\X\get_env;
+use XStore\X\Env;
 
-require_once __DIR__ . "/X/Env.php";
-
-function get_mysql_info(): array
+class Configs
 {
-    $host = get_env("MYSQL_HOST", "127.0.0.1");
-    $port = get_env("MYSQL_PORT", 3306);
-    $username = get_env("MYSQL_USERNAME", "admin");
-    $password = get_env("MYSQL_PASSWORD", "adminpw");
-    $dbname = get_env("MYSQL_DATABASE", "db");
-    return array(
-        "host" => $host,
-        "port" => $port,
-        "user" => $username,
-        "password" => $password,
-        "dbname" => $dbname,
-    );
-}
 
-function get_secret_key(): string
-{
-    $key = get_env("JWT_SECRET_KEY", "example_key");
-    return $key;
+    private function __construct()
+    {
+        error_log("init " . Configs::class, LOG_INFO);
+    }
+
+    public static function get_mysql_info(): array
+    {
+        $host = Env::get_env("MYSQL_HOST", "127.0.0.1");
+        $port = Env::get_env("MYSQL_PORT", 3306);
+        $username = Env::get_env("MYSQL_USERNAME", "admin");
+        $password = Env::get_env("MYSQL_PASSWORD", "adminpw");
+        $dbname = Env::get_env("MYSQL_DATABASE", "db");
+        return array(
+            "host" => $host,
+            "port" => $port,
+            "user" => $username,
+            "password" => $password,
+            "dbname" => $dbname,
+        );
+    }
+
+    public static function get_secret_key(): string
+    {
+        $key = Env::get_env("JWT_SECRET_KEY", "secret");
+        return $key;
+    }
 }

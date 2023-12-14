@@ -2,6 +2,7 @@
 
 namespace XStore\Domains\Models;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -49,6 +50,7 @@ class Property extends BaseModel
     public function set_product(Product $product): void
     {
         $this->product = $product;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_product(): Product
@@ -59,6 +61,7 @@ class Property extends BaseModel
     public function set_color(string $color): void
     {
         $this->color = $color;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_color(): string
@@ -69,6 +72,7 @@ class Property extends BaseModel
     public function set_number(string $number): void
     {
         $this->number = $number;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_number(): string
@@ -79,6 +83,7 @@ class Property extends BaseModel
     public function set_price(string $price): void
     {
         $this->price = $price;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_price(): string
@@ -89,6 +94,7 @@ class Property extends BaseModel
     public function set_size_id(int $size_id): void
     {
         $this->size_id = $size_id;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_size_id(): int
@@ -99,6 +105,7 @@ class Property extends BaseModel
     public function set_path(string $path): void
     {
         $this->path = $path;
+        $this->set_updated_at(new DateTime('now'));
     }
 
     public function get_path(): string

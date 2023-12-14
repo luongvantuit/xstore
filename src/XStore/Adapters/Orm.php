@@ -10,8 +10,7 @@ require_once __DIR__ . "/../../../vendor/autoload.php";
 require_once __DIR__ . "/../Configs.php";
 
 use Doctrine\ORM\Tools\SchemaTool;
-
-use function XStore\get_mysql_info;
+use XStore\Configs;
 
 function start_mappers(): void
 {
@@ -19,7 +18,7 @@ function start_mappers(): void
         paths: array(__DIR__ . "/../Domains/Models"),
         isDevMode: true,
     );
-    $mysql_info = get_mysql_info();
+    $mysql_info = Configs::get_mysql_info();
     $connection = DriverManager::getConnection(array_merge([
         'driver' => 'pdo_mysql',
     ], $mysql_info), $config);

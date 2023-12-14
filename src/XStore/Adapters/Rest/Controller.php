@@ -4,7 +4,7 @@
 namespace XStore\Adapters\Rest;
 
 use XStore\ServiceLayers\MessageBus;
-use XStore\X\Request\Method;
+use XStore\X\Request\HttpRequestMethod;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;
@@ -23,52 +23,59 @@ class Controller
         $this->bus = bootstrap();
     }
 
-    private function _execute()
+    private function method_not_allowed()
     {
         $response = new HttpResponse();
-        $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
-            new HttpResponseJson(message: "not found")
+        $response->statusCode(HttpStatusCode::METHOD_NOT_ALLOWED)->json(
+            new HttpResponseJson(success: false, message: "method not allowed!")
+        )->build();
+    }
+    private function forbidden()
+    {
+        $response = new HttpResponse();
+        $response->statusCode(HttpStatusCode::FORBIDDEN)->json(
+            new HttpResponseJson(success: false, message: "forbidden!")
         )->build();
     }
 
     public function execute()
     {
-        switch ($_SERVER[Method::PARAM_NAME]) {
-            case Method::GET:
+        switch ($_SERVER[HttpRequestMethod::PARAM_NAME]) {
+            case HttpRequestMethod::GET:
                 $this->execute_get();
                 break;
-            case Method::POST:
+            case HttpRequestMethod::POST:
                 $this->execute_post();
                 break;
-            case Method::PUT:
+            case HttpRequestMethod::PUT:
                 $this->execute_put();
                 break;
-            case Method::DELETE:
+            case HttpRequestMethod::DELETE:
                 $this->execute_delete();
                 break;
             default:
-                $this->_execute();
+                $this->forbidden();
                 break;
         }
     }
 
     public function execute_get()
     {
-        $this->_execute();
+        $this->method_not_allowed();
     }
 
     public function execute_post()
     {
-        $this->_execute();
+        $this->method_not_allowed();
     }
 
     public function execute_put()
     {
-        $this->_execute();
+        $this->method_not_allowed();
     }
 
     public function execute_delete()
     {
-        $this->_execute();
+        $this->method_not_allowed();
     }
 }

@@ -38,7 +38,7 @@ function bootstrap(): MessageBus
         ],
         isDevMode: true,
     );
-    $mysql_info = get_mysql_info();
+    $mysql_info = Configs::get_mysql_info();
     $connection = DriverManager::getConnection(array_merge([
         'driver' => 'pdo_mysql',
     ], $mysql_info), $config);
