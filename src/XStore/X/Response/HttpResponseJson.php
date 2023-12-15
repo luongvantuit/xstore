@@ -35,13 +35,13 @@ class HttpResponseJson
             "message" => $this->message
         ];
         if ($this->data != null) {
-            $json = array_push($json, ["data" => $this->data]);
+            $json = array_merge($json, ["data" => $this->data]);
         }
         if ($this->total != null) {
-            $json = array_push($json, ["total" => $this->total]);
+            $json = array_merge($json, ["total" => $this->total]);
         }
         if ($this->meta != null) {
-            $json = array_push($json, ["meta" => $this->meta]);
+            $json = array_merge($json, ["meta" => $this->meta]);
         }
         return $json;
     }

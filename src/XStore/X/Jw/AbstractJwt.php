@@ -2,6 +2,10 @@
 
 namespace XStore\X\Jw;
 
-class AbstractJwt
+abstract class AbstractJwt
 {
+
+    abstract function encode(array $payload): string;
+
+    abstract function decode(string $jwt): array;
 }

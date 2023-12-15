@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use ReflectionFunction;
 use XStore\Adapters\Hashing\BcryptHashing;
+use XStore\Adapters\Notifications\PhpMailerNotification;
 use XStore\ServiceLayers\MessageBus;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\X\MappersSingleton;
@@ -24,7 +25,8 @@ function bootstrap(): MessageBus
 {
     # Dependencies pattern
     $dependencies = array(
-        "hashing" => new BcryptHashing()
+        "hashing" => new BcryptHashing(),
+        "email_notification" => new PhpMailerNotification()
     );
     // Mappers
     if (!MappersSingleton::get_instance()->created) {

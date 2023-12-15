@@ -1,11 +1,13 @@
 <?php
 
 use XStore\Adapters\Rest\Controller;
+use XStore\Configs;
 use XStore\Domains\Commands\LoginCommand;
 use XStore\Domains\Commands\UserLoginCommand;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\ServiceLayers\Exceptions\InvalidPasswordException;
 use XStore\Views;
+use XStore\X\Jw\Jwt;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;
@@ -28,7 +30,7 @@ class LoginController extends Controller
             $response->statusCode(HttpStatusCode::OK)->json(
                 new HttpResponseJson(data: array(
                     "user" => $user,
-                    // "jwt" => generateJWT($user)
+                    "jwt" => Views::get_jwt_token_of_user($this->bus->get_uow(), $user["id"], new Jwt(Configs::get_secret_key()))
                 ))
             );
         } catch (NotFoundException $e) {
