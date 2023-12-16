@@ -1,4 +1,10 @@
 <?php
 
+use XStore\Adapters\Rest\Controller;
 
-namespace XStore\Entrypoints\Rest;
+class UsersController extends Controller
+{
+}
+
+$controller = new UsersController();
+$controller->execute();

@@ -4,23 +4,23 @@ namespace XStore\Domains\Commands;
 
 class UserLoginCommand extends Command
 {
-    private string $email;
+    private string $identify;
     private string $password;
 
-    public function __construct(string $email, string $password)
+    public function __construct(string $identify, string $password)
     {
-        $this->email = $email;
+        $this->identify = $identify;
         $this->password = $password;
     }
 
-    public function set_email(string $email): void
+    public function set_identify(string $identify): void
     {
-        $this->email = $email;
+        $this->identify = $identify;
     }
 
-    public function get_email(): string
+    public function get_identify(): string
     {
-        return $this->email;
+        return $this->identify;
     }
 
     public function set_password(string $password): void

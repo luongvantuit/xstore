@@ -8,20 +8,28 @@ use XStore\Domains\Events\CreatedUserEvent;
 use XStore\Domains\Models\User;
 use XStore\ServiceLayers\UnitOfWork\AbstractUnitOfWork;
 use XStore\Domains\Commands\UserLoginCommand;
+use XStore\ServiceLayers\Exceptions\EmailExistedException;
 use XStore\ServiceLayers\Exceptions\InvalidPasswordException;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
-
-require_once __DIR__ . "/../Utils.php";
+use XStore\ServiceLayers\Exceptions\UsernameExistedException;
 
 function create_new_user(CreateNewUserCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
     $uow->begin_transaction();
     $repo = $uow->get_repo();
     /** @var User $model */
+    $model = $repo->get(User::class, array("email" => strtolower($command->get_email())));
+    if ($model != null) {
+        throw new EmailExistedException();
+    }
+    $model = $repo->get(User::class, array("username" => strtolower($command->get_username())));
+    if ($model != null) {
+        throw new UsernameExistedException();
+    }
     $password_hash = $hashing->hash($command->get_password());
     $model = new User(
-        username: $command->get_username(),
-        email: $command->get_email(),
+        username: strtolower($command->get_username()),
+        email: strtolower($command->get_email()),
         password: $password_hash,
     );
     $repo->add($model);
@@ -34,7 +42,11 @@ function login_user(UserLoginCommand $command, AbstractUnitOfWork $uow, Abstract
 {
     $repo = $uow->get_repo();
     /** @var User $model */
-    $model = $repo->get(User::class, array("email" => $command->get_email()));
+    $model = $repo->get(User::class, array("email" => strtolower($command->get_identify())));
+    if ($model == null) {
+        /** @var User $model */
+        $model = $repo->get(User::class, array("username" => strtolower($command->get_identify())));
+    }
     if ($model == null) {
         throw new NotFoundException();
     }

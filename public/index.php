@@ -19,8 +19,18 @@ $path_mapping = array(
     # API App
     "/api/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/LoginController.php",
     "/api/register" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/RegisterController.php",
+    "/api/profiles" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/ProfilesController.php",
+    "/api/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/OrdersController.php",
     "/api/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/ProductsController.php",
+    "/api/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/UsersController.php",
+    "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
+    "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
     # API Admin
+    "/api/admins" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/AdminController.php",
+    "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",
+    "/api/admin/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/OrdersController.php",
+    "/api/admin/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/ProductsController.php",
+    "/api/admin/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/UsersController.php",
 );
 
 # Inject to target

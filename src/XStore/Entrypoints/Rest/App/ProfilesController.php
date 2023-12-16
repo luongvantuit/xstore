@@ -1,3 +1,10 @@
 <?php
 
-namespace XStore\Entrypoints\Rest;
+use XStore\Adapters\Rest\Controller;
+
+class ProfilesController extends Controller
+{
+}
+
+$controller = new ProfilesController();
+$controller->execute();

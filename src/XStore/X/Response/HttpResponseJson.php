@@ -6,7 +6,7 @@ class HttpResponseJson
 {
     private bool $success;
 
-    private string $message;
+    private string|array $message;
 
     private array| null $data;
 
@@ -16,7 +16,7 @@ class HttpResponseJson
 
     public function __construct(
         bool $success = true,
-        string $message = "success",
+        string|array $message = "success",
         array|null $data = null,
         int| null $total = null,
         array|null $meta = null
@@ -52,7 +52,7 @@ class HttpResponseJson
         return $this->success;
     }
 
-    public function get_message(): string
+    public function get_message(): string|array
     {
         return $this->message;
     }

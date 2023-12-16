@@ -20,20 +20,22 @@ class User extends BaseModel
     private string $password;
 
     #[ORM\Column(name: "status", enumType: UserStatus::class, options: ["default" => UserStatus::ACTIVE])]
-    private UserStatus $status;
+    private UserStatus $status = UserStatus::ACTIVE;
 
     #[ORM\Column(name: "email_ok", type: 'boolean', options: ["default" => false])]
-    private bool $email_ok;
+    private bool $email_ok = false;
 
     #[ORM\Column(name: "email_confirmation_token", type: 'string', nullable: true)]
-    private string $email_confirmation_token;
+    private string|null $email_confirmation_token;
 
-    public function __construct(string $username, string $email, string $password)
+    public function __construct(string $username, string $email, string $password, bool $email_ok = false, UserStatus $status = UserStatus::ACTIVE)
     {
         parent::__construct();
         $this->username = $username;
         $this->email = $email;
         $this->password = $password;
+        $this->email_ok = $email_ok;
+        $this->status = $status;
     }
 
     public function set_password(string $password): void
@@ -91,13 +93,13 @@ class User extends BaseModel
         return $this->email_ok;
     }
 
-    public function set_email_confirmation_token(string $email_confirmation_token): void
+    public function set_email_confirmation_token(string|null $email_confirmation_token): void
     {
         $this->email_confirmation_token = $email_confirmation_token;
         $this->set_updated_at(new DateTime('now'));
     }
 
-    public function get_email_confirmation_token(): string
+    public function get_email_confirmation_token(): string|null
     {
         return $this->email_confirmation_token;
     }
