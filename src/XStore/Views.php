@@ -68,4 +68,32 @@ class Views
         }
         return $jwt->encode($result);
     }
+
+    public static function get_admin_by_identify(DoctrineUnitOfWork $uow, string $identify): array | null
+    {
+        $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE username = :username;";
+        $conn = $uow->get_entity_manager()->getConnection();
+        $params = [
+            "username" => strtolower($identify)
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result;
+    }
+
+    public static function get_jwt_token_of_admin(DoctrineUnitOfWork $uow, int $admin_id, AbstractJwt $jwt): string|null
+    {
+        $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE id = :id;";
+        $conn = $uow->get_entity_manager()->getConnection();
+        $params = [
+            "id" => $admin_id
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $jwt->encode($result);
+    }
 }

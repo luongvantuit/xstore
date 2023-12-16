@@ -36,7 +36,7 @@ $path_mapping = array(
 # Inject to target
 $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 if (Path::has($path_mapping, $url_path)) {
-    // define("PATH_ORIGIN", Path::origin($path_mapping, $url_path), true);
+    define("PATH_ORIGIN", Path::origin($path_mapping, $url_path));
     include_once Path::target($path_mapping, $url_path);
 } else {
     $response = new HttpResponse();
