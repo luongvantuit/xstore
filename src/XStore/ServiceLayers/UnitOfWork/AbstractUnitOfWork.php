@@ -14,16 +14,16 @@ abstract class AbstractUnitOfWork
         $this->repo = null;
     }
 
-    abstract function begin_transaction(): void;
+    abstract function beginTransaction(): void;
 
-    public function collect_new_events()
+    public function collectNewEvents()
     {
-        $cached = $this->repo->get_cached();
+        $cached = $this->repo->getCached();
         $events = [];
         foreach ($cached as $c) {
-            $_events = $c->get_events();
+            $_events = $c->getEvents();
             $events = array_merge($events, $_events);
-            $c->set_events([]);
+            $c->setEvents([]);
         }
         return $events;
     }
@@ -32,5 +32,5 @@ abstract class AbstractUnitOfWork
 
     abstract public function rollback(): void;
 
-    abstract public function get_repo(): AbstractRepository;
+    abstract public function getRepository(): AbstractRepository;
 }

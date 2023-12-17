@@ -19,58 +19,58 @@ class Admin extends BaseModel
     private string $password;
 
     #[ORM\Column(name: "is_root", type: 'string')]
-    private bool $is_root = false;
+    private bool $isRoot = false;
 
-    public function __construct(string $username, string $password, string $email = null, bool $is_root = false)
+    public function __construct(string $username, string $password, string $email = null, bool $isRoot = false)
     {
         parent::__construct();
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        $this->is_root = $is_root;
+        $this->isRoot = $isRoot;
     }
 
-    public function set_email(string $email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_email(): string|null
+    public function getEmail(): string|null
     {
         return $this->email;
     }
 
-    public function set_password(string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_password(): string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function set_username(string $username): void
+    public function setUsername(string $username): void
     {
         $this->username = $username;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_username(): string
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function set_root(bool $is_root): void
+    public function setRoot(bool $isRoot): void
     {
-        $this->is_root = $is_root;
-        $this->set_updated_at(new DateTime('now'));
+        $this->isRoot = $isRoot;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function is_root(): string
+    public function isRoot(): string
     {
-        return $this->is_root;
+        return $this->isRoot;
     }
 }

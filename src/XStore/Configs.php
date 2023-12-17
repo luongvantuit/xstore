@@ -9,16 +9,15 @@ class Configs
 
     private function __construct()
     {
-        error_log("init " . Configs::class, LOG_INFO);
     }
 
-    public static function get_mysql_info(): array
+    public static function getMysqlInfo(): array
     {
-        $host = Env::get_env("MYSQL_HOST", "127.0.0.1");
-        $port = Env::get_env("MYSQL_PORT", 3306);
-        $username = Env::get_env("MYSQL_USERNAME", "admin");
-        $password = Env::get_env("MYSQL_PASSWORD", "adminpw");
-        $dbname = Env::get_env("MYSQL_DATABASE", "db");
+        $host = Env::getEnv("MYSQL_HOST", "127.0.0.1");
+        $port = Env::getEnv("MYSQL_PORT", 3306);
+        $username = Env::getEnv("MYSQL_USERNAME", "admin");
+        $password = Env::getEnv("MYSQL_PASSWORD", "adminpw");
+        $dbname = Env::getEnv("MYSQL_DATABASE", "db");
         return array(
             "host" => $host,
             "port" => $port,
@@ -28,9 +27,9 @@ class Configs
         );
     }
 
-    public static function get_secret_key(): string
+    public static function getSecretKey(): string
     {
-        $key = Env::get_env("JWT_SECRET_KEY", "secret");
+        $key = Env::getEnv("JWT_SECRET_KEY", "secret");
         return $key;
     }
 }

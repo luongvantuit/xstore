@@ -13,7 +13,7 @@ use XStore\X\Response\HttpStatusCode;
 
 class RegisterController extends Controller
 {
-    public function execute_post()
+    public function executePost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $response = new HttpResponse();
@@ -27,7 +27,7 @@ class RegisterController extends Controller
             $password = $body['password'];
             try {
                 $this->bus->handle(new CreateNewUserCommand(username: $username, email: $email, password: $password));
-                $user = Views::get_user_by_email($this->bus->get_uow(), $email);
+                $user = Views::getUserByEmail($this->bus->getUow(), $email);
                 $response->statusCode(HttpStatusCode::OK)->json(
                     new HttpResponseJson(data: $user)
                 );
@@ -44,7 +44,7 @@ class RegisterController extends Controller
             } catch (Exception $e) {
                 error_log($e, LOG_INFO);
                 $response->statusCode(HttpStatusCode::INTERNAL_SERVER_ERROR)->json(
-                    new HttpResponseJson(success: false, message: "internal server error")
+                    new HttpResponseJson(success: false, message: "internal server error!")
                 );
             }
         } catch (ValidatorException $e) {

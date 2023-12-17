@@ -15,7 +15,7 @@ use XStore\X\Response\HttpStatusCode;
 
 class LoginController extends Controller
 {
-    public function execute_post()
+    public function executePost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $response = new HttpResponse();
@@ -27,8 +27,8 @@ class LoginController extends Controller
             $password = $body['password'];
             try {
                 $this->bus->handle(new AdminLoginCommand($identify, $password));
-                $admin = Views::get_admin_by_identify($this->bus->get_uow(), $identify);
-                $jwt = Views::get_jwt_token_of_admin($this->bus->get_uow(), $admin["id"], new Jwt("admin" . Configs::get_secret_key()));
+                $admin = Views::getAdminByIdentify($this->bus->getUow(), $identify);
+                $jwt = Views::getJwtTokenOfAdmin($this->bus->getUow(), $admin["id"], new Jwt("admin" . Configs::getSecretKey()));
                 $response->statusCode(HttpStatusCode::OK)->json(
                     new HttpResponseJson(data: array(
                         "admin" => $admin,

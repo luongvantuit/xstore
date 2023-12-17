@@ -25,7 +25,7 @@ class Property extends BaseModel
     private string $price;
 
     #[ORM\Column(name: "size_id", type: 'integer')]
-    private string $size_id;
+    private string $sizeId;
 
     #[ORM\Column(name: "path", type: 'string')]
     private string $path;
@@ -35,7 +35,7 @@ class Property extends BaseModel
         string $color,
         string $number,
         string $price,
-        string $size_id,
+        string $sizeId,
         string $path
     ) {
         parent::__construct();
@@ -43,72 +43,72 @@ class Property extends BaseModel
         $this->color = $color;
         $this->number = $number;
         $this->price = $price;
-        $this->size_id = $size_id;
+        $this->sizeId = $sizeId;
         $this->path = $path;
     }
 
-    public function set_product(Product $product): void
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_product(): Product
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
-    public function set_color(string $color): void
+    public function setColor(string $color): void
     {
         $this->color = $color;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_color(): string
+    public function getColor(): string
     {
         return $this->color;
     }
 
-    public function set_number(string $number): void
+    public function setNumber(string $number): void
     {
         $this->number = $number;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_number(): string
+    public function getNumber(): string
     {
         return $this->number;
     }
 
-    public function set_price(string $price): void
+    public function setPrice(string $price): void
     {
         $this->price = $price;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_price(): string
+    public function getPrice(): string
     {
         return $this->price;
     }
 
-    public function set_size_id(int $size_id): void
+    public function setSizeId(int $sizeId): void
     {
-        $this->size_id = $size_id;
-        $this->set_updated_at(new DateTime('now'));
+        $this->sizeId = $sizeId;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_size_id(): int
+    public function getSizeId(): int
     {
-        return $this->size_id;
+        return $this->sizeId;
     }
 
-    public function set_path(string $path): void
+    public function setPath(string $path): void
     {
         $this->path = $path;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_path(): string
+    public function getPath(): string
     {
         return $this->path;
     }

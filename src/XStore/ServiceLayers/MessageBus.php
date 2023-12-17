@@ -12,16 +12,16 @@ class MessageBus
 
     private AbstractUnitOfWork $uow;
 
-    private array $event_handlers;
-    private array $command_handlers;
+    private array $eventHandlers;
+    private array $commandHandlers;
 
     private array $queue = [];
 
-    public function __construct(AbstractUnitOfWork $uow, array $event_handlers, array $command_handlers)
+    public function __construct(AbstractUnitOfWork $uow, array $eventHandlers, array $commandHandlers)
     {
         $this->uow = $uow;
-        $this->event_handlers = $event_handlers;
-        $this->command_handlers = $command_handlers;
+        $this->eventHandlers = $eventHandlers;
+        $this->commandHandlers = $commandHandlers;
     }
 
     public function handle(Command|Event $message): void
@@ -30,36 +30,36 @@ class MessageBus
         while (count($this->queue) > 0) {
             $_message = array_pop($this->queue);
             if ($_message instanceof Command) {
-                $this->handle_command($_message);
+                $this->handleCommand($_message);
             } else if ($_message instanceof Event) {
-                $this->handle_event($_message);
+                $this->handleEvent($_message);
             } else {
                 throw new Exception("error handler message" . $message);
             }
         }
     }
 
-    public function handle_event(Event $event): void
+    public function handleEvent(Event $event): void
     {
-        $handlers = $this->event_handlers[$event::class];
+        $handlers = $this->eventHandlers[$event::class];
         foreach ($handlers as $handler) {
             try {
                 $handler($event);
-                $this->queue = array_merge($this->queue, $this->uow->collect_new_events());
+                $this->queue = array_merge($this->queue, $this->uow->collectNewEvents());
             } catch (Exception $e) {
                 continue;
             }
         }
     }
 
-    public function handle_command(Command $command): void
+    public function handleCommand(Command $command): void
     {
-        $handler = $this->command_handlers[$command::class];
+        $handler = $this->commandHandlers[$command::class];
         $handler($command);
-        $this->queue = array_merge($this->queue, $this->uow->collect_new_events());
+        $this->queue = array_merge($this->queue, $this->uow->collectNewEvents());
     }
 
-    public function get_uow(): AbstractUnitOfWork
+    public function getUow(): AbstractUnitOfWork
     {
         return $this->uow;
     }

@@ -47,48 +47,48 @@ class HttpResponseJson
     }
 
 
-    public function get_success(): bool
+    public function getSuccess(): bool
     {
         return $this->success;
     }
 
-    public function get_message(): string|array
+    public function getMessage(): string|array
     {
         return $this->message;
     }
 
-    public function get_data(): array|null
+    public function getData(): array|null
     {
         return $this->data;
     }
 
-    public function get_total(): int|null
+    public function getTotal(): int|null
     {
         return $this->total;
     }
 
-    public function get_meta(): array|null
+    public function getMeta(): array|null
     {
         return $this->meta;
     }
 
-    public function set_success(bool $success): void
+    public function setSuccess(bool $success): void
     {
         $this->success = $success;
     }
-    public function set_message(string $message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
-    public function set_data(array|null $data): void
+    public function setData(array|null $data): void
     {
         $this->data = $data;
     }
-    public function set_total(int|null $total): void
+    public function setTotal(int|null $total): void
     {
         $this->total = $total;
     }
-    public function set_meta(array|null $meta): void
+    public function setMeta(array|null $meta): void
     {
         $this->meta = $meta;
     }

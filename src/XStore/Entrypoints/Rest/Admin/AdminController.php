@@ -10,12 +10,12 @@ use XStore\X\Response\HttpStatusCode;
 class AdminController extends Controller
 {
 
-    public function execute_get()
+    public function executeGet()
     {
         // Get admin
     }
 
-    public function execute_post()
+    public function executePost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $response = new HttpResponse();
@@ -36,12 +36,12 @@ class AdminController extends Controller
         // Create new admin
     }
 
-    public function execute_put()
+    public function executePut()
     {
         // Update a admin
     }
 
-    public function execute_delete()
+    public function executeDelete()
     {
         // Delete a admin
     }

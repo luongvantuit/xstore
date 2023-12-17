@@ -15,10 +15,10 @@ class Address extends BaseModel
     private User $user;
 
     #[ORM\Column(name: "first_name", type: 'string')]
-    private string $first_name;
+    private string $firstName;
 
     #[ORM\Column(name: "last_name", type: 'string')]
-    private string $last_name;
+    private string $lastName;
 
     #[ORM\Column(name: "address", type: 'string')]
     private string $address;
@@ -27,104 +27,104 @@ class Address extends BaseModel
     private string $email;
 
     #[ORM\Column(name: "phone_number", type: 'string')]
-    private string $phone_number;
+    private string $phoneNumber;
 
     #[ORM\Column(name: "default_address", type: 'boolean')]
-    private bool $default_address;
+    private bool $defaultAddress;
 
     public function __construct(
         User $user,
-        string $first_name,
-        string $last_name,
+        string $firstName,
+        string $lastName,
         string $address,
         string $email,
-        string $phone_number,
-        bool $default_address
+        string $phoneNumber,
+        bool $defaultAddress
     ) {
         parent::__construct();
         $this->user = $user;
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
         $this->address = $address;
         $this->email = $email;
-        $this->phone_number = $phone_number;
-        $this->default_address = $default_address;
+        $this->phoneNumber = $phoneNumber;
+        $this->defaultAddress = $defaultAddress;
     }
 
-    public function set_user(User $user): void
+    public function setUser(User $user): void
     {
         $this->user = $user;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_user(): User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function set_first_name(string $first_name): void
+    public function setFirstName(string $firstName): void
     {
-        $this->first_name = $first_name;
-        $this->set_updated_at(new DateTime('now'));
+        $this->firstName = $firstName;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_first_name(): string
+    public function getFirstName(): string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
-    public function set_last_name(string $last_name): void
+    public function setLastName(string $lastName): void
     {
-        $this->last_name = $last_name;
-        $this->set_updated_at(new DateTime('now'));
+        $this->lastName = $lastName;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_last_name(): string
+    public function getLastName(): string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
-    public function set_address(string $address): void
+    public function setAddress(string $address): void
     {
         $this->address = $address;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_address(): string
+    public function getAddress(): string
     {
         return $this->address;
     }
 
-    public function set_email(string $email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_email(): string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function set_phone_number(string $phone_number): void
+    public function setPhoneNumber(string $phoneNumber): void
     {
-        $this->phone_number = $phone_number;
-        $this->set_updated_at(new DateTime('now'));
+        $this->phoneNumber = $phoneNumber;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_phone_number(): string
+    public function getPhoneNumber(): string
     {
-        return $this->phone_number;
+        return $this->phoneNumber;
     }
 
-    public function set_default_address(bool $default_address): void
+    public function setDefaultAddress(bool $defaultAddress): void
     {
-        $this->default_address = $default_address;
-        $this->set_updated_at(new DateTime('now'));
+        $this->defaultAddress = $defaultAddress;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_default_address(): bool
+    public function getDefaultAddress(): bool
     {
-        return $this->default_address;
+        return $this->defaultAddress;
     }
 }

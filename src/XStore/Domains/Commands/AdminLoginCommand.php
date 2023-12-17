@@ -14,22 +14,22 @@ class AdminLoginCommand extends Command
         $this->password = $password;
     }
 
-    public function set_identify(string $identify): void
+    public function setIdentify(string $identify): void
     {
         $this->identify = $identify;
     }
 
-    public function get_identify(): string
+    public function getIdentify(): string
     {
         return $this->identify;
     }
 
-    public function set_password(string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
-    public function get_password(): string
+    public function getPassword(): string
     {
         return $this->password;
     }

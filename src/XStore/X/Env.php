@@ -9,9 +9,9 @@ class Env
     {
     }
 
-    public static function get_env(string $name, mixed $default_value = null): mixed
+    public static function getEnv(string $name, mixed $defaultValue = null): mixed
     {
         $value = getenv($name);
-        return $value !== false ? $value : $default_value;
+        return $value !== false ? $value : $defaultValue;
     }
 }

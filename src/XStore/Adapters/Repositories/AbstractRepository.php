@@ -39,7 +39,7 @@ abstract class AbstractRepository
 
     abstract protected function _remove(string $clz, ?array $filters = []): int;
 
-    public function get_cached(): array
+    public function getCached(): array
     {
         return $this->cached;
     }

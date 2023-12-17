@@ -18,32 +18,32 @@ class CreateNewAdminCommand extends Command
         $this->password = $password;
     }
 
-    public function set_email(string $email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
-    public function get_email(): string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function set_password(string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
-    public function get_password(): string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function set_username(string $username): void
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
 
-    public function get_username(): string
+    public function getUsername(): string
     {
         return $this->username;
     }

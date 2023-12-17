@@ -11,10 +11,10 @@ class Views
     {
     }
 
-    public static function get_user_by_id(DoctrineUnitOfWork $uow, int $id): array | null
+    public static function getUserById(DoctrineUnitOfWork $uow, int $id): array | null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE id = :id;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
             "id" => $id
         ];
@@ -26,10 +26,10 @@ class Views
         return $result;
     }
 
-    public static function get_user_by_email(DoctrineUnitOfWork $uow, string $email): array|null
+    public static function getUserByEmail(DoctrineUnitOfWork $uow, string $email): array|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE email = :email;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
             "email" => strtolower($email)
         ];
@@ -40,10 +40,10 @@ class Views
         return $result;
     }
 
-    public static function get_user_by_identify(DoctrineUnitOfWork $uow, string $identify): array | null
+    public static function getUserByIdentify(DoctrineUnitOfWork $uow, string $identify): array | null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE email = :email OR username = :username;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
             "email" => strtolower($identify),
             "username" => strtolower($identify)
@@ -55,12 +55,12 @@ class Views
         return $result;
     }
 
-    public static function get_jwt_token_of_user(DoctrineUnitOfWork $uow, int $user_id, AbstractJwt $jwt): string|null
+    public static function getJwtTokenOfUser(DoctrineUnitOfWork $uow, int $userId, AbstractJwt $jwt): string|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE id = :id;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
-            "id" => $user_id
+            "id" => $userId
         ];
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
@@ -69,10 +69,10 @@ class Views
         return $jwt->encode($result);
     }
 
-    public static function get_admin_by_identify(DoctrineUnitOfWork $uow, string $identify): array | null
+    public static function getAdminByIdentify(DoctrineUnitOfWork $uow, string $identify): array | null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE username = :username;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
             "username" => strtolower($identify)
         ];
@@ -83,12 +83,12 @@ class Views
         return $result;
     }
 
-    public static function get_jwt_token_of_admin(DoctrineUnitOfWork $uow, int $admin_id, AbstractJwt $jwt): string|null
+    public static function getJwtTokenOfAdmin(DoctrineUnitOfWork $uow, int $adminId, AbstractJwt $jwt): string|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE id = :id;";
-        $conn = $uow->get_entity_manager()->getConnection();
+        $conn = $uow->getEntityManager()->getConnection();
         $params = [
-            "id" => $admin_id
+            "id" => $adminId
         ];
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {

@@ -6,6 +6,7 @@ use XStore\Adapters\Hashing\AbstractHashing;
 use XStore\Domains\Commands\AdminLoginCommand;
 use XStore\Domains\Commands\CreateNewAdminCommand;
 use XStore\Domains\Commands\CreateNewUserCommand;
+use XStore\Domains\Commands\InitialAdminCommand;
 use XStore\Domains\Events\CreatedUserEvent;
 use XStore\Domains\Models\User;
 use XStore\ServiceLayers\UnitOfWork\AbstractUnitOfWork;
@@ -15,89 +16,110 @@ use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\Exceptions\EmailExistedException;
 use XStore\ServiceLayers\Exceptions\InvalidPasswordException;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
+use XStore\ServiceLayers\Exceptions\RootWasInitiatedException;
 use XStore\ServiceLayers\Exceptions\UsernameExistedException;
 
 
-function create_new_admin(CreateNewAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
+function createNewAdmin(CreateNewAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
-    $repo = $uow->get_repo();
+    $repo = $uow->getRepository();
     /** @var Admin $model */
-    $model = $repo->get(Admin::class, array("username" => strtolower($command->get_username())));
+    $model = $repo->get(Admin::class, array("username" => strtolower($command->getUsername())));
     if ($model != null) {
         throw new UsernameExistedException();
     }
-    $uow->begin_transaction();
-    $password_hash = $hashing->hash($command->get_password());
+    $uow->beginTransaction();
+    $passwordHash = $hashing->hash($command->getPassword());
     $model = new Admin(
-        username: strtolower($command->get_username()),
-        password: $password_hash,
-        email: $command->get_email() == null ? null : strtolower($command->get_email())
+        username: strtolower($command->getUsername()),
+        password: $passwordHash,
+        email: $command->getEmail() == null ? null : strtolower($command->getEmail())
     );
     $repo->add($model);
     $uow->commit();
-    $event = new CreatedAdminEvent($model->get_id());
-    $model->set_events(array($event));
+    $event = new CreatedAdminEvent($model->getId());
+    $model->setEvents(array($event));
 }
 
-function create_new_user(CreateNewUserCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
+function createNewUser(CreateNewUserCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
-    $repo = $uow->get_repo();
+    $repo = $uow->getRepository();
     /** @var User $model */
-    $model = $repo->get(User::class, array("email" => strtolower($command->get_email())));
+    $model = $repo->get(User::class, array("email" => strtolower($command->getEmail())));
     if ($model != null) {
         throw new EmailExistedException();
     }
-    $model = $repo->get(User::class, array("username" => strtolower($command->get_username())));
+    $model = $repo->get(User::class, array("username" => strtolower($command->getUsername())));
     if ($model != null) {
         throw new UsernameExistedException();
     }
-    $uow->begin_transaction();
-    $password_hash = $hashing->hash($command->get_password());
+    $uow->beginTransaction();
+    $passwordHash = $hashing->hash($command->getPassword());
     $model = new User(
-        username: strtolower($command->get_username()),
-        email: strtolower($command->get_email()),
-        password: $password_hash,
+        username: strtolower($command->getUsername()),
+        email: strtolower($command->getEmail()),
+        password: $passwordHash,
     );
     $repo->add($model);
     $uow->commit();
-    $event = new CreatedUserEvent($model->get_id());
-    $model->set_events(array($event));
+    $event = new CreatedUserEvent($model->getId());
+    $model->setEvents(array($event));
 }
 
-function login_user(UserLoginCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
+function loginUser(UserLoginCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
-    $repo = $uow->get_repo();
+    $repo = $uow->getRepository();
     /** @var User $model */
-    $model = $repo->get(User::class, array("email" => strtolower($command->get_identify())));
+    $model = $repo->get(User::class, array("email" => strtolower($command->getIdentify())));
     if ($model == null) {
         /** @var User $model */
-        $model = $repo->get(User::class, array("username" => strtolower($command->get_identify())));
+        $model = $repo->get(User::class, array("username" => strtolower($command->getIdentify())));
     }
     if ($model == null) {
         throw new NotFoundException();
     }
-    if (!$hashing->compare($command->get_password(), $model->get_password())) {
+    if (!$hashing->compare($command->getPassword(), $model->getPassword())) {
         throw new InvalidPasswordException();
     }
 }
 
-function login_admin(AdminLoginCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
+function loginAdmin(AdminLoginCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
-    $repo = $uow->get_repo();
+    $repo = $uow->getRepository();
     /** @var Admin $model */
-    $model = $repo->get(Admin::class, array("username" => strtolower($command->get_identify())));
+    $model = $repo->get(Admin::class, array("username" => strtolower($command->getIdentify())));
     if ($model == null) {
         throw new NotFoundException();
     }
-    if (!$hashing->compare($command->get_password(), $model->get_password())) {
+    if (!$hashing->compare($command->getPassword(), $model->getPassword())) {
         throw new InvalidPasswordException();
     }
+}
+
+function initialAdmin(InitialAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
+{
+    $repo = $uow->getRepository();
+    /** @var Admin $model */
+    $model = $repo->get(Admin::class, array("username" => "root"));
+    if ($model != null) {
+        throw new RootWasInitiatedException();
+    }
+    $uow->beginTransaction();
+    $passwordHash = $hashing->hash($command->getPassword());
+    $model = new Admin(
+        username: "root",
+        password: $passwordHash,
+        isRoot: true
+    );
+    $repo->add($model);
+    $uow->commit();
 }
 
 
 const COMMAND_HANDLERS = array(
-    CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\create_new_user",
-    UserLoginCommand::class => "XStore\ServiceLayers\Handlers\login_user",
-    CreateNewAdminCommand::class => "XStore\ServiceLayers\Handlers\create_new_admin",
-    AdminLoginCommand::class => "XStore\ServiceLayers\Handlers\login_admin"
+    CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
+    UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
+    CreateNewAdminCommand::class => "XStore\ServiceLayers\Handlers\createNewAdmin",
+    AdminLoginCommand::class => "XStore\ServiceLayers\Handlers\loginAdmin",
+    InitialAdminCommand::class => "XStore\ServiceLayers\Handlers\initialAdmin"
 );

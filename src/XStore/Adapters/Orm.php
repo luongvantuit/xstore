@@ -18,7 +18,7 @@ function start_mappers(): void
         paths: array(__DIR__ . "/../Domains/Models"),
         isDevMode: true,
     );
-    $mysql_info = Configs::get_mysql_info();
+    $mysql_info = Configs::getMysqlInfo();
     $connection = DriverManager::getConnection(array_merge([
         'driver' => 'pdo_mysql',
     ], $mysql_info), $config);

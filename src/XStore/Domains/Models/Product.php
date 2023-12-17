@@ -27,35 +27,35 @@ class Product extends BaseModel
         $this->path = $path;
     }
 
-    public function set_name(string $name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_name(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function set_description(string $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_description(): string
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    public function set_path(string $path): void
+    public function setPath(string $path): void
     {
         $this->path = $path;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_path(): string
+    public function getPath(): string
     {
         return $this->path;
     }

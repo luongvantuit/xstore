@@ -16,7 +16,7 @@ use XStore\X\Response\HttpStatusCode;
 class LoginController extends Controller
 {
 
-    public function execute_post()
+    public function executePost()
     {
         $body = json_decode(file_get_contents('php://input'), true);
         $response = new HttpResponse();
@@ -28,8 +28,8 @@ class LoginController extends Controller
             $password = $body['password'];
             try {
                 $this->bus->handle(new UserLoginCommand($identify, $password));
-                $user = Views::get_user_by_identify($this->bus->get_uow(), $identify);
-                $jwt = Views::get_jwt_token_of_user($this->bus->get_uow(), $user["id"], new Jwt(Configs::get_secret_key()));
+                $user = Views::getUserByIdentify($this->bus->getUow(), $identify);
+                $jwt = Views::getJwtTokenOfUser($this->bus->getUow(), $user["id"], new Jwt(Configs::getSecretKey()));
                 $response->statusCode(HttpStatusCode::OK)->json(
                     new HttpResponseJson(data: array(
                         "user" => $user,
@@ -39,17 +39,17 @@ class LoginController extends Controller
             } catch (NotFoundException $e) {
                 error_log($e, LOG_INFO);
                 $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
-                    new HttpResponseJson(success: false, message: "not found user")
+                    new HttpResponseJson(success: false, message: "not found user!")
                 );
             } catch (InvalidPasswordException $e) {
                 error_log($e, LOG_INFO);
                 $response->statusCode(HttpStatusCode::UNAUTHORIZED)->json(
-                    new HttpResponseJson(success: false, message: "invalid password")
+                    new HttpResponseJson(success: false, message: "invalid password!")
                 );
             } catch (Exception $e) {
                 error_log($e, LOG_INFO);
                 $response->statusCode(HttpStatusCode::INTERNAL_SERVER_ERROR)->json(
-                    new HttpResponseJson(success: false, message: "internal server error")
+                    new HttpResponseJson(success: false, message: "internal server error!")
                 );
             }
         } catch (ValidatorException $e) {

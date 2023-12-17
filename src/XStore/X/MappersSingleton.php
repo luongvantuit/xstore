@@ -14,7 +14,7 @@ class MappersSingleton
         $this->created = false;
     }
 
-    static public function get_instance(): MappersSingleton
+    static public function getInstance(): MappersSingleton
     {
         if (MappersSingleton::$instance == null) {
             MappersSingleton::$instance = new MappersSingleton();

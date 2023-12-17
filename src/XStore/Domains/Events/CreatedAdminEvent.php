@@ -13,7 +13,7 @@ class CreatedAdminEvent extends Event
         $this->id = $id;
     }
 
-    public function get_id(): int| null
+    public function getId(): int| null
     {
         return $this->id;
     }

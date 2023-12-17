@@ -26,11 +26,11 @@ function bootstrap(): MessageBus
     # Dependencies pattern
     $dependencies = array(
         "hashing" => new BcryptHashing(),
-        "email_notification" => new PhpMailerNotification()
+        "emailNotification" => new PhpMailerNotification()
     );
     // Mappers
-    if (!MappersSingleton::get_instance()->created) {
-        MappersSingleton::get_instance()->created = true;
+    if (!MappersSingleton::getInstance()->created) {
+        MappersSingleton::getInstance()->created = true;
         start_mappers();
     }
     // Initial unit of work
@@ -40,7 +40,7 @@ function bootstrap(): MessageBus
         ],
         isDevMode: true,
     );
-    $mysql_info = Configs::get_mysql_info();
+    $mysql_info = Configs::getMysqlInfo();
     $connection = DriverManager::getConnection(array_merge([
         'driver' => 'pdo_mysql',
     ], $mysql_info), $config);
@@ -50,23 +50,23 @@ function bootstrap(): MessageBus
     // Extend unit of work
     $dependencies = array_merge($dependencies, array("uow" => $uow));
     # Inject event handlers
-    $injected_event_handlers = array_map(function ($event_handlers) use ($dependencies) {
+    $injectedEventHandlers = array_map(function ($eventHandlers) use ($dependencies) {
         return array_map(function ($handler) use ($dependencies) {
-            return inject_dependencies($handler, $dependencies);
-        }, $event_handlers);
+            return injectDependencies($handler, $dependencies);
+        }, $eventHandlers);
     }, EVENT_HANDLERS);
     # Inject command handlers
-    $injected_command_handlers = array_map(function ($handler) use ($dependencies) {
-        return inject_dependencies($handler, $dependencies);
+    $injectedCommandHandlers = array_map(function ($handler) use ($dependencies) {
+        return injectDependencies($handler, $dependencies);
     }, COMMAND_HANDLERS);
     return new MessageBus(
         uow: $uow,
-        event_handlers: $injected_event_handlers,
-        command_handlers: $injected_command_handlers,
+        eventHandlers: $injectedEventHandlers,
+        commandHandlers: $injectedCommandHandlers,
     );
 }
 
-function inject_dependencies($handler, $dependencies): callable
+function injectDependencies($handler, $dependencies): callable
 {
     $reflection = new ReflectionFunction($handler);
     $params = $reflection->getParameters();

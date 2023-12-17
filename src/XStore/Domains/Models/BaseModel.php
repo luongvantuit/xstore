@@ -15,22 +15,22 @@ class BaseModel
     private int|null $id;
 
     #[ORM\Column(name: "created_at", type: 'datetime', updatable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private DateTime $created_at;
+    private DateTime $createdAt;
 
     #[ORM\Column(name: "updated_at", type: 'datetime', nullable: true)]
-    private DateTime|null $updated_at;
+    private DateTime|null $updatedAt;
 
     private array $events;
 
     public function __construct()
     {
         $this->id = null;
-        $this->created_at = new DateTime();
-        $this->updated_at = null;
+        $this->createdAt = new DateTime();
+        $this->updatedAt = null;
         $this->events = [];
     }
 
-    public function get_events(): array
+    public function getEvents(): array
     {
         if (empty($this->events)) {
             $this->events = [];
@@ -38,27 +38,27 @@ class BaseModel
         return $this->events;
     }
 
-    public function set_events(array $events = [])
+    public function setEvents(array $events = [])
     {
         $this->events = $events;
     }
 
-    public function get_id(): int|null
+    public function getId(): int|null
     {
         return $this->id;
     }
-    public function get_created_at(): DateTime
+    public function getCreatedAt(): DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function get_updated_at(): DateTime|null
+    public function getUpdatedAt(): DateTime|null
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function set_updated_at(DateTime $update_at = new DateTime()): void
+    public function setUpdatedAt(DateTime $updatedAt = new DateTime()): void
     {
-        $this->updated_at = $update_at;
+        $this->updatedAt = $updatedAt;
     }
 }

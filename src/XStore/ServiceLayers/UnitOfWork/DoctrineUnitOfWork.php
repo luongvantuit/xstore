@@ -18,7 +18,7 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         $this->repo = new DoctrineRepository($this->entity_manager);
     }
 
-    public function begin_transaction(): void
+    public function beginTransaction(): void
     {
         $this->entity_manager->beginTransaction();
     }
@@ -33,7 +33,7 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         $this->entity_manager->rollback();
     }
 
-    public function get_repo(): AbstractRepository
+    public function getRepository(): AbstractRepository
     {
         if ($this->repo == null) {
             $this->repo = new DoctrineRepository($this->entity_manager);
@@ -41,7 +41,7 @@ class DoctrineUnitOfWork extends AbstractUnitOfWork
         return $this->repo;
     }
 
-    public function get_entity_manager(): EntityManagerInterface
+    public function getEntityManager(): EntityManagerInterface
     {
         return $this->entity_manager;
     }

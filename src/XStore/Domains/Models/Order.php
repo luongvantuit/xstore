@@ -21,60 +21,60 @@ class Order extends BaseModel
 
 
     #[ORM\Column(name: "type_shipping_fee", type: 'integer')]
-    private int $type_shipping_fee;
+    private int $typeShippingFee;
 
     #[ORM\Column(name: "status", type: 'string')]
     private string $status;
 
-    public function __construct(User $user, Address $address, int $type_shipping_fee, string $status)
+    public function __construct(User $user, Address $address, int $typeShippingFee, string $status)
     {
         parent::__construct();
         $this->user = $user;
         $this->address = $address;
-        $this->type_shipping_fee = $type_shipping_fee;
+        $this->typeShippingFee = $typeShippingFee;
         $this->status = $status;
     }
 
-    public function set_user(User $user): void
+    public function setUser(User $user): void
     {
         $this->user = $user;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_user(): User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function set_address(Address $address): void
+    public function setAddress(Address $address): void
     {
         $this->address = $address;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_address(): Address
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
-    public function set_type_shipping_fee(int $type_shipping_fee): void
+    public function setTypeShippingFee(int $typeShippingFee): void
     {
-        $this->type_shipping_fee = $type_shipping_fee;
-        $this->set_updated_at(new DateTime('now'));
+        $this->typeShippingFee = $typeShippingFee;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_type_shipping_fee(): int
+    public function getTypeShippingFee(): int
     {
-        return $this->type_shipping_fee;
+        return $this->typeShippingFee;
     }
 
-    public function set_status(string $status): void
+    public function setStatus(string $status): void
     {
         $this->status = $status;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_status(): string
+    public function getStatus(): string
     {
         return $this->status;
     }

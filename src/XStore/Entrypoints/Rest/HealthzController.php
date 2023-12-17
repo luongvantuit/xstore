@@ -9,11 +9,11 @@ use XStore\X\Response\HttpStatusCode;
 class HealthzController extends Controller
 {
 
-    public function execute_get(): void
+    public function executeGet(): void
     {
         $response = new HttpResponse();
         $response->statusCode(HttpStatusCode::OK)->json(
-            new HttpResponseJson(message: "alive")
+            new HttpResponseJson(message: "alive!")
         )->build();
     }
 }

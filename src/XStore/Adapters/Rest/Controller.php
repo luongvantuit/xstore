@@ -23,7 +23,7 @@ class Controller
         $this->bus = bootstrap();
     }
 
-    private function method_not_allowed()
+    private function methodNotAllowed()
     {
         $response = new HttpResponse();
         $response->statusCode(HttpStatusCode::METHOD_NOT_ALLOWED)->json(
@@ -42,16 +42,16 @@ class Controller
     {
         switch ($_SERVER[HttpRequestMethod::PARAM_NAME]) {
             case HttpRequestMethod::GET:
-                $this->execute_get();
+                $this->executeGet();
                 break;
             case HttpRequestMethod::POST:
-                $this->execute_post();
+                $this->executePost();
                 break;
             case HttpRequestMethod::PUT:
-                $this->execute_put();
+                $this->executePut();
                 break;
             case HttpRequestMethod::DELETE:
-                $this->execute_delete();
+                $this->executeDelete();
                 break;
             default:
                 $this->forbidden();
@@ -59,23 +59,23 @@ class Controller
         }
     }
 
-    public function execute_get()
+    public function executeGet()
     {
-        $this->method_not_allowed();
+        $this->methodNotAllowed();
     }
 
-    public function execute_post()
+    public function executePost()
     {
-        $this->method_not_allowed();
+        $this->methodNotAllowed();
     }
 
-    public function execute_put()
+    public function executePut()
     {
-        $this->method_not_allowed();
+        $this->methodNotAllowed();
     }
 
-    public function execute_delete()
+    public function executeDelete()
     {
-        $this->method_not_allowed();
+        $this->methodNotAllowed();
     }
 }

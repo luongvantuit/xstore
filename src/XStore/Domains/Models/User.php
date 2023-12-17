@@ -23,84 +23,84 @@ class User extends BaseModel
     private UserStatus $status = UserStatus::ACTIVE;
 
     #[ORM\Column(name: "email_ok", type: 'boolean', options: ["default" => false])]
-    private bool $email_ok = false;
+    private bool $emailOk = false;
 
     #[ORM\Column(name: "email_confirmation_token", type: 'string', nullable: true)]
-    private string|null $email_confirmation_token;
+    private string|null $emailConfirmationToken;
 
-    public function __construct(string $username, string $email, string $password, bool $email_ok = false, UserStatus $status = UserStatus::ACTIVE)
+    public function __construct(string $username, string $email, string $password, bool $emailOk = false, UserStatus $status = UserStatus::ACTIVE)
     {
         parent::__construct();
         $this->username = $username;
         $this->email = $email;
         $this->password = $password;
-        $this->email_ok = $email_ok;
+        $this->emailOk = $emailOk;
         $this->status = $status;
     }
 
-    public function set_password(string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_password(): string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function set_username(string $username): void
+    public function setUsername(string $username): void
     {
         $this->username = $username;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_username(): string
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function set_email(string $email): void
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_email(): string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function set_status(UserStatus $status): void
+    public function setStatus(UserStatus $status): void
     {
         $this->status = $status;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_status(): UserStatus
+    public function getStatus(): UserStatus
     {
         return $this->status;
     }
 
-    public function set_email_ok(bool $email_ok): void
+    public function setEmailOk(bool $emailOk): void
     {
-        $this->email_ok = $email_ok;
-        $this->set_updated_at(new DateTime('now'));
+        $this->emailOk = $emailOk;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_email_ok(): bool
+    public function getEmailOk(): bool
     {
-        return $this->email_ok;
+        return $this->emailOk;
     }
 
-    public function set_email_confirmation_token(string|null $email_confirmation_token): void
+    public function setEmailConfirmationToken(string|null $emailConfirmationToken): void
     {
-        $this->email_confirmation_token = $email_confirmation_token;
-        $this->set_updated_at(new DateTime('now'));
+        $this->emailConfirmationToken = $emailConfirmationToken;
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_email_confirmation_token(): string|null
+    public function getEmailConfirmationToken(): string|null
     {
-        return $this->email_confirmation_token;
+        return $this->emailConfirmationToken;
     }
 }

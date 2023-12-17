@@ -31,35 +31,35 @@ class OrderProduct extends BaseModel
         $this->number = $number;
     }
 
-    public function set_order(Order $order): void
+    public function setOrder(Order $order): void
     {
         $this->order = $order;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_order(): Order
+    public function getOrder(): Order
     {
         return $this->order;
     }
 
-    public function set_property(Property $property): void
+    public function setProperty(Property $property): void
     {
         $this->property = $property;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_property(): Property
+    public function getProperty(): Property
     {
         return $this->property;
     }
 
-    public function set_number(float $number): void
+    public function setNumber(float $number): void
     {
         $this->number = $number;
-        $this->set_updated_at(new DateTime('now'));
+        $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function get_number(): float
+    public function getNumber(): float
     {
         return $this->number;
     }
