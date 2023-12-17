@@ -2,8 +2,10 @@
 
 namespace XStore;
 
+use Symfony\Component\Cache\DoctrineProvider;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\X\Jw\AbstractJwt;
+use XStore\Domains\Models\OrderStatus;
 
 class Views
 {
@@ -95,5 +97,31 @@ class Views
             return null;
         }
         return $jwt->encode($result);
+    }
+
+    public static function getCartProductByUserId(DoctrineUnitOfWork $uow, int $userId): array|null
+    {
+        $sql = "SELECT id FROM orders WHERE user_id = :user_id AND status = :status_order;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "user_id" => $userId,
+            "status_order" => OrderStatus::INCARD
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        $sql = "SELECT order_products.id, order_products.property_id, order_products.number
+        FROM order_products
+        WHERE order_id = :order_id;";
+        $params = [
+            "order_id" => $result['id']
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 }

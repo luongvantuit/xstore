@@ -17,16 +17,16 @@ class Order extends BaseModel
 
     #[ORM\ManyToOne(targetEntity: Address::class, inversedBy: "orders")]
     #[ORM\JoinColumn(name: "address_id", referencedColumnName: "id", onDelete: "CASCADE")]
-    private Address $address;
+    private ?Address $address;
 
 
     #[ORM\Column(name: "type_shipping_fee", type: 'integer')]
-    private int $typeShippingFee;
+    private ?int $typeShippingFee;
 
-    #[ORM\Column(name: "status", type: 'string')]
-    private string $status;
+    #[ORM\Column(name: "status", enumType: OrderStatus::class, options: ["default" => OrderStatus::INCARD])]
+    private OrderStatus $status = OrderStatus::INCARD;
 
-    public function __construct(User $user, Address $address, int $typeShippingFee, string $status)
+    public function __construct(User $user, ?Address $address, ?int $typeShippingFee, OrderStatus $status)
     {
         parent::__construct();
         $this->user = $user;
@@ -68,13 +68,13 @@ class Order extends BaseModel
         return $this->typeShippingFee;
     }
 
-    public function setStatus(string $status): void
+    public function setStatus(OrderStatus $status): void
     {
         $this->status = $status;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getStatus(): string
+    public function getStatus(): OrderStatus
     {
         return $this->status;
     }
