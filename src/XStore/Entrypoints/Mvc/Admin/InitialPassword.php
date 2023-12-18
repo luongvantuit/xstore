@@ -32,33 +32,40 @@ if ($model != null) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initial Password - Root Password</title>
-    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap-grid.css" type="text/css">
-    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap-grid.rtl.css" type="text/css">
-    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap-reboot.css" type="text/css">
-    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap-reboot.rtl.css" type="text/css">
-    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap-reboot.rtl.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/admin/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/admin/css/fontawesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/admin/css/initial-password.css" type="text/css">
 </head>
 
 <body>
-    <div class="d-flex justify-content-center align-items-center h-100 w-100">
-        <form action="" class="rounded shadow-sm w-25 bg-white d-flex flex-column p-3 justify-content-center form-gap">
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+        <form id="form-setup-root-password" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-setup-root-password needs-validation" novalidate>
             <p class="font-weight-bold h3 text-center">Setup Root Password</p>
+            <div id="form-setup-root-password-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+            </div>
             <div class="form-group">
                 <label for="input-password">Password</label>
-                <input type="password" class="form-control" id="input-password" placeholder="Password" minlength="6" required>
+                <div class="input-group has-validation">
+                    <span class="input-group-text">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" class="form-control" id="input-password" placeholder="password" minlength="6" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div id="input-password-invalid-feedback-message" class="invalid-feedback">
+                        <!-- Invalid message -->
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-
-    <script src="/assets/bootstrap-5.0.2/js/jquery-3.3.1.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/jquery.magnific-popup.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/jquery.slicknav.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/owl.carousel.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/jquery.nice-select.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/mixitup.min.js"></script>
-    <script src="/assets/bootstrap-5.0.2/js/main.js"></script>
+    <script src="/assets/admin/js/bootstrap.min.js"></script>
+    <script src="/assets/admin/js/fontawesome.min.js"></script>
+    <script src="/assets/admin/js/jquery.min.js"></script>
+    <script src="/assets/admin/js/initial-password.js"></script>
 </body>
 
 </html>
