@@ -18,6 +18,8 @@ $path_mapping = array(
     "/shops" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Shops.php",
     "/contact" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Contact.php",
     # MVC Admin
+    "/admin" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Home.php",
+    "/admin/initial-password" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/InitialPassword.php",
     # API 
     "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/HealthzController.php",
     # API App
@@ -42,8 +44,11 @@ $path_mapping = array(
 
 # Inject to target
 $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+if (strlen($url_path) > 0 && $url_path != "/" && $url_path[strlen($url_path) - 1] == "/") {
+    $url_path = substr($url_path, 0, strlen($url_path) - 1);
+}
 if (Path::has($path_mapping, $url_path)) {
-    define("PATH_ORIGIN", Path::origin($path_mapping, $url_path));
+    // define("PATH_ORIGIN", Path::origin($path_mapping, $url_path));
     include_once Path::target($path_mapping, $url_path);
 } else {
     $response = new HttpResponse();

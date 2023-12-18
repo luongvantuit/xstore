@@ -12,12 +12,15 @@ class Path
     public static function compare(string $pathOrigin, string $path): bool
     {
         $pathOriginExplore = explode("/", $pathOrigin);
-        $path_explode = explode("/", $path);
+        $pathExplode = explode("/", $path);
+        if (sizeof($pathOriginExplore) != sizeof($pathExplode)) {
+            return false;
+        }
         for ($counter = 0; $counter < count($pathOriginExplore); $counter++) {
             if (strlen($pathOriginExplore[$counter]) > 0 && $pathOriginExplore[$counter][1] == ":") {
                 continue;
             }
-            if ($pathOriginExplore[$counter] != $path_explode[$counter]) {
+            if ($pathOriginExplore[$counter] != $pathExplode[$counter]) {
                 return false;
             }
         }
