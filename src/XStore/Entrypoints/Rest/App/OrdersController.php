@@ -15,6 +15,7 @@ use XStore\Domains\Commands\UpdateOrderCommand;
 use XStore\ServiceLayers\Exceptions\ForbiddenException;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\Domains\Commands\CancelOrderCommand;
+use XStore\ServiceLayers\Exceptions\OutStockException;
 
 class OrdersController extends Controller
 {
@@ -62,8 +63,11 @@ class OrdersController extends Controller
                     $response->statusCode(HttpStatusCode::OK)->json(
                         new HttpResponseJson(data: array())
                     );
+                } catch (OutStockException $e) {
+                    $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
+                        new HttpResponseJson(success: false, message: $e->getMessage())
+                    );
                 } catch (Exception $e) {
-
                     $response->statusCode(HttpStatusCode::INTERNAL_SERVER_ERROR)->json(
                         new HttpResponseJson(success: false, message: "internal server error")
                     );

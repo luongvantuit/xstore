@@ -28,6 +28,11 @@ class DoctrineRepository extends AbstractRepository
         return $this->entity_manager->getRepository($clz)->findOneBy($filters);
     }
 
+    protected function _getAll(string $clz, ?array $filters = []): ?array
+    {
+        return $this->entity_manager->getRepository($clz)->findBy($filters);
+    }
+
     protected function _remove(string $clz, ?array $filters = []): int
     {
         $entities = $this->entity_manager->getRepository($clz)->findBy($filters);

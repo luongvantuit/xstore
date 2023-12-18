@@ -279,10 +279,13 @@ function createOrder(CreateOrderCommand $command, AbstractUnitOfWork $uow): void
     $repo->add($order);
 
     foreach ($command->getProducts() as $product) {
-        /** @var Property $model */
+        /** @var Property $property */
         $property = $repo->get(Property::class, array("id" => $product['property_id']));
         if ($property == null) {
             throw new NotFoundException();
+        }
+        if ($product['number'] > $property->getNumber()) {
+            throw new OutStockException();
         }
         /** @var OrderProduct $model */
         $order_product = new OrderProduct(
@@ -291,6 +294,8 @@ function createOrder(CreateOrderCommand $command, AbstractUnitOfWork $uow): void
             number: $product['number']
         );
         $repo->add($order_product);
+        $property->setNumber($property->getNumber() - $product['number']);
+        $repo->add($property);
     }
     $uow->commit();
 }
@@ -299,13 +304,11 @@ function updateOrder(UpdateOrderCommand $command, AbstractUnitOfWork $uow): void
 {
     $repo = $uow->getRepository();
     $uow->beginTransaction();
-    error_log(json_encode($command), LOG_INFO);
     /** @var User $model */
     $user = $repo->get(User::class, array("id" => $command->getUserId()));
     if ($user == null) {
         throw new NotFoundException();
     }
-    error_log(json_encode($user), LOG_INFO);
     /** @var Address $address */
     $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
     if ($address == null) {
@@ -327,7 +330,6 @@ function updateOrder(UpdateOrderCommand $command, AbstractUnitOfWork $uow): void
 
     /** @var Order $order */
     $order = $repo->get(Order::class, array("id" => $command->getOrderId()));
-    error_log(json_encode($order), LOG_INFO);
     if ($order == null) {
         throw new NotFoundException();
     }
@@ -365,6 +367,15 @@ function cancelOrder(CancelOrderCommand $command, AbstractUnitOfWork $uow): void
     }
     $order->setStatus(OrderStatus::CANCELED);
     $repo->add($order);
+
+    $order_product = $repo->getAll(OrderProduct::class, array("order" => $order));
+
+    foreach ($order_product as $product) {
+        /** @var Property $property */
+        $property = $product->getProperty();
+        $property->setNumber($property->getNumber() + $product->getNumber());
+        $repo->add($property);
+    }
     $uow->commit();
 }
 const COMMAND_HANDLERS = array(

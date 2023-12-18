@@ -150,8 +150,6 @@ class Views
         }
         $result = [];
         foreach ($orders as $order) {
-            error_log(json_encode($order), LOG_INFO);
-            $result[$order['id']] = $order;
             $result[$order['id']]['products'] = [];
             $result[$order['id']]['status'] = $order['status'];
         }
