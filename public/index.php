@@ -23,8 +23,9 @@ $path_mapping = array(
     "/api/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/OrdersController.php",
     "/api/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/ProductsController.php",
     "/api/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/UsersController.php",
-    "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
+    // "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
     "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
+
     # API Admin
     "/api/admins" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/AdminController.php",
     "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",

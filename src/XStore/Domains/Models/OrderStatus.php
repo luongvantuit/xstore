@@ -7,7 +7,7 @@ enum OrderStatus: string
 {
     case  INCARD = "incard";
     case  PENDING = "pending";
-    case  CANCELLED = "cancelled";
+    case  CANCELED = "cancelled";
     case  DELIVERING = "delivering";
     case  DELIVERED = "delivered";
     case  RETURNING = "returning";

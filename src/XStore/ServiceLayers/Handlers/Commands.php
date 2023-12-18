@@ -2,6 +2,7 @@
 
 namespace XStore\ServiceLayers\Handlers;
 
+use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use XStore\Adapters\Hashing\AbstractHashing;
 use XStore\Domains\Commands\AdminLoginCommand;
 use XStore\Domains\Commands\CreateNewAdminCommand;
@@ -19,12 +20,19 @@ use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\ServiceLayers\Exceptions\RootWasInitiatedException;
 use XStore\ServiceLayers\Exceptions\UsernameExistedException;
 use XStore\Domains\Commands\AddProductToCartCommand;
+use XStore\Domains\Commands\CancelOrderCommand;
 use XStore\Domains\Models\OrderStatus;
 use XStore\Domains\Models\Order;
 use XStore\Domains\Models\OrderProduct;
 use XStore\Domains\Models\Property;
 use XStore\Domains\Commands\DeleteCartProductCommand;
 use XStore\Domains\Commands\UpdateCartProductCommand;
+use XStore\Domains\Commands\CreateOrderCommand;
+use XStore\Domains\Commands\UpdateOrderCommand;
+use XStore\Domains\Models\Address;
+use XStore\Domains\Models\TypeShippingFee;
+use XStore\ServiceLayers\Exceptions\OutStockException;
+use XStore\ServiceLayers\Exceptions\ForbiddenException;
 
 function createNewAdmin(CreateNewAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
@@ -130,21 +138,25 @@ function addProductToCart(AddProductToCartCommand $command, AbstractUnitOfWork $
     if ($user == null) {
         throw new NotFoundException();
     }
-    /** @var Order $model */
-    $order = $repo->get(Order::class, array("user_id" => $command->getUserId(), "status" => OrderStatus::INCARD));
+    /** @var Order $order */
+    $order = $repo->get(Order::class, array("user" => $user, "status" => OrderStatus::INCARD));
     if ($order == null) {
         $order = new Order(
             user: $user,
             address: null,
-            typeShippingFee: null,
+            typeShippingFee: TypeShippingFee::OTHER_SHIPPING,
             status: OrderStatus::INCARD
         );
         $repo->add($order);
     }
-    /** @var Property $model */
+    /** @var Property $property */
     $property = $repo->get(Property::class, array("id" => $command->getPropertyId()));
     if ($property == null) {
         throw new NotFoundException();
+    }
+
+    if ($command->getNumber() > $property->getNumber()) {
+        throw new OutStockException();
     }
     /** @var OrderProduct $model */
     $order_product = new OrderProduct(
@@ -160,39 +172,201 @@ function deleteCartProduct(DeleteCartProductCommand $command, AbstractUnitOfWork
 {
     $repo = $uow->getRepository();
     $uow->beginTransaction();
-    $repo->remove(
-        OrderProduct::class,
-        array("id" => $command->getOrderPropertyId(), "order.user.id" => $command->getUserId())
-    );
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+
+    /** @var Order $order */
+    $order = $repo->get(Order::class, array("user" => $user, "status" => OrderStatus::INCARD));
+
+    if ($order == null) {
+        throw new NotFoundException();
+    }
+
+    /** @var Property $property */
+    $property = $repo->get(Property::class, array("id" => $command->getPropertyId()));
+    if ($property == null) {
+        throw new NotFoundException();
+    }
+
+    /** @var OrderProduct $order_product */
+    $repo->remove(OrderProduct::class, array("property" => $property, "order" => $order));
+
+
     $uow->commit();
 }
 
-function updateCartProductCommand(UpdateCartProductCommand $command, AbstractUnitOfWork $uow): void
+function updateCartProduct(UpdateCartProductCommand $command, AbstractUnitOfWork $uow): void
 {
     $repo = $uow->getRepository();
     $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    /** @var Order $order */
+    $order = $repo->get(Order::class, array("user" => $user, "status" => OrderStatus::INCARD));
 
+    if ($order == null) {
+        throw new NotFoundException();
+    }
+    /** @var Property $property */
+    $property = $repo->get(Property::class, array("id" => $command->getPropertyId()));
+    if ($property == null) {
+        throw new NotFoundException();
+    }
     if ($command->getNumber() == 0) {
-        $repo->remove(
-            OrderProduct::class,
-            array("id" => $command->getOrderPropertyId(), "order.user.id" => $command->getUserId())
-        );
+        /** @var OrderProduct $order_product */
+        $repo->remove(OrderProduct::class, array("property" => $property, "order" => $order));
         $uow->commit();
     } else {
+        if ($command->getNumber() > $property->getNumber()) {
+            throw new OutStockException();
+        }
         /** @var OrderProduct $model */
         $model = $repo->get(
             OrderProduct::class,
-            array("id" => $command->getOrderPropertyId(), "order.user.id" => $command->getUserId())
+            array("property" => $property, "order" => $order)
         );
         if ($model == null) {
             throw new NotFoundException();
         }
         $model->setNumber($command->getNumber());
-        $model->setProperty($repo->get(Property::class, array("id" => $command->getPropertyId())));
+        $repo->add($model);
         $uow->commit();
     }
 }
 
+function createOrder(CreateOrderCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+
+    /** @var Address $address */
+    $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
+    if ($address == null) {
+        throw new NotFoundException();
+    }
+
+    $location = $address->getAddress();
+
+    if ($location == null) {
+        throw new NotFoundException();
+    }
+
+    $typeShippingFee = TypeShippingFee::OTHER_SHIPPING;
+    if (
+        strpos($location, "Hà Nội") !== false || strpos($location, "Hanoi") !== false ||
+        strpos($location, "hanoi") !== false || strpos($location, "hà nội") !== false
+    ) {
+        $typeShippingFee = TypeShippingFee::LOCAL_SHIPPING;
+    }
+
+    /** @var Order $model */
+    $order = new Order(
+        user: $user,
+        address: $address,
+        typeShippingFee: $typeShippingFee,
+        status: OrderStatus::PENDING
+    );
+    $repo->add($order);
+
+    foreach ($command->getProducts() as $product) {
+        /** @var Property $model */
+        $property = $repo->get(Property::class, array("id" => $product['property_id']));
+        if ($property == null) {
+            throw new NotFoundException();
+        }
+        /** @var OrderProduct $model */
+        $order_product = new OrderProduct(
+            order: $order,
+            property: $property,
+            number: $product['number']
+        );
+        $repo->add($order_product);
+    }
+    $uow->commit();
+}
+
+function updateOrder(UpdateOrderCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    error_log(json_encode($command), LOG_INFO);
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    error_log(json_encode($user), LOG_INFO);
+    /** @var Address $address */
+    $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
+    if ($address == null) {
+        throw new NotFoundException();
+    }
+    $location = $address->getAddress();
+
+    if ($location == null) {
+        throw new NotFoundException();
+    }
+
+    $typeShippingFee = TypeShippingFee::OTHER_SHIPPING;
+    if (
+        strpos($location, "Hà Nội") !== false || strpos($location, "Hanoi") !== false ||
+        strpos($location, "hanoi") !== false || strpos($location, "hà nội") !== false
+    ) {
+        $typeShippingFee = TypeShippingFee::LOCAL_SHIPPING;
+    }
+
+    /** @var Order $order */
+    $order = $repo->get(Order::class, array("id" => $command->getOrderId()));
+    error_log(json_encode($order), LOG_INFO);
+    if ($order == null) {
+        throw new NotFoundException();
+    }
+    if ($order->getUser()->getId() != $user->getId()) {
+        throw new ForbiddenException();
+    }
+    if ($order->getStatus() != OrderStatus::PENDING) {
+        throw new ForbiddenException();
+    }
+    $order->setAddress($address);
+    $order->setTypeShippingFee($typeShippingFee);
+    $repo->add($order);
+    $uow->commit();
+}
+
+function cancelOrder(CancelOrderCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    /** @var Order $order */
+    $order = $repo->get(Order::class, array("id" => $command->getOrderId()));
+    if ($order == null) {
+        throw new NotFoundException();
+    }
+    if ($order->getUser()->getId() != $user->getId()) {
+        throw new ForbiddenException();
+    }
+    if ($order->getStatus() != OrderStatus::PENDING) {
+        throw new ForbiddenException();
+    }
+    $order->setStatus(OrderStatus::CANCELED);
+    $repo->add($order);
+    $uow->commit();
+}
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -200,5 +374,9 @@ const COMMAND_HANDLERS = array(
     AdminLoginCommand::class => "XStore\ServiceLayers\Handlers\loginAdmin",
     InitialAdminCommand::class => "XStore\ServiceLayers\Handlers\initialAdmin",
     AddProductToCartCommand::class => "XStore\ServiceLayers\Handlers\addProductToCart",
-    DeleteCartProductCommand::class => "XStore\ServiceLayers\Handlers\deleteCartProduct"
+    DeleteCartProductCommand::class => "XStore\ServiceLayers\Handlers\deleteCartProduct",
+    UpdateCartProductCommand::class => "XStore\ServiceLayers\Handlers\updateCartProduct",
+    CreateOrderCommand::class => "XStore\ServiceLayers\Handlers\createOrder",
+    UpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\updateOrder",
+    CancelOrderCommand::class => "XStore\ServiceLayers\Handlers\cancelOrder"
 );

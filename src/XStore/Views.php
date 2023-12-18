@@ -99,13 +99,14 @@ class Views
         return $jwt->encode($result);
     }
 
+
     public static function getCartProductByUserId(DoctrineUnitOfWork $uow, int $userId): array|null
     {
         $sql = "SELECT id FROM orders WHERE user_id = :user_id AND status = :status_order;";
         $conn = $uow->getEntityManager()->getConnection();
         $params = [
             "user_id" => $userId,
-            "status_order" => OrderStatus::INCARD
+            "status_order" => OrderStatus::INCARD->value
         ];
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
@@ -122,6 +123,56 @@ class Views
         if (!$result) {
             return null;
         }
+        error_log(json_encode($result), LOG_INFO);
         return $result;
+    }
+
+    public static function getOrdersByUserId(DoctrineUnitOfWork $uow, int $userId): array|null
+    {
+        $sql = "SELECT id , status FROM orders WHERE user_id = :user_id and status != :status_order;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "user_id" => $userId,
+            "status_order" => OrderStatus::INCARD->value
+        ];
+        $orders = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$orders) {
+            return null;
+        }
+        error_log(json_encode($orders), LOG_INFO);
+        $ids = array_map(fn ($order) => $order['id'], $orders);
+        $sql = "SELECT order_products.id, order_products.property_id, order_products.number, order_products.order_id
+        FROM order_products
+        WHERE order_id in (" . join(",", $ids) . ");";
+        $product_orders = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$product_orders) {
+            return null;
+        }
+        $result = [];
+        foreach ($orders as $order) {
+            error_log(json_encode($order), LOG_INFO);
+            $result[$order['id']] = $order;
+            $result[$order['id']]['products'] = [];
+            $result[$order['id']]['status'] = $order['status'];
+        }
+        foreach ($product_orders as $product_order) {
+            $result[$product_order['order_id']]['products'][] = $product_order;
+        }
+        return $result;
+    }
+
+    public static function getUserIdByJwt(DoctrineUnitOfWork $uow, AbstractJwt $jwt, string $token): int|null
+    {
+        $payload = $jwt->decode($token);
+        $sql = "SELECT id FROM users WHERE id = :id;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "id" => $payload['id']
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result['id'];
     }
 }

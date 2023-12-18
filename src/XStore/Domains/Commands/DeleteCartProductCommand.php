@@ -6,12 +6,12 @@ namespace XStore\Domains\Commands;
 class DeleteCartProductCommand extends Command
 {
     private int $userId;
-    private int $orderPropertyId;
+    private int $propertyId;
 
-    public function __construct(int $userId, int $orderPropertyId)
+    public function __construct(int $userId, int $propertyId)
     {
         $this->userId = $userId;
-        $this->orderPropertyId = $orderPropertyId;
+        $this->propertyId = $propertyId;
     }
 
     public function setUserId(int $userId): void
@@ -24,13 +24,13 @@ class DeleteCartProductCommand extends Command
         return $this->userId;
     }
 
-    public function setOrderPropertyId(int $orderPropertyId): void
+    public function setPropertyId(int $propertyId): void
     {
-        $this->orderPropertyId = $orderPropertyId;
+        $this->propertyId = $propertyId;
     }
 
-    public function getOrderPropertyId(): int
+    public function getPropertyId(): int
     {
-        return $this->orderPropertyId;
+        return $this->propertyId;
     }
 }
