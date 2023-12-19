@@ -2,7 +2,6 @@
 
 namespace XStore;
 
-use Symfony\Component\Cache\DoctrineProvider;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\X\Jw\AbstractJwt;
 use XStore\Domains\Models\OrderStatus;
@@ -123,7 +122,6 @@ class Views
         if (!$result) {
             return null;
         }
-        error_log(json_encode($result), LOG_INFO);
         return $result;
     }
 
@@ -139,7 +137,6 @@ class Views
         if (!$orders) {
             return null;
         }
-        error_log(json_encode($orders), LOG_INFO);
         $ids = array_map(fn ($order) => $order['id'], $orders);
         $sql = "SELECT order_products.id, order_products.property_id, order_products.number, order_products.order_id
         FROM order_products
@@ -172,5 +169,45 @@ class Views
             return null;
         }
         return $result['id'];
+    }
+
+    public static function getProducts(DoctrineUnitOfWork $uow): array
+    {
+        $sql = "SELECT id, name, path, description FROM products;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $products = $conn->executeQuery($sql)->fetchAllAssociative();
+        if (!$products) {
+            return [];
+        }
+
+        $sql = "SELECT id, product_id, color, number, size_id, created_at, updated_at, path FROM properties;";
+        $properties = $conn->executeQuery($sql)->fetchAllAssociative();
+        if (!$properties) {
+            return [];
+        }
+
+        foreach ($products as &$product) {
+            $product['properties'] = [];
+        }
+
+        foreach ($properties as $property) {
+            $product['properties'][] = $property;
+        }
+
+        return $products;
+    }
+
+    public static function getAddressByUserId(DoctrineUnitOfWork $uow, int $userId): array|null
+    {
+        $sql = "SELECT id, first_name, last_name, phone_number, address, email, default_address FROM addresses WHERE user_id = :user_id;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "user_id" => $userId
+        ];
+        $result = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 }

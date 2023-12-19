@@ -31,6 +31,7 @@ $path_mapping = array(
     "/api/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/UsersController.php",
     // "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
     "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
+    "/api/address" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/AddressController.php",
 
     # API Admin
 

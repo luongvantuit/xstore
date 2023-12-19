@@ -33,6 +33,9 @@ use XStore\Domains\Models\Address;
 use XStore\Domains\Models\TypeShippingFee;
 use XStore\ServiceLayers\Exceptions\OutStockException;
 use XStore\ServiceLayers\Exceptions\ForbiddenException;
+use XStore\Domains\Commands\AddAddressCommand;
+use XStore\Domains\Commands\DeleteAddressCommand;
+use XStore\Domains\Commands\UpdateAddressCommand;
 
 function createNewAdmin(CreateNewAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
@@ -378,6 +381,89 @@ function cancelOrder(CancelOrderCommand $command, AbstractUnitOfWork $uow): void
     }
     $uow->commit();
 }
+
+function addAddress(AddAddressCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    $address = new Address(
+        user: $user,
+        firstName: $command->getFirstName(),
+        lastName: $command->getLastName(),
+        phoneNumber: $command->getPhoneNumber(),
+        address: $command->getAddress(),
+        email: $command->getEmail(),
+        defaultAddress: $command->getDefaultAddress()
+    );
+    $repo->add($address);
+    $uow->commit();
+}
+
+function deleteAddress(DeleteAddressCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    /** @var Address $address */
+    $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
+    if ($address == null) {
+        throw new NotFoundException();
+    }
+    $repo->remove(Address::class, array("id" => $command->getAddressId()));
+    $uow->commit();
+}
+
+function updateAddress(UpdateAddressCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    /** @var User $model */
+    $user = $repo->get(User::class, array("id" => $command->getUserId()));
+    if ($user == null) {
+        throw new NotFoundException();
+    }
+    /** @var Address $address */
+    $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
+    if ($address == null) {
+        throw new NotFoundException();
+    }
+    if ($command->getFirstName() != null) {
+        $address->setFirstName($command->getFirstName());
+    }
+    if ($command->getLastName() != null) {
+        $address->setLastName($command->getLastName());
+    }
+
+    if ($command->getPhoneNumber() != null) {
+        $address->setPhoneNumber($command->getPhoneNumber());
+    }
+
+    if ($command->getAddress() != null) {
+        $address->setAddress($command->getAddress());
+    }
+
+    if ($command->getEmail() != null) {
+        $address->setEmail($command->getEmail());
+    }
+
+    if ($command->getDefaultAddress() != null) {
+        $address->setDefaultAddress($command->getDefaultAddress());
+    }
+
+
+    $repo->add($address);
+    $uow->commit();
+}
+
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -389,5 +475,8 @@ const COMMAND_HANDLERS = array(
     UpdateCartProductCommand::class => "XStore\ServiceLayers\Handlers\updateCartProduct",
     CreateOrderCommand::class => "XStore\ServiceLayers\Handlers\createOrder",
     UpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\updateOrder",
-    CancelOrderCommand::class => "XStore\ServiceLayers\Handlers\cancelOrder"
+    CancelOrderCommand::class => "XStore\ServiceLayers\Handlers\cancelOrder",
+    AddAddressCommand::class => "XStore\ServiceLayers\Handlers\addAddress",
+    DeleteAddressCommand::class => "XStore\ServiceLayers\Handlers\deleteAddress",
+    UpdateAddressCommand::class => "XStore\ServiceLayers\Handlers\updateAddress",
 );
