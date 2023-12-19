@@ -6,7 +6,9 @@ COPY ./composer.json ./composer.json
 
 RUN composer install
 
-FROM php:8.1.3-fpm
+FROM php:8.2.1-fpm
+
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 WORKDIR /app
 
