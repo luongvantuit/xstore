@@ -39,13 +39,9 @@ window.addEventListener("DOMContentLoaded", () => {
               }
             } else {
               btnFormLogin.disable = false;
-              let errorMessage = "internal error";
-              if (response.headers.get("Content-Type") !== "application/json") {
-                const resJson = await response.json();
-                errorMessage = resJson["message"];
-              }
+              const resJson = await response.json();
               document.getElementById("form-login-alert-message").textContent =
-                errorMessage;
+                resJson["message"];
               document
                 .getElementById("form-login-alert")
                 .classList.remove("d-none");

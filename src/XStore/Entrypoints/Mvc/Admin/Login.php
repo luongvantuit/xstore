@@ -40,6 +40,9 @@ if ($model == null) {
 <body>
     <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <form id="form-login" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-login needs-validation" novalidate>
+            <div class="w-100 d-flex align-items-center justify-content-center">
+                <img src="/assets/admin/svgs/solid/layer-group.svg" class="w-25">
+            </div>
             <p class="font-weight-bold h3 text-center">Welcome to <strong>XStore</strong></p>
             <div id="form-login-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
                 <strong>Error!</strong>

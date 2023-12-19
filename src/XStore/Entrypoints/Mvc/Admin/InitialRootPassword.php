@@ -40,6 +40,9 @@ if ($model != null) {
 <body>
     <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <form id="form-setup-root-password" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-setup-root-password needs-validation" novalidate>
+            <div class="w-100 d-flex align-items-center justify-content-center">
+                <img src="/assets/admin/svgs/solid/layer-group.svg" class="w-25">
+            </div>
             <p class="font-weight-bold h3 text-center">Setup Root Password</p>
             <div id="form-setup-root-password-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
                 <strong>Error!</strong>
