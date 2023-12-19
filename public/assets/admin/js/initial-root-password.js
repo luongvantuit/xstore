@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   (function () {
-    "use strict";
+    ("use strict");
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var formSetupRootPassword = document.getElementById(
       "form-setup-root-password"
@@ -8,10 +8,38 @@ window.addEventListener("DOMContentLoaded", () => {
     // Loop over them and prevent submission
     formSetupRootPassword.addEventListener(
       "submit",
-      function (event) {
+      async function (event) {
         if (!formSetupRootPassword.checkValidity()) {
           event.preventDefault();
           event.stopPropagation();
+        } else {
+          event.preventDefault();
+          const btnFormSetupRootPassword = document.getElementById(
+            "btn-form-setup-root-password"
+          );
+          btnFormSetupRootPassword.disable = true;
+          const inputPassword = document.getElementById("input-password");
+          const response = await fetch("/api/admin/initial-root-password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              password: inputPassword.value,
+            }),
+          });
+          btnFormSetupRootPassword.disable = false;
+          if (response.ok) {
+            window.location.href = "/admin/login";
+          } else {
+            const resJson = await response.json();
+            document.getElementById(
+              "form-setup-root-password-alert-message"
+            ).textContent = resJson["message"];
+            document
+              .getElementById("form-setup-root-password-alert")
+              .classList.remove("d-none");
+          }
         }
         formSetupRootPassword.classList.add("was-validated");
       },
@@ -30,10 +58,6 @@ window.addEventListener("DOMContentLoaded", () => {
         inputPasswordInvalidFeedbackMessage.textContent =
           "Require password length greater than 6!";
       }
-    });
-    // Close alert
-    $("#bth-close-alert").click(() => {
-      $("#form-setup-root-password-alert").alert("close");
     });
   })();
 });

@@ -19,7 +19,8 @@ $path_mapping = array(
     "/contact" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Contact.php",
     # MVC Admin
     "/admin" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Home.php",
-    "/admin/initial-password" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/InitialPassword.php",
+    "/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Login.php",
+    "/admin/initial-root-password" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/InitialRootPassword.php",
     # API 
     "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/HealthzController.php",
     # API App
@@ -33,6 +34,7 @@ $path_mapping = array(
     "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
     # API Admin
     "/api/admins" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/AdminController.php",
+    "/api/admin/initial-root-password" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/InitialRootPasswordController.php",
     "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",
     "/api/admin/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/OrdersController.php",
     "/api/admin/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/ProductsController.php",
@@ -44,6 +46,7 @@ $path_mapping = array(
 
 # Inject to target
 $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+error_log($url_path, LOG_INFO);
 if (strlen($url_path) > 0 && $url_path != "/" && $url_path[strlen($url_path) - 1] == "/") {
     $url_path = substr($url_path, 0, strlen($url_path) - 1);
 }

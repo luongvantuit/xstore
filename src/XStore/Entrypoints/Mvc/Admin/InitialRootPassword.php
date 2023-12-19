@@ -20,7 +20,7 @@ $repo = $uow->getRepository();
 $model = $repo->get(Admin::class, array("username" => "root"));
 if ($model != null) {
     http_response_code(302);
-    header("Location: /admin");
+    header("Location: /admin/login");
     exit;
 }
 
@@ -34,15 +34,16 @@ if ($model != null) {
     <title>Initial Password - Root Password</title>
     <link rel="stylesheet" href="/assets/admin/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/fontawesome.min.css" type="text/css">
-    <link rel="stylesheet" href="/assets/admin/css/initial-password.css" type="text/css">
+    <link rel="stylesheet" href="/assets/admin/css/initial-root-password.css" type="text/css">
 </head>
 
 <body>
     <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
         <form id="form-setup-root-password" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-setup-root-password needs-validation" novalidate>
             <p class="font-weight-bold h3 text-center">Setup Root Password</p>
-            <div id="form-setup-root-password-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+            <div id="form-setup-root-password-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                <strong>Error!</strong>
+                <p id="form-setup-root-password-alert-message">You should check in on some of those fields below.</p>
             </div>
             <div class="form-group">
                 <label for="input-password">Password</label>
@@ -59,13 +60,13 @@ if ($model != null) {
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button id="btn-form-setup-root-password" type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
-    <script src="/assets/admin/js/initial-password.js"></script>
+    <script src="/assets/admin/js/initial-root-password.js"></script>
 </body>
 
 </html>
