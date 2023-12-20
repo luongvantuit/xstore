@@ -8,6 +8,7 @@ use XStore\X\Response\HttpStatusCode;
 require_once __DIR__ . "/../vendor/autoload.php";
 
 
+
 # Path mapping
 $path_mapping = array(
     # MVC App
@@ -24,6 +25,8 @@ $path_mapping = array(
     "/admin/orders" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Orders.php",
     "/admin/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Products.php",
     "/admin/users" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Users.php",
+    "/admin" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Home.php",
+    "/admin/initial-password" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/InitialPassword.php",
     # API 
     "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/HealthzController.php",
     # API App
@@ -33,9 +36,13 @@ $path_mapping = array(
     "/api/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/OrdersController.php",
     "/api/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/ProductsController.php",
     "/api/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/UsersController.php",
-    "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
+    // "/api/cart" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartController.php",
     "/api/cart-product" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/CartProductController.php",
+    "/api/address" => __DIR__ . "/../src/XStore/Entrypoints/Rest/App/AddressController.php",
+
     # API Admin
+
+
     "/api/admins" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/AdminController.php",
     "/api/admin/initial-root-password" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/InitialRootPasswordController.php",
     "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",

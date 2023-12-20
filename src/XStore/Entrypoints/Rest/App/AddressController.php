@@ -6,17 +6,16 @@ use Respect\Validation\Validator;
 use Respect\Validation\Exceptions\ValidatorException;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;
-use XStore\Domains\Commands\AddProductToCartCommand;
 use XStore\Views;
-use XStore\Domains\Commands\DeleteCartProductCommand;
-use XStore\Domains\Commands\UpdateCartProductCommand;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
-use XStore\ServiceLayers\Exceptions\OutStockException;
 use XStore\Configs;
 use XStore\X\Jw\Exceptions\InvalidTokenException;
 use XStore\X\Jw\Jwt;
+use XStore\Domains\Commands\AddAddressCommand;
+use XStore\Domains\Commands\DeleteAddressCommand;
+use XStore\Domains\Commands\UpdateAddressCommand;
 
-class CartProductController extends Controller
+class AddressController extends Controller
 {
     public function executePost()
     {
@@ -27,14 +26,30 @@ class CartProductController extends Controller
         try {
             $user_id = Views::getUserIdByJwt($this->bus->getUow(), new Jwt(Configs::getSecretKey()), $jwt);
             $body = json_decode(file_get_contents('php://input'), true);
-            $validator = Validator::key("property_id", Validator::intType()->notEmpty())
-                ->key("number", Validator::intType()->notEmpty());
+            $validator = Validator::key("first_name", Validator::stringType()->notEmpty())
+                ->key("last_name", Validator::stringType()->notEmpty())
+                ->key("phone_number", Validator::stringType()->notEmpty())
+                ->key("address", Validator::stringType()->notEmpty())
+                ->key("email", Validator::stringType()->notEmpty())
+                ->key("default_address", Validator::boolType()->notEmpty());
             try {
                 $validator->assert($body);
-                $property_id = $body['property_id'];
-                $number = $body['number'];
+                $first_name = $body['first_name'];
+                $last_name = $body['last_name'];
+                $phone_number = $body['phone_number'];
+                $address = $body['address'];
+                $email = $body['email'];
+                $default_address = $body['default_address'];
                 try {
-                    $this->bus->handle(new AddProductToCartCommand($user_id, $property_id, $number));
+                    $this->bus->handle(new AddAddressCommand(
+                        $user_id,
+                        $first_name,
+                        $last_name,
+                        $phone_number,
+                        $address,
+                        $email,
+                        $default_address
+                    ));
                     $response->statusCode(HttpStatusCode::OK)->json(
                         new HttpResponseJson(data: array())
                     );
@@ -42,11 +57,6 @@ class CartProductController extends Controller
                     error_log($e, LOG_INFO);
                     $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
                         new HttpResponseJson(success: false, message: "not found!")
-                    );
-                } catch (OutStockException $e) {
-                    error_log($e, LOG_INFO);
-                    $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
-                        new HttpResponseJson(success: false, message: "out stock!")
                     );
                 } catch (Exception $e) {
                     error_log($e, LOG_INFO);
@@ -77,7 +87,7 @@ class CartProductController extends Controller
         try {
             $user_id = Views::getUserIdByJwt($this->bus->getUow(), new Jwt(Configs::getSecretKey()), $jwt);
             $response->statusCode(HttpStatusCode::OK)->json(
-                new HttpResponseJson(data: Views::getCartProductByUserId($this->bus->getUow(), $user_id))
+                new HttpResponseJson(data: Views::getAddressByUserId($this->bus->getUow(), $user_id))
             );
         } catch (InvalidTokenException $e) {
             error_log($e, LOG_INFO);
@@ -96,9 +106,13 @@ class CartProductController extends Controller
         $jwt = substr($jwt, 7);
         try {
             $user_id = Views::getUserIdByJwt($this->bus->getUow(), new Jwt(Configs::getSecretKey()), $jwt);
-            $property_id = $_GET['property_id'];
+            $address_id = $_GET['id'];
+
             try {
-                $this->bus->handle(new DeleteCartProductCommand($user_id, $property_id));
+                $this->bus->handle(new DeleteAddressCommand(
+                    $user_id,
+                    $address_id
+                ));
                 $response->statusCode(HttpStatusCode::OK)->json(
                     new HttpResponseJson(data: array())
                 );
@@ -113,12 +127,12 @@ class CartProductController extends Controller
                     new HttpResponseJson(success: false, message: "internal server error")
                 );
             }
-        } catch (InvalidTokenException $e) {
-            error_log($e, LOG_INFO);
-            $response->statusCode(HttpStatusCode::FORBIDDEN)->json(
-                new HttpResponseJson(success: false, message: $e->getMessage())
+        } catch (ValidatorException $e) {
+            $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
+                new HttpResponseJson(success: false, message: $e->getMessages())
             );
         }
+
         $response->build();
     }
 
@@ -130,34 +144,55 @@ class CartProductController extends Controller
         $jwt = substr($jwt, 7);
         try {
             $user_id = Views::getUserIdByJwt($this->bus->getUow(), new Jwt(Configs::getSecretKey()), $jwt);
-            $property_id = $_GET['property_id'];
-            $number = $_GET['number'];
+            $body = json_decode(file_get_contents('php://input'), true);
+            $validator = Validator::key("id", Validator::intType()->notEmpty());
             try {
-                $this->bus->handle(new UpdateCartProductCommand($user_id, $property_id, $number));
-                $response->statusCode(HttpStatusCode::OK)->json(
-                    new HttpResponseJson(data: array())
-                );
-            } catch (NotFoundException $e) {
-                $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
-                    new HttpResponseJson(success: false, message: "not found!")
-                );
-            } catch (OutStockException $e) {
+                $validator->assert($body);
+                $address_id = $body['id'];
+                $first_name = isset($body['first_name']) ? $body['first_name'] : null;
+                $last_name = isset($body['last_name']) ? $body['last_name'] : null;
+                $phone_number = isset($body['phone_number']) ? $body['phone_number'] : null;
+                $address = isset($body['address']) ? $body['address'] : null;
+                $email = isset($body['email']) ? $body['email'] : null;
+                $default_address = isset($body['default_address']) ? $body['default_address'] : null;
+                try {
+                    $this->bus->handle(new UpdateAddressCommand(
+                        $user_id,
+                        $address_id,
+                        $first_name,
+                        $last_name,
+                        $phone_number,
+                        $address,
+                        $email,
+                        $default_address
+                    ));
+                    $response->statusCode(HttpStatusCode::OK)->json(
+                        new HttpResponseJson(data: array())
+                    );
+                } catch (NotFoundException $e) {
+                    error_log($e, LOG_INFO);
+                    $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
+                        new HttpResponseJson(success: false, message: "not found!")
+                    );
+                } catch (Exception $e) {
+                    error_log($e, LOG_INFO);
+                    $response->statusCode(HttpStatusCode::INTERNAL_SERVER_ERROR)->json(
+                        new HttpResponseJson(success: false, message: "internal server error")
+                    );
+                }
+            } catch (ValidatorException $e) {
                 $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
-                    new HttpResponseJson(success: false, message: $e->getMessage())
-                );
-            } catch (Exception $e) {
-                $response->statusCode(HttpStatusCode::INTERNAL_SERVER_ERROR)->json(
-                    new HttpResponseJson(success: false, message: "internal server error")
+                    new HttpResponseJson(success: false, message: $e->getMessages())
                 );
             }
         } catch (InvalidTokenException $e) {
+            error_log($e, LOG_INFO);
             $response->statusCode(HttpStatusCode::FORBIDDEN)->json(
-                new HttpResponseJson(success: false, message: $e->getMessage())
+                new HttpResponseJson(success: false, message: $e)
             );
         }
-        $response->build();
     }
 }
 
-$controller = new CartProductController();
+$controller = new AddressController();
 $controller->execute();

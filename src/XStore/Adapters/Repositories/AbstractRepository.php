@@ -32,6 +32,19 @@ abstract class AbstractRepository
 
     abstract protected function _get(string $clz, ?array $filters = []): ?BaseModel;
 
+
+    public function getAll(string $clz, ?array $filters = []): ?array
+    {
+        $models = $this->_getAll($clz, $filters);
+        foreach ($models as $model) {
+            array_push($this->cached, $model);
+        }
+        return $models;
+    }
+
+    abstract protected function _getAll(string $clz, ?array $filters = []): ?array;
+
+
     public function remove(string $clz, ?array $filters = []): int
     {
         return $this->_remove($clz, $filters);

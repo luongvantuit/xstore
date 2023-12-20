@@ -5,6 +5,7 @@ namespace XStore\Domains\Models;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity]
 #[ORM\Table(name: 'orders')]
 
@@ -17,17 +18,24 @@ class Order extends BaseModel
 
     #[ORM\ManyToOne(targetEntity: Address::class, inversedBy: "orders")]
     #[ORM\JoinColumn(name: "address_id", referencedColumnName: "id", onDelete: "CASCADE")]
-    private Address $address;
+    private ?Address $address;
 
+    #[ORM\Column(
+        name: "type_shipping_fee",
+        enumType: TypeShippingFee::class,
+        options: ["default" => TypeShippingFee::OTHER_SHIPPING]
+    )]
+    private ?TypeShippingFee $typeShippingFee = TypeShippingFee::OTHER_SHIPPING;
 
-    #[ORM\Column(name: "type_shipping_fee", type: 'integer')]
-    private int $typeShippingFee;
+    #[ORM\Column(name: "status", enumType: OrderStatus::class, options: ["default" => OrderStatus::INCARD])]
+    private OrderStatus $status = OrderStatus::INCARD;
 
-    #[ORM\Column(name: "status", type: 'string')]
-    private string $status;
-
-    public function __construct(User $user, Address $address, int $typeShippingFee, string $status)
-    {
+    public function __construct(
+        User $user,
+        ?Address $address,
+        ?TypeShippingFee $typeShippingFee,
+        OrderStatus $status
+    ) {
         parent::__construct();
         $this->user = $user;
         $this->address = $address;
@@ -57,24 +65,24 @@ class Order extends BaseModel
         return $this->address;
     }
 
-    public function setTypeShippingFee(int $typeShippingFee): void
+    public function setTypeShippingFee(TypeShippingFee $typeShippingFee): void
     {
         $this->typeShippingFee = $typeShippingFee;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getTypeShippingFee(): int
+    public function getTypeShippingFee(): TypeShippingFee
     {
         return $this->typeShippingFee;
     }
 
-    public function setStatus(string $status): void
+    public function setStatus(OrderStatus $status): void
     {
         $this->status = $status;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getStatus(): string
+    public function getStatus(): OrderStatus
     {
         return $this->status;
     }
