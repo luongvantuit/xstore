@@ -24,6 +24,22 @@ if ($model == null) {
     exit;
 }
 
+if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+    http_response_code(302);
+    header("Location: /admin");
+    exit;
+} else {
+    /**
+     * @var Admin $admin
+     */
+    $admin = $repo->get(Admin::class, array("id" => (int)$_GET["id"]));
+    if ($admin == null) {
+        http_response_code(302);
+        header("Location: /admin");
+        exit;
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,6 +107,45 @@ if ($model == null) {
         </div>
     </div>
     <div class="bg-light">
+        <form id="form-edit-admin" class="mt-3 needs-validation d-flex flex-column gap-3" novalidate>
+            <div id="form-edit-admin-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                <strong>Error!</strong>
+                <p id="form-edit-admin-alert-message">You should check in on some of those fields below.</p>
+            </div>
+            <div class="form-group">
+                <label for="input-username">Username</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+                    <?php
+                    echo '<input type="text" class="form-control" id="input-username" placeholder="username" required value="' . $admin->getUsername() . '">'
+                    ?>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div id="input-username-invalid-feedback-message" class="invalid-feedback">
+                        <!-- Invalid message -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="input-email">Email</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <input type="email" class="form-control" id="input-email" placeholder="email">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div id="input-email-invalid-feedback-message" class="invalid-feedback">
+                        Please enter a email!
+                    </div>
+                </div>
+            </div>
+            <button id="btn-edit-admin" type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
@@ -98,6 +153,7 @@ if ($model == null) {
     <script src="/assets/admin/js/home.js"></script>
     <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
+    <script src="/assets/admin/js/edit-admin.js"></script>
 </body>
 
 </html>

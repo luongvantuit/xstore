@@ -210,4 +210,68 @@ class Views
         }
         return $result;
     }
+
+    public static function getAdmins(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (username LIKE `%" . $search . "%` OR email LIKE `%" . $search . "%` OR id LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT id, username, email, created_at, updated_at FROM admins " . $where . " LIMIT " . $offset . "," . $limit;
+        $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$results) {
+            return null;
+        }
+        return $results;
+    }
+
+    public static function getSizeOfAdmins(DoctrineUnitOfWork $uow, string|null $search = null): int|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (username LIKE `%" . $search . "%` OR email LIKE `%" . $search . "%` OR id LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT COUNT(*) as count FROM admins " . $where;
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result["count"];
+    }
+
+    public static function getUsers(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (username LIKE `%" . $search . "%` OR email LIKE `%" . $search . "%` OR id LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT id, username, email, status, email_ok, created_at, updated_at FROM users " . $where . " LIMIT " . $offset . "," . $limit;
+        $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$results) {
+            return null;
+        }
+        return $results;
+    }
+
+    public static function getSizeOfUsers(DoctrineUnitOfWork $uow, string|null $search = null): int|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (username LIKE `%" . $search . "%` OR email LIKE `%" . $search . "%` OR id LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT COUNT(*) as count FROM users " . $where;
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result["count"];
+    }
 }

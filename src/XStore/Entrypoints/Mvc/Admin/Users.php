@@ -2,6 +2,7 @@
 
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\Views;
 
 use function XStore\bootstrap;
 
@@ -31,7 +32,7 @@ if ($model == null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admins</title>
+    <title>Admin - Users Manager</title>
     <link rel="stylesheet" href="/assets/admin/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/fontawesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/left-navbar.css" type="text/css">
@@ -61,6 +62,9 @@ if ($model == null) {
                     <a href="/admin/orders" class="xstore-nav-link">
                         <i class="fa-solid fa-box-open xstore-nav-icon"></i> <span class="xstore-nav-name">Orders</span>
                     </a>
+                    <a href="/admin/admins" class="xstore-nav-link">
+                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span class="xstore-nav-name">Admins</span>
+                    </a>
                 </div>
             </div>
             <div class="xstore-nav-link" data-bs-toggle="modal" data-bs-target="#signOutModal">
@@ -81,12 +85,91 @@ if ($model == null) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
-                    <button type="button" class="btn btn-danger" id="btn-signout">Yes/SignOut</button>
+                    <button type="button" class="btn btn-danger" id="btn-sign-out">Yes/SignOut</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="bg-light">
+        <?php
+        // *
+        $currentPage = $_GET["page"] ?? 0;
+        if ($currentPage < 0) {
+            $currentPage = 0;
+        }
+        $limit = $_GET["limit"] ?? 10;
+        if ($limit == 0) {
+            $limit = 10;
+        }
+        $users = Views::getUsers($bus->getUow(), limit: $limit, offset: $limit * $currentPage);
+        ?>
+        <table class="table table-striped table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Email Ok</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                for ($index = 0; $index < sizeof($users ?? []); $index++) {
+                    echo '
+                    <tr>
+                        <td>
+                            ' . $index . '
+                        </td>
+                        <td>' . $users[$index]["username"] . '</td>
+                        <td>' . $users[$index]["email"] . '</td>
+                        <td><i class="fa-solid fa-circle text-' . ($users[$index]["email_ok"] == 1 ? "success" : "dark") . '"></i></td>
+                        <td>' . $users[$index]["status"] . '</td>
+                        <td>' . $users[$index]["created_at"] . '</td>
+                        <td>' . $users[$index]["updated_at"] . '</td>
+                    </tr>';
+                }
+                ?>
+            </tbody>
+        </table>
+        <?php
+        // * Pagination
+        $sizeOfUsers = Views::getSizeOfUsers($bus->getUow());
+        $pageNumbers = ceil($sizeOfUsers / $limit);
+        $minRangePage = max(0, $currentPage - 2);
+        $maxRangePage = min($pageNumbers - 1, $currentPage + 2);
+        ?>
+        <nav aria-label="admins navigation">
+            <ul class="pagination">
+                <?php
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage > 0 ? "" : "btn disabled") . '" href="/admin/users/?page=' . ($currentPage - 1) . '" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ';
+                if ($currentPage >= 3) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/users/?page=' . ($currentPage - 3) . '">...</a></li>';
+                }
+                foreach (range($minRangePage, $maxRangePage) as $pageNumber) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/users/?page=' . $pageNumber . '">' . $pageNumber . '</a></li>';
+                }
+                if ($currentPage < $pageNumbers - 3) {
+                    echo ' <li class="page-item"><a class="page-link" href="/admin/users/?page=' . ($currentPage + 3) . '">...</a></li>';
+                }
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage < $pageNumbers - 1 ? "" : "btn disabled") . '" href="/admin/users/?page=' . ($currentPage + 1) . '" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                '
+                ?>
+            </ul>
+        </nav>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>

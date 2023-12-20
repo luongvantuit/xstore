@@ -34,7 +34,9 @@ window.addEventListener("DOMContentLoaded", () => {
               const resJson = await response.json();
               const accessToken = resJson["data"]["jwt"];
               if (accessToken) {
+                console.log(resJson);
                 localStorage.setItem("access-token", accessToken);
+                document.cookie = `username=${resJson["data"]["admin"]["username"]};${document.cookie}`;
                 window.location.replace("/admin");
               }
             } else {

@@ -23,7 +23,7 @@ class CreateNewAdminCommand extends Command
         $this->email = $email;
     }
 
-    public function getEmail(): string
+    public function getEmail(): string|null
     {
         return $this->email;
     }

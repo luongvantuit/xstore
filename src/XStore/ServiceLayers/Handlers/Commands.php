@@ -8,6 +8,8 @@ use XStore\Domains\Commands\AdminLoginCommand;
 use XStore\Domains\Commands\CreateNewAdminCommand;
 use XStore\Domains\Commands\CreateNewUserCommand;
 use XStore\Domains\Commands\InitialAdminCommand;
+use XStore\Domains\Commands\RemoveAdminCommand;
+use XStore\Domains\Commands\UpdateAdminCommand;
 use XStore\Domains\Events\CreatedUserEvent;
 use XStore\Domains\Models\User;
 use XStore\ServiceLayers\UnitOfWork\AbstractUnitOfWork;
@@ -36,6 +38,42 @@ use XStore\ServiceLayers\Exceptions\ForbiddenException;
 use XStore\Domains\Commands\AddAddressCommand;
 use XStore\Domains\Commands\DeleteAddressCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
+
+function removeAdmin(RemoveAdminCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Admin $model */
+    $model = $repo->get(Admin::class, array("id" => strtolower($command->getAdminId())));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $uow->beginTransaction();
+    $repo->remove(Admin::class, array("id" => strtolower($command->getAdminId())));
+    $uow->commit();
+}
+
+function updateAdmin(UpdateAdminCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Admin $model */
+    $model = $repo->get(Admin::class, array("id" => strtolower($command->getAdminId())));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $uow->beginTransaction();
+    if ($command->getUsername() != null) {
+        if ($repo->get(Admin::class, array("username" => strtolower($command->getUsername()))) != null) {
+            throw new UsernameExistedException();
+        }
+        $model->setUsername(strtolower($command->getUsername()));
+    }
+    if ($command->getEmail()) {
+        $model->setEmail(strtolower($command->getEmail()));
+    }
+    $repo->add($model);
+    $uow->commit();
+}
+
 
 function createNewAdmin(CreateNewAdminCommand $command, AbstractUnitOfWork $uow, AbstractHashing $hashing): void
 {
@@ -470,6 +508,8 @@ const COMMAND_HANDLERS = array(
     CreateNewAdminCommand::class => "XStore\ServiceLayers\Handlers\createNewAdmin",
     AdminLoginCommand::class => "XStore\ServiceLayers\Handlers\loginAdmin",
     InitialAdminCommand::class => "XStore\ServiceLayers\Handlers\initialAdmin",
+    RemoveAdminCommand::class => "XStore\ServiceLayers\Handlers\\removeAdmin",
+    UpdateAdminCommand::class => "XStore\ServiceLayers\Handlers\updateAdmin",
     AddProductToCartCommand::class => "XStore\ServiceLayers\Handlers\addProductToCart",
     DeleteCartProductCommand::class => "XStore\ServiceLayers\Handlers\deleteCartProduct",
     UpdateCartProductCommand::class => "XStore\ServiceLayers\Handlers\updateCartProduct",

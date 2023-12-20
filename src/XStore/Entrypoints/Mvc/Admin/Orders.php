@@ -61,6 +61,9 @@ if ($model == null) {
                     <a href="/admin/orders" class="xstore-nav-link xstore-active">
                         <i class="fa-solid fa-box-open xstore-nav-icon"></i> <span class="xstore-nav-name">Orders</span>
                     </a>
+                    <a href="/admin/admins" class="xstore-nav-link">
+                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span class="xstore-nav-name">Admins</span>
+                    </a>
                 </div>
             </div>
             <div class="xstore-nav-link" data-bs-toggle="modal" data-bs-target="#signOutModal">
@@ -81,7 +84,7 @@ if ($model == null) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
-                    <button type="button" class="btn btn-danger" id="btn-signout">Yes/SignOut</button>
+                    <button type="button" class="btn btn-danger" id="btn-sign-out">Yes/SignOut</button>
                 </div>
             </div>
         </div>
