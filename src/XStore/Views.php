@@ -12,6 +12,22 @@ class Views
     {
     }
 
+    public static function getAdminById(DoctrineUnitOfWork $uow, int $id): array | null
+    {
+        $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE id = :id;";
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "id" => $id
+        ];
+        /** @var array $results */
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result;
+    }
+
+
     public static function getUserById(DoctrineUnitOfWork $uow, int $id): array | null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE id = :id;";
@@ -292,7 +308,7 @@ class Views
     }
 
 
-    public static function getProductsAgent(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): int|null
+    public static function getProductsAgent(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null
     {
         $where = " WHERE 1 ";
         if ($search != null && $search != "") {

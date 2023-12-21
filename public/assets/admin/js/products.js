@@ -11,39 +11,35 @@ window.addEventListener("DOMContentLoaded", () => {
           event.stopPropagation();
         } else {
           event.preventDefault();
-          //   const btnFormAddNewAAdmin = document.getElementById(
-          //     "btn-form-add-new-a-admin"
-          //   );
-          //   btnFormAddNewAAdmin.disable = true;
-          //   const inputUsername = document.getElementById("input-username");
-          //   const inputEmail = document.getElementById("input-email");
-          //   const inputPassword = document.getElementById("input-password");
-          //   let body = {
-          //     username: inputUsername.value,
-          //     password: inputPassword.value,
-          //   };
-          //   if (inputEmail.value != "") {
-          //     body["email"] = inputEmail.value;
-          //   }
-          //   const response = await fetch("/api/admins", {
-          //     method: "POST",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //     },
-          //     body: JSON.stringify(body),
-          //   });
-          //   if (response.ok) {
-          //     window.location.reload();
-          //   } else {
-          //     btnFormAddNewAAdmin.disable = false;
-          //     const resJson = await response.json();
-          //     document.getElementById(
-          //       "form-add-new-a-product-alert-message"
-          //     ).textContent = resJson["message"];
-          //     document
-          //       .getElementById("form-add-new-a-product-alert")
-          //       .classList.remove("d-none");
-          //   }
+          const btnFormAddNewAProduct = document.getElementById(
+            "btn-form-add-new-a-product"
+          );
+          btnFormAddNewAProduct.disable = true;
+          const inputName = document.getElementById("input-name");
+          const inputDescription = document.getElementById("input-description");
+          const inputPhoto = document.getElementById("input-photo");
+          const formData = new FormData();
+          if (inputDescription.value != "") {
+            formData.append("description", inputDescription.value);
+          }
+          formData.append("name", inputName.value);
+          formData.append("file", inputPhoto.files[0]);
+          const response = await fetch("/api/admin/products", {
+            method: "POST",
+            body: formData,
+          });
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            btnFormAddNewAProduct.disable = false;
+            const resJson = await response.json();
+            document.getElementById(
+              "form-add-new-a-product-alert-message"
+            ).textContent = resJson["message"];
+            document
+              .getElementById("form-add-new-a-product-alert")
+              .classList.remove("d-none");
+          }
         }
         formAddNewAProduct.classList.add("was-validated");
       },

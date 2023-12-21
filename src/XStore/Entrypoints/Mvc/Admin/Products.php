@@ -1,8 +1,10 @@
 <?php
 
+use XStore\Configs;
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\Views;
+use XStore\X\Jw\Jwt;
 
 use function XStore\bootstrap;
 
@@ -24,6 +26,36 @@ if ($model == null) {
     header("Location: /admin/initial-root-password");
     exit;
 }
+
+if (isset($_COOKIE["adminAccessToken"])) {
+    /**
+     * @var string $accessToken
+     */
+    $accessToken = $_COOKIE["adminAccessToken"];
+    try {
+        $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
+        $adminId = (int)$payload["id"];
+        /**
+         * @var Admin $currentAdmin
+         */
+        $currentAdmin = $repo->get(Admin::class, array("id" => $adminId));
+        if ($currentAdmin == null) {
+            http_response_code(302);
+            header("Location: /admin/login");
+            exit;
+        }
+    } catch (\Exception $e) {
+        error_log($e, LOG_INFO);
+        http_response_code(302);
+        header("Location: /admin/login");
+        exit;
+    }
+} else {
+    http_response_code(302);
+    header("Location: /admin/login");
+    exit;
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -103,7 +135,8 @@ if ($model == null) {
                             <form id="form-add-new-a-product" class="d-flex flex-column justify-content-center gap-3 needs-validation" novalidate>
                                 <div id="form-add-new-a-product-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
                                     <strong>Error!</strong>
-                                    <p id="form-add-new-a-product-alert-message">You should check in on some of those fields below.</p>
+                                    <p id="form-add-new-a-product-alert-message">You should check in on some of those
+                                        fields below.</p>
                                 </div>
                                 <div class="form-group">
                                     <label for="input-name">Name</label>
@@ -111,7 +144,7 @@ if ($model == null) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-signature"></i>
                                         </span>
-                                        <input type="text" class="form-control" id="input-name" placeholder="name" required>
+                                        <input type="text" class="form-control" id="input-name" name="name" placeholder="name" required>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -126,7 +159,7 @@ if ($model == null) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-mortar-pestle"></i>
                                         </span>
-                                        <input type="text" class="form-control" id="input-description" placeholder="description">
+                                        <input type="text" class="form-control" id="input-description" name="description" placeholder="description">
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -141,7 +174,7 @@ if ($model == null) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-file"></i>
                                         </span>
-                                        <input type="file" class="form-control" id="input-photo" placeholder="photo" required>
+                                        <input type="file" class="form-control" id="input-photo" placeholder="photo" name="file" accept="image/png, image/jpeg" required>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -160,7 +193,8 @@ if ($model == null) {
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addProductModal">Add
+            Product</button>
         <?php
         // *
         $currentPage = $_GET["page"] ?? 0;
@@ -195,7 +229,23 @@ if ($model == null) {
                         </td>
                         <td>' . $products[$index]["name"] . '</td>
                         <td>' . $products[$index]["description"] . '</td>
-                        <td></td>
+                        <div class="modal fade" id="photoProductModal' . $products[$index]["id"] . '" tabindex="-1" aria-labelledby="photoProductModalLabel' . $products[$index]["id"] . '" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="photoProductModalLabel' . $products[$index]["id"] . '">Photo Of Product</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <img src="' . $products[$index]["path"] . '" class="rounded mx-auto d-block w-75 h-75"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <td><a class="btn text-primary" href="#photoProductModal' . $products[$index]["id"] . '" data-bs-toggle="modal"><i class="fa-solid fa-image"></i></a></td>
                         <td>' . $products[$index]["created_at"] . '</td>
                         <td>' . $products[$index]["updated_at"] . '</td>
                         <td>
@@ -211,7 +261,7 @@ if ($model == null) {
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
-                                            <button type="button" class="btn btn-danger" onclick="deleteAdmin(' . $products[$index]["id"] . ')">Yes/Delete</button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteProduct(' . $admins[$index]["id"] . ')">Yes/Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +271,7 @@ if ($model == null) {
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $products[$index]["id"] . '">
                                     <li><a class="dropdown-item" href="/admin/product/edit?id=' . $products[$index]["id"] . '">Edit</a></li>
-                                    <li><a class="dropdown-item text-danger" href="#deleteProductModalLabel' . $products[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#deleteProductModal' . $products[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -272,9 +322,9 @@ if ($model == null) {
         </nav>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
+    <script src="/assets/admin/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
-    <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
     <script src="/assets/admin/js/products.js"></script>
 </body>

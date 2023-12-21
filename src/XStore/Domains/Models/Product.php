@@ -13,13 +13,13 @@ class Product extends BaseModel
     #[ORM\Column(name: "name", type: 'string')]
     private string $name;
 
-    #[ORM\Column(name: "description", type: 'string')]
-    private string $description;
+    #[ORM\Column(name: "description", type: 'string', nullable: true)]
+    private string|null $description;
 
     #[ORM\Column(name: "path", type: 'string')]
     private string $path;
 
-    public function __construct(string $name, string $description, string $path)
+    public function __construct(string $name, string|null $description, string $path)
     {
         parent::__construct();
         $this->name = $name;
@@ -38,13 +38,13 @@ class Product extends BaseModel
         return $this->name;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(string|null $description): void
     {
         $this->description = $description;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getDescription(): string
+    public function getDescription(): string|null
     {
         return $this->description;
     }

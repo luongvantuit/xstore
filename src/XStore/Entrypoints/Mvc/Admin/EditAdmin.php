@@ -1,7 +1,9 @@
 <?php
 
+use XStore\Configs;
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\X\Jw\Jwt;
 
 use function XStore\bootstrap;
 
@@ -38,6 +40,35 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         header("Location: /admin");
         exit;
     }
+}
+
+if (isset($_COOKIE["adminAccessToken"])) {
+    /**
+     * @var string $accessToken
+     */
+    $accessToken = $_COOKIE["adminAccessToken"];
+    try {
+        $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
+        $adminId = (int)$payload["id"];
+        /**
+         * @var Admin $currentAdmin
+         */
+        $currentAdmin = $repo->get(Admin::class, array("id" => $adminId));
+        if ($currentAdmin == null) {
+            http_response_code(302);
+            header("Location: /admin/login");
+            exit;
+        }
+    } catch (\Exception $e) {
+        error_log($e, LOG_INFO);
+        http_response_code(302);
+        header("Location: /admin/login");
+        exit;
+    }
+} else {
+    http_response_code(302);
+    header("Location: /admin/login");
+    exit;
 }
 
 ?>
@@ -151,7 +182,6 @@ if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
     <script src="/assets/admin/js/home.js"></script>
-    <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
     <script src="/assets/admin/js/edit-admin.js"></script>
 </body>

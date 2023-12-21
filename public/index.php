@@ -29,7 +29,6 @@ $path_mapping = array(
     "/admin/product/edit" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/EditProduct.php",
     "/admin/users" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Users.php",
     "/admin" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Home.php",
-    "/admin/initial-password" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/InitialPassword.php",
     # API 
     "/api/healthz" => __DIR__ . "/../src/XStore/Entrypoints/Rest/HealthzController.php",
     # API App

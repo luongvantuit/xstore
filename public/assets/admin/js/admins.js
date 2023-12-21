@@ -81,6 +81,9 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function deleteAdmin(adminId) {
+  const bootstrapModal = bootstrap.Modal.getInstance(
+    document.getElementById(`deleteAdminModal${adminId}`)
+  );
   const response = await fetch("/api/admins", {
     method: "DELETE",
     headers: {
@@ -92,5 +95,16 @@ async function deleteAdmin(adminId) {
   });
   if (response.ok) {
     window.location.reload();
+  } else {
+    const json = await response.json();
+    document.getElementById("toast-delete-admin-failed-message").textContent =
+      json["message"];
+    let toastDeleteAdminFailed = document.getElementById(
+      "toast-delete-admin-failed"
+    );
+    if (toastDeleteAdminFailed) {
+      var toast = new bootstrap.Toast(toastDeleteAdminFailed);
+      toast.show();
+    }
   }
 }

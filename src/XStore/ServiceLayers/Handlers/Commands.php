@@ -2,10 +2,7 @@
 
 namespace XStore\ServiceLayers\Handlers;
 
-use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
 use Exception;
-use ReflectionEnum;
-use ReflectionEnumBackedCase;
 use XStore\Adapters\Hashing\AbstractHashing;
 use XStore\Domains\Commands\AdminLoginCommand;
 use XStore\Domains\Commands\CreateNewAdminCommand;
@@ -40,8 +37,11 @@ use XStore\ServiceLayers\Exceptions\OutStockException;
 use XStore\ServiceLayers\Exceptions\ForbiddenException;
 use XStore\Domains\Commands\AddAddressCommand;
 use XStore\Domains\Commands\AdminUpdateOrderCommand;
+use XStore\Domains\Commands\CreateNewProductCommand;
 use XStore\Domains\Commands\DeleteAddressCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
+use XStore\Domains\Models\Product;
+use XStore\ServiceLayers\Exceptions\CannotRemoveRootException;
 
 function removeAdmin(RemoveAdminCommand $command, AbstractUnitOfWork $uow): void
 {
@@ -50,6 +50,9 @@ function removeAdmin(RemoveAdminCommand $command, AbstractUnitOfWork $uow): void
     $model = $repo->get(Admin::class, array("id" => strtolower($command->getAdminId())));
     if ($model == null) {
         throw new NotFoundException();
+    }
+    if ($model->getUsername() == "root") {
+        throw new CannotRemoveRootException();
     }
     $uow->beginTransaction();
     $repo->remove(Admin::class, array("id" => strtolower($command->getAdminId())));
@@ -526,6 +529,15 @@ function adminUpdateOrder(AdminUpdateOrderCommand $command, AbstractUnitOfWork $
     $uow->commit();
 }
 
+function createProduct(CreateNewProductCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    $uow->beginTransaction();
+    $model = new Product(name: $command->getName(), description: $command->getDescription(), path: $command->getPath());
+    $repo->add($model);
+    $uow->commit();
+}
+
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -544,4 +556,5 @@ const COMMAND_HANDLERS = array(
     DeleteAddressCommand::class => "XStore\ServiceLayers\Handlers\deleteAddress",
     UpdateAddressCommand::class => "XStore\ServiceLayers\Handlers\updateAddress",
     AdminUpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\adminUpdateOrder",
+    CreateNewProductCommand::class => "XStore\ServiceLayers\Handlers\createProduct",
 );

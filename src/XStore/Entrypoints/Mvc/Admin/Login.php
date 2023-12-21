@@ -1,7 +1,9 @@
 <?php
 
+use XStore\Configs;
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\X\Jw\Jwt;
 
 use function XStore\bootstrap;
 
@@ -23,6 +25,29 @@ if ($model == null) {
     header("Location: /admin/initial-root-password");
     exit;
 }
+
+if (isset($_COOKIE["adminAccessToken"])) {
+    /**
+     * @var string $accessToken
+     */
+    $accessToken = $_COOKIE["adminAccessToken"];
+    try {
+        $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
+        $adminId = (int)$payload["id"];
+        $currentAdmin = $repo->get(Admin::class, array("id" => $adminId));
+        if (
+            $currentAdmin != null
+        ) {
+            http_response_code(302);
+            header("Location: /admin");
+            exit;
+        }
+    } catch (\Exception $e) {
+        error_log($e, LOG_INFO);
+    }
+}
+
+
 
 ?>
 <!DOCTYPE html>

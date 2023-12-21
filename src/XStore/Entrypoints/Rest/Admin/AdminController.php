@@ -6,6 +6,7 @@ use XStore\Adapters\Rest\Controller;
 use XStore\Domains\Commands\CreateNewAdminCommand;
 use XStore\Domains\Commands\RemoveAdminCommand;
 use XStore\Domains\Commands\UpdateAdminCommand;
+use XStore\ServiceLayers\Exceptions\CannotRemoveRootException;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\ServiceLayers\Exceptions\UsernameExistedException;
 use XStore\X\Response\HttpResponse;
@@ -127,6 +128,11 @@ class AdminController extends Controller
                 error_log($e, LOG_INFO);
                 $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
                     new HttpResponseJson(success: false, message: "not found admin!")
+                );
+            } catch (CannotRemoveRootException $e) {
+                error_log($e, LOG_INFO);
+                $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
+                    new HttpResponseJson(success: false, message: $e->getMessage())
                 );
             } catch (Exception $e) {
                 error_log($e, LOG_INFO);

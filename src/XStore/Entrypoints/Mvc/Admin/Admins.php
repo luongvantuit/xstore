@@ -1,8 +1,11 @@
 <?php
 
+use XStore\Configs;
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\Views;
+use XStore\X\Jw\AbstractJwt;
+use XStore\X\Jw\Jwt;
 
 use function XStore\bootstrap;
 
@@ -22,6 +25,36 @@ $model = $repo->get(Admin::class, array("username" => "root"));
 if ($model == null) {
     http_response_code(302);
     header("Location: /admin/initial-root-password");
+    exit;
+}
+
+if (isset($_COOKIE["adminAccessToken"])) {
+    /**
+     * @var string $accessToken
+     */
+    $accessToken = $_COOKIE["adminAccessToken"];
+    try {
+        $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
+        $adminId = (int)$payload["id"];
+        /**
+         * @var Admin $currentAdmin
+         */
+        $currentAdmin = $repo->get(Admin::class, array("id" => $adminId));
+        if ($currentAdmin == null) {
+            http_response_code(302);
+            header("Location: /admin/login");
+            exit;
+        }
+        define("CURRENT_ADMIN", $currentAdmin->getUsername());
+    } catch (\Exception $e) {
+        error_log($e, LOG_INFO);
+        http_response_code(302);
+        header("Location: /admin/login");
+        exit;
+    }
+} else {
+    http_response_code(302);
+    header("Location: /admin/login");
     exit;
 }
 
@@ -104,7 +137,8 @@ if ($model == null) {
                             <form id="form-add-new-a-admin" class="d-flex flex-column justify-content-center gap-3 needs-validation" novalidate>
                                 <div id="form-add-new-a-admin-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
                                     <strong>Error!</strong>
-                                    <p id="form-add-new-a-admin-alert-message">You should check in on some of those fields below.</p>
+                                    <p id="form-add-new-a-admin-alert-message">You should check in on some of those
+                                        fields below.</p>
                                 </div>
                                 <div class="form-group">
                                     <label for="input-username">Username</label>
@@ -162,7 +196,7 @@ if ($model == null) {
             </div>
         </div>
         <?php
-        if (isset($_COOKIE["username"]) && $_COOKIE["username"] === "root") {
+        if (CURRENT_ADMIN == "root") {
             echo '<button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addUserModal">Add Admin</button>';
         }
         ?>
@@ -274,14 +308,26 @@ if ($model == null) {
                 ?>
             </ul>
         </nav>
-    </div>
 
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="toast-delete-admin-failed" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="/assets/admin/svgs/solid/layer-group.svg" class="rounded me-2" style="width: 24px;" alt="...">
+                    <strong class="me-auto">XStore</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div id="toast-delete-admin-failed-message" class="toast-body">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
-    <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
     <script src="/assets/admin/js/admins.js"></script>
 </body>

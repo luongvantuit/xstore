@@ -1,7 +1,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   (async function () {
     ("use strict");
-    const accessToken = await localStorage.getItem("access-token");
+    const accessToken = await localStorage.getItem("adminAccessToken");
     if (accessToken) {
       window.location.href = "/admin";
     } else {
@@ -34,9 +34,8 @@ window.addEventListener("DOMContentLoaded", () => {
               const resJson = await response.json();
               const accessToken = resJson["data"]["jwt"];
               if (accessToken) {
-                console.log(resJson);
-                localStorage.setItem("access-token", accessToken);
-                document.cookie = `username=${resJson["data"]["admin"]["username"]};${document.cookie}`;
+                localStorage.setItem("adminAccessToken", accessToken);
+                document.cookie = `adminAccessToken=${accessToken};${document.cookie}`;
                 window.location.replace("/admin");
               }
             } else {
