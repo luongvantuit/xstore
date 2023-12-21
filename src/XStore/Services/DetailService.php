@@ -20,10 +20,12 @@ class DetailService extends BaseService
     }
     public function  getProperties($params = [])
     {
+
         $sql = "SELECT * FROM products, properties WHERE product_id = :id and products.id = properties.product_id ";
-        if($params['color']){
+        if($params && !empty($params['color'])){
             $sql.= 'and color = :color';
         }
+
         $conn = $this->uow->getEntityManager()->getConnection();
 
         /** @var array $results */
@@ -31,5 +33,6 @@ class DetailService extends BaseService
 
         return $result;
     }
+
 
 }

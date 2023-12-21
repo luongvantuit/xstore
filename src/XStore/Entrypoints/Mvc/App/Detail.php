@@ -3,19 +3,20 @@
     require_once __DIR__ . "/../Common/Header.php";
     use XStore\Services\DetailService;
     use XStore\Services\ProductService;
-    $products = new DetailService();
+    $productdetails = new DetailService();
     try {
         $params = [
           'id' => $_GET['id'] ?? '',
           'color' => $_GET['color'] ?? ''
         ];
-        $products = $products->getProperties($params);
-
+        $products = $productdetails->getProperties($params);
+        $colors =   $productdetails->getProperties(['id'=>$_GET['id'] ]);
         $product = $products[0];
+
     } catch (Exception $e) {
         echo $e->getMessage();
+        echo $e ->getLine();
     }
-
     ?>
 <html lang="vi">
 	<head>
@@ -172,8 +173,24 @@
 					</div>
                     <body>
                     <div id="container">
-                        <div id="colors"></div>
-                        <div id="sizes"></div>
+                        <div id="colors">
+
+                        <?php foreach ($colors as $item )   {
+
+
+
+                            ?>
+                            <div class ="color" style="--color=<?php echo $item['color']?>" data-color = "<?php echo $item['color']?>" data-active="<?php echo $_GET['color'] ?>" ></div>
+                        <?php  }?>
+
+                        </div>
+                        <div id="sizes">
+                             <div class="size" data-size="xs" data-active="true"></div>
+                             <div class="size" data-size="s" data-active="false"></div>
+                            <div class="size" data-size="m" data-active="false"></div>
+                            <div class="size" data-size="l" data-active="false"></div>
+                            <div class="size" data-size="xl" data-active="false"></div>
+                        </div>
                         <div id="tabs">
                             <div id="tab-title">
                                 <div class="tab-item active" data-tab="0">Thông tin sản phẩm</div>
@@ -182,7 +199,6 @@
                             <div id="tab-content">
                                 <div class="item-content-tab active" data-tab="0">
                                     <ul>
-                                        <li><?php echo $product['']               ?></li>
                                         <li>Chất liệu: 70% cotton, 30% polyester</li>
                                         <li>Kiểu dáng áo thun phom overfit năng động</li>
                                         <li>Thiết kế trẻ trung</li>
@@ -203,70 +219,92 @@
 
                     <script>
 
-                        const onAddElement = ({ data, activeItem, rootElement, id, isTextContent, isProperty }) => {
-                            const dataItem = data.map((item, i) => {
-                                const element = document.createElement('div');
-                                let className = id;
-                                if (!i) className = `${id} active`;
+                        const onAddElement = ({
+                                                  data,
+                                                  activeItem,
+                                                  rootElement,
+                                                  id,
+                                                  isTextContent,
+                                                  isProperty,
+                                                  isChangeParam,
+                                              }) => {
+                            const listElement = Array.from(rootElement.children)
 
-                                element.dataset[id] = item;
-                                element.className = className;
+                            data.forEach((item, index) => {
+                                const element = listElement[index]
+                                const isActive = element.dataset.active === item
+                                if (isActive) {
+                                    element.classList.add('active')
+                                }
+
+                                console.log(item);
+
                                 if (isTextContent) element.textContent = item;
-                                if (isProperty) element.style.setProperty('--color', item);
+                                if (isProperty) element.style.setProperty("--color", item);
 
-                                element.onclick = (e) => {
-                                    const item = e.target;
-                                    const itemData = item.dataset[id];
-                                    Array.from(rootElement.children).forEach((ele) => {
-                                        const isBeforeActive = ele.classList.contains('active');
-                                        if (isBeforeActive) ele.classList.remove('active');
-                                    });
-                                    item.classList.add('active');
-                                    currentSize = { index: i, [id]: itemData };
-                                };
+                                element.onclick = () => {
+                                    if (isChangeParam) {
+                                        const currentURL = window.location.href;
+                                        let url = new URL(currentURL);
+                                        url.searchParams.set(id, item);
+                                        window.history.pushState({}, '', url.href);
+                                        location.reload(true);
+                                    }
 
-                                return element;
-                            });
-
-                            dataItem.forEach((item) => rootElement.appendChild(item));
+                                    if (isTextContent) {
+                                        listElement.forEach((ele) => {
+                                            const isBeforeActive = ele.classList.contains("active");
+                                            if (isBeforeActive) {
+                                                ele.classList.remove("active");
+                                                ele.dataset.active = false;
+                                            }
+                                        });
+                                        element.classList.add("active");
+                                        activeItem = item
+                                    }
+                                }
+                            })
                         };
 
                         // Màu
-                        let currentColor = { index: 0, color: 'red' }; // Chỉ sô tương ứng với mã màu trong mảng dưới
 
                         // Tùy chỉnh màu
-                        const colorData = ['whitesmoke', 'black', 'pink', 'yellow'];
-                        const colorsElement = document.getElementById('colors');
+                        const colorsElement = document.getElementById("colors");
+                        const colorData = Array.from(colorsElement.children).map(item => item.dataset.color)
+                        let activeColor = Array.from(colorsElement.children).find(item => item.dataset.active)?.dataset?.color ?? colorData[0]
+
 
                         //   Size
-                        let currentSize = { index: 0, size: 'xs' }; // Chỉ sô tương ứng với mã size trong mảng dưới
 
                         // Tùy chỉnh size
-                        const sizesData = ['xs', 's', 'm', 'l', 'xl'];
-                        const sizesElement = document.getElementById('sizes');
+                        const sizesElement = document.getElementById("sizes");
+                        const sizesData = Array.from(sizesElement.children).map(item => item.dataset.size)
+                        let activeSize = Array.from(sizesElement.children).find(item => item.dataset.active)?.dataset?.size ?? sizesData[0]
+
+
 
                         //   Bắt đầu khởi tạo
                         //   Màu
                         onAddElement({
                             data: colorData,
-                            activeItem: currentColor,
-                            id: 'color',
+                            activeItem: activeColor,
+                            id: "color",
                             rootElement: colorsElement,
                             isProperty: true,
+                            isChangeParam: true,
                         });
 
-                        //   Size
                         onAddElement({
                             data: sizesData,
-                            activeItem: currentSize,
-                            id: 'size',
+                            activeItem: activeSize,
+                            id: "size",
                             rootElement: sizesElement,
                             isTextContent: true,
                         });
 
                         //   Tabs
-                        const tabTitleElement = document.getElementById('tab-title');
-                        const tabContentElement = document.getElementById('tab-content');
+                        const tabTitleElement = document.getElementById("tab-title");
+                        const tabContentElement = document.getElementById("tab-content");
                         const tabTitleData = Array.from(tabTitleElement.children);
                         const tabContentData = Array.from(tabContentElement.children);
 
@@ -277,13 +315,13 @@
 
                                 tabTitleData.forEach((ele, index) => {
                                     if (index != itemData) {
-                                        ele.classList.remove('active');
-                                        tabContentData[index].classList.remove('active');
+                                        ele.classList.remove("active");
+                                        tabContentData[index].classList.remove("active");
                                     }
                                 });
 
-                                item.classList.add('active');
-                                tabContentData[itemData].classList.add('active');
+                                item.classList.add("active");
+                                tabContentData[itemData].classList.add("active");
                             };
                         });
                     </script>
