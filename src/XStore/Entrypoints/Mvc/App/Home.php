@@ -2,7 +2,7 @@
 <html lang="en">
 
 </head>
-    <title>Home - XStore</title>
+<title>Home - XStore</title>
 </head>
 
 <body>
@@ -69,7 +69,7 @@
                                 aliquet libero viverra cursus. </p>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="single-features-ads">
                             <img src="./assets/img/icons/chat.png" alt="">
                             <h4>Online support 24/7</h4>

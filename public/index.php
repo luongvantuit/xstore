@@ -18,6 +18,7 @@ $path_mapping = array(
     "/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Products.php",
     "/shops" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Shops.php",
     "/contact" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Contact.php",
+    "/checkout" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Checkout.php",
     # MVC Admin
     "/admin" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Home.php",
     "/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/Admin/Login.php",

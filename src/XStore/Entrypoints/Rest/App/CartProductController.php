@@ -33,6 +33,9 @@ class CartProductController extends Controller
                 $validator->assert($body);
                 $property_id = $body['property_id'];
                 $number = $body['number'];
+                error_log($property_id, LOG_INFO);
+                error_log($number, LOG_INFO);
+                error_log($user_id, LOG_INFO);
                 try {
                     $this->bus->handle(new AddProductToCartCommand($user_id, $property_id, $number));
                     $response->statusCode(HttpStatusCode::OK)->json(
