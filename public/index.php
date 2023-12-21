@@ -16,6 +16,7 @@ $path_mapping = array(
     "/register" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Register.php",
     "/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Login.php",
     "/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Products.php",
+    "/product" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Product.php",
     "/shops" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Shops.php",
     "/contact" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Contact.php",
     "/checkout" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Checkout.php",

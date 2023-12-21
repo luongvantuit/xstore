@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
               const accessToken = resJson["data"]["jwt"];
               if (accessToken) {
                 localStorage.setItem("adminAccessToken", accessToken);
-                document.cookie = `adminAccessToken=${accessToken};${document.cookie}`;
+                document.cookie = `adminAccessToken=${accessToken};`;
                 window.location.replace("/admin");
               }
             } else {

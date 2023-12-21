@@ -5,23 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
-    <script src="/assets/app/js/cart.js"></script>
+    <?php
+    require_once __DIR__ . "/../Common/Links.php";
+    ?>
 </head>
 
 <body>
     <?php
 
-    use Doctrine\DBAL\Schema\View;
+    require_once __DIR__ . "/../Common/Header.php";
+    ?>
+
+    <?php
+
     use XStore\Domains\Models\User;
     use XStore\X\Jw\Jwt;
     use XStore\Configs;
-    use XStore\Domains\Models\Product;
     use XStore\Domains\Models\Property;
     use XStore\Views;
 
     use function XStore\bootstrap;
 
-    require_once __DIR__ . "/../Common/Header.php";
     require_once __DIR__ . "/../../../Bootstrap.php";
 
     $bus = bootstrap();
@@ -69,6 +73,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th></th>
                             <th class="product-h">Product</th>
                             <th>Price</th>
                             <th class="quan">Quantity</th>
@@ -156,4 +161,11 @@
             </div>
         </div>
     </div>
+    <?php
+    require_once __DIR__ . "/../Common/Footer.php";
+    require_once __DIR__ . "/../Common/Scripts.php";
+    ?>
+    <script src="/assets/app/js/cart.js"></script>
 </body>
+
+</html>

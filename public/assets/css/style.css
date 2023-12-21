@@ -782,6 +782,8 @@ ol {
 
 .single-product-item {
 	margin-bottom: 30px;
+	width: 240px;
+	height: 360px;
 }
 
 .single-product-item figure {

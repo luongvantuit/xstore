@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <?php
 require_once __DIR__ . "/../Common/Header.php";
-
-use XStore\Services\DetailService;
-use XStore\Services\ProductService;
-
-$products = new DetailService();
 try {
 	$params = [
 		'id' => $_GET['id'] ?? '',

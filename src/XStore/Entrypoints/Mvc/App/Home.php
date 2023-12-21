@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-</head>
-<title>Home - XStore</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - XStore</title>
+    <?php
+    require_once __DIR__ . "/../Common/Links.php";
+    ?>
 </head>
 
 <body>
@@ -296,7 +301,8 @@
         </div>
     </div>
     <?php
-    require_once __DIR__ . "/../Common/Footer.php"
+    require_once __DIR__ . "/../Common/Footer.php";
+    require_once __DIR__ . "/../Common/Scripts.php";
     ?>
 </body>
 

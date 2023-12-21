@@ -1,9 +1,6 @@
 <?php
 
-use XStore\Configs;
-use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
-use XStore\X\Jw\Jwt;
 
 use function XStore\bootstrap;
 
@@ -24,13 +21,18 @@ $repo = $uow->getRepository();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XStore - Login</title>
-    <link rel="stylesheet" href="/assets/admin/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/fontawesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/login.css" type="text/css">
+    <?php
+    require_once __DIR__ . "/../Common/Links.php";
+    ?>
 </head>
 
-<body>
-    <div class="d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+<body style="height: 100vh;">
+    <?php
+    require_once __DIR__ . "/../Common/Header.php";
+    ?>
+    <div class="d-flex align-items-center justify-content-center h-75">
         <form id="form-login" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-login needs-validation" novalidate>
             <div class="w-100 d-flex align-items-center justify-content-center">
                 <img src="/assets/admin/svgs/solid/layer-group.svg" class="w-25">
@@ -41,17 +43,17 @@ $repo = $uow->getRepository();
                 <p id="form-login-alert-message">You should check in on some of those fields below.</p>
             </div>
             <div class="form-group">
-                <label for="input-username">Username</label>
+                <label for="input-identify">Username or Email</label>
                 <div class="input-group has-validation">
                     <span class="input-group-text">
                         <i class="fa-solid fa-user"></i>
                     </span>
-                    <input type="text" class="form-control" id="input-username" placeholder="username" required>
+                    <input type="text" class="form-control" id="input-identify" placeholder="username or email" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
-                    <div id="input-username-invalid-feedback-message" class="invalid-feedback">
-                        Please enter your username!
+                    <div id="input-identify-invalid-feedback-message" class="invalid-feedback">
+                        Please enter your username of email!
                     </div>
                 </div>
             </div>
@@ -73,12 +75,12 @@ $repo = $uow->getRepository();
             <button id="btn-form-login" type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-
-    <script src="/assets/admin/js/bootstrap.min.js"></script>
+    <?php
+    require_once __DIR__ . "/../Common/Footer.php";
+    require_once __DIR__ . "/../Common/Scripts.php";
+    ?>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
-    <script src="/assets/admin/js/jquery.min.js"></script>
     <script src="/assets/app/js/login.js"></script>
-
 </body>
 
 </html>

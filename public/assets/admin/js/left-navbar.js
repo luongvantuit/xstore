@@ -21,12 +21,10 @@ window.addEventListener("DOMContentLoaded", () => {
     showNavbar("header-toggle", "nav-bar", "body-pd", "header");
     $("#btn-sign-out").on("click", () => {
       localStorage.clear();
-      var cookies = document.cookie.split(";");
-      // set past expiry to all cookies
-      for (var i = 0; i < cookies.length; i++) {
-        document.cookie =
-          cookies[i] + "=; expires=" + new Date(0).toUTCString();
-      }
+      document.cookie =
+        "adminAccessToken=; expires=" +
+        new Date(0).toUTCString() +
+        ";path=/admin";
       window.location.href = "/admin/login";
     });
   })();
