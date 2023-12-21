@@ -2,6 +2,7 @@
 
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\Views;
 
 use function XStore\bootstrap;
 
@@ -90,12 +91,192 @@ if ($model == null) {
         </div>
     </div>
     <div class="bg-light">
+        <div class="modal fade" id="addProductModal" tabindex="0" aria-labelledby="addProductModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addProductModal">Add New A Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <form id="form-add-new-a-product" class="d-flex flex-column justify-content-center gap-3 needs-validation" novalidate>
+                                <div id="form-add-new-a-product-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                                    <strong>Error!</strong>
+                                    <p id="form-add-new-a-product-alert-message">You should check in on some of those fields below.</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-name">Name</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-signature"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="input-name" placeholder="name" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div id="input-name-invalid-feedback-message" class="invalid-feedback">
+                                            Please enter a name of product!
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-description">Description</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-mortar-pestle"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="input-description" placeholder="description">
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div id="input-description-invalid-feedback-message" class="invalid-feedback">
+                                            <!-- Invalid message -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-photo">Photo</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text">
+                                            <i class="fa-solid fa-file"></i>
+                                        </span>
+                                        <input type="file" class="form-control" id="input-photo" placeholder="photo" required>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div id="input-photo-invalid-feedback-message" class="invalid-feedback">
+                                            Require a photo!
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="btn-form-add-new-a-product" type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel/Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+        <?php
+        // *
+        $currentPage = $_GET["page"] ?? 0;
+        if ($currentPage < 0) {
+            $currentPage = 0;
+        }
+        $limit = $_GET["limit"] ?? 10;
+        if ($limit == 0) {
+            $limit = 10;
+        }
+        $products = Views::getProductsAgent($bus->getUow(), limit: $limit, offset: $limit * $currentPage);
+        ?>
+        <table class="table table-striped table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                for ($index = 0; $index < sizeof($products ?? []); $index++) {
+                    echo '
+                    <tr>
+                        <td>
+                            ' . $index . '
+                        </td>
+                        <td>' . $products[$index]["name"] . '</td>
+                        <td>' . $products[$index]["description"] . '</td>
+                        <td></td>
+                        <td>' . $products[$index]["created_at"] . '</td>
+                        <td>' . $products[$index]["updated_at"] . '</td>
+                        <td>
+                            <div class="modal fade" id="deleteProductModal' . $products[$index]["id"] . '" tabindex="-1" aria-labelledby="deleteProductModalLabel' . $products[$index]["id"] . '" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteProductModalLabel' . $products[$index]["id"] . '">Are you sure?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            You want delete product <strong>' . $products[$index]["name"] . '</strong>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteAdmin(' . $products[$index]["id"] . ')">Yes/Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton' . $products[$index]["id"] . '" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $products[$index]["id"] . '">
+                                    <li><a class="dropdown-item" href="/admin/product/edit?id=' . $products[$index]["id"] . '">Edit</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#deleteProductModalLabel' . $products[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>';
+                }
+                ?>
+            </tbody>
+        </table>
+
+        <?php
+        // * Pagination
+        $sizeOfProducts = Views::getSizeOfProducts($bus->getUow());
+        $pageNumbers = ceil($sizeOfProducts / $limit);
+        $minRangePage = max(0, $currentPage - 2);
+        $maxRangePage = min($pageNumbers - 1, $currentPage + 2);
+        if ($pageNumbers == 0) {
+            $maxRangePage = 0;
+        }
+        ?>
+        <nav aria-label="Products navigation">
+            <ul class="pagination">
+                <?php
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage > 0 ? "" : "btn disabled") . '" href="/admin/products/?page=' . ($currentPage - 1) . '" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ';
+                if ($currentPage >= 3) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/products/?page=' . ($currentPage - 3) . '">...</a></li>';
+                }
+                foreach (range($minRangePage, $maxRangePage) as $pageNumber) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/products/?page=' . $pageNumber . '">' . $pageNumber . '</a></li>';
+                }
+                if ($currentPage < $pageNumbers - 3) {
+                    echo ' <li class="page-item"><a class="page-link" href="/admin/products/?page=' . ($currentPage + 3) . '">...</a></li>';
+                }
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage < $pageNumbers - 1 ? "" : "btn disabled") . '" href="/admin/products/?page=' . ($currentPage + 1) . '" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                '
+                ?>
+            </ul>
+        </nav>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
     <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
+    <script src="/assets/admin/js/products.js"></script>
 </body>
 
 </html>

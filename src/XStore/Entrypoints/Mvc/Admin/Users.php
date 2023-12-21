@@ -140,8 +140,11 @@ if ($model == null) {
         $pageNumbers = ceil($sizeOfUsers / $limit);
         $minRangePage = max(0, $currentPage - 2);
         $maxRangePage = min($pageNumbers - 1, $currentPage + 2);
+        if ($pageNumbers == 0) {
+            $maxRangePage = 0;
+        }
         ?>
-        <nav aria-label="admins navigation">
+        <nav aria-label="Users navigation">
             <ul class="pagination">
                 <?php
                 echo '

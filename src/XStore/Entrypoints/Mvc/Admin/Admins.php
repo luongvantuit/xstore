@@ -1,6 +1,5 @@
 <?php
 
-use Doctrine\DBAL\Schema\View;
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
 use XStore\Views;
@@ -203,11 +202,11 @@ if ($model == null) {
                         <td>' . $admins[$index]["created_at"] . '</td>
                         <td>' . $admins[$index]["updated_at"] . '</td>
                         <td>
-                            <div class="modal fade" id="deleteAdminModel' . $admins[$index]["id"] . '" tabindex="-1" aria-labelledby="deleteAdminModelLabel' . $admins[$index]["id"] . '" aria-hidden="true">
+                            <div class="modal fade" id="deleteAdminModal' . $admins[$index]["id"] . '" tabindex="-1" aria-labelledby="deleteAdminModalLabel' . $admins[$index]["id"] . '" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteAdminModelLabel' . $admins[$index]["id"] . '">Are you sure?</h5>
+                                            <h5 class="modal-title" id="deleteAdminModalLabel' . $admins[$index]["id"] . '">Are you sure?</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
@@ -226,7 +225,7 @@ if ($model == null) {
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $admins[$index]["id"] . '">
                                     <li><a class="dropdown-item" href="/admin/admin/edit?id=' . $admins[$index]["id"] . '">Edit</a></li>
                                     
-                                    <li><a class="dropdown-item text-danger" href="#deleteAdminModel' . $admins[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
+                                    <li><a class="dropdown-item text-danger" href="#deleteAdminModal' . $admins[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -242,6 +241,9 @@ if ($model == null) {
         $pageNumbers = ceil($sizeOfAdmins / $limit);
         $minRangePage = max(0, $currentPage - 2);
         $maxRangePage = min($pageNumbers - 1, $currentPage + 2);
+        if ($pageNumbers == 0) {
+            $maxRangePage = 0;
+        }
         ?>
         <nav aria-label="admins navigation">
             <ul class="pagination">

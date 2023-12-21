@@ -2,6 +2,7 @@
 
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\Views;
 
 use function XStore\bootstrap;
 
@@ -90,7 +91,57 @@ if ($model == null) {
             </div>
         </div>
     </div>
+    <?php
+    $sizeOfUsers = Views::getSizeOfUsers($bus->getUow());
+    $sizeOfProducts = Views::getSizeOfProducts($bus->getUow());
+    $sizeOfOrders = Views::getSizeOfOrders($bus->getUow());
+    $sizeOfAdmins = Views::getSizeOfAdmins($bus->getUow());
+    ?>
     <div class="bg-light">
+        <div class="container">
+            <div class="row row-cols-lg-3 row-cols-sm-1 row-cols-md-2">
+                <div class="col">
+                    <div class="d-flex flex-column shadow-sm p-3 bg-body rounded mt-3 gap-3">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-warning fs-4"></i> <span class="text-warning fs-4 fw-bold">Admins</span>
+                        </div>
+                        <?php
+                        echo '<p class="fw-bold fs-5 gray-700">' . $sizeOfAdmins . '</p>'
+                        ?>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex flex-column shadow-sm p-3 bg-body rounded mt-3 gap-3">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <i class="fa-solid fa-user text-danger fs-4"></i> <span class="text-danger fs-4 fw-bold">Users</span>
+                        </div>
+                        <?php
+                        echo '<p class="fw-bold fs-5 gray-700">' . $sizeOfUsers . '</p>'
+                        ?>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex flex-column shadow-sm p-3 bg-body rounded mt-3 gap-3">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <i class="fa-solid fa-store text-success fs-4"></i> <span class="text-success fs-4 fw-bold">Products</span>
+                        </div>
+                        <?php
+                        echo '<p class="fw-bold fs-5 gray-700">' . $sizeOfProducts . '</p>'
+                        ?>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex flex-column shadow-sm p-3 bg-body rounded mt-3 gap-3">
+                        <div class="d-flex flex-row align-items-center gap-2">
+                            <i class="fa-solid fa-box-open text-info fs-4"></i> <span class="text-info fs-4 fw-bold">Orders</span>
+                        </div>
+                        <?php
+                        echo '<p class="fw-bold fs-5 gray-700">' . $sizeOfOrders . '</p>'
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>

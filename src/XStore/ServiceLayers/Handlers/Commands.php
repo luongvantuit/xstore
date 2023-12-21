@@ -3,6 +3,9 @@
 namespace XStore\ServiceLayers\Handlers;
 
 use Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand;
+use Exception;
+use ReflectionEnum;
+use ReflectionEnumBackedCase;
 use XStore\Adapters\Hashing\AbstractHashing;
 use XStore\Domains\Commands\AdminLoginCommand;
 use XStore\Domains\Commands\CreateNewAdminCommand;
@@ -36,6 +39,7 @@ use XStore\Domains\Models\TypeShippingFee;
 use XStore\ServiceLayers\Exceptions\OutStockException;
 use XStore\ServiceLayers\Exceptions\ForbiddenException;
 use XStore\Domains\Commands\AddAddressCommand;
+use XStore\Domains\Commands\AdminUpdateOrderCommand;
 use XStore\Domains\Commands\DeleteAddressCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
 
@@ -502,6 +506,26 @@ function updateAddress(UpdateAddressCommand $command, AbstractUnitOfWork $uow): 
     $uow->commit();
 }
 
+
+function adminUpdateOrder(AdminUpdateOrderCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+
+    /** @var Order $model */
+    $model = $repo->get(Order::class, array("id" => $command->getId()));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $status = OrderStatus::getCase($command->getStatus());
+    if ($status == null) {
+        throw new Exception();
+    }
+    $model->setStatus($status);
+    $uow->beginTransaction();
+    $repo->add($model);
+    $uow->commit();
+}
+
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -519,4 +543,5 @@ const COMMAND_HANDLERS = array(
     AddAddressCommand::class => "XStore\ServiceLayers\Handlers\addAddress",
     DeleteAddressCommand::class => "XStore\ServiceLayers\Handlers\deleteAddress",
     UpdateAddressCommand::class => "XStore\ServiceLayers\Handlers\updateAddress",
+    AdminUpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\adminUpdateOrder",
 );

@@ -274,4 +274,63 @@ class Views
         }
         return $result["count"];
     }
+
+    public static function getSizeOfProducts(DoctrineUnitOfWork $uow, string|null $search = null): int|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (name LIKE `%" . $search . "%` OR description LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT COUNT(*) as count FROM products ";
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result["count"];
+    }
+
+
+    public static function getProductsAgent(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): int|null
+    {
+        $where = " WHERE 1 ";
+        if ($search != null && $search != "") {
+            $where = $where . " AND (name LIKE `%" . $search . "%` OR description LIKE `%" . $search . "%`) ";
+        }
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT id, name, description, path, created_at, updated_at FROM products " . $where . " LIMIT " . $offset . "," . $limit;
+        $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$results) {
+            return null;
+        }
+        return $results;
+    }
+
+    public static function getSizeOfOrders(DoctrineUnitOfWork $uow, string|null $search = null): int|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT COUNT(*) as count FROM orders "; // . $where;
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result["count"];
+    }
+    public static function getOrders(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [];
+        $sql = "SELECT id,address_id,user_id, type_shipping_fee, status,created_at,updated_at FROM orders " . " LIMIT " . $offset . "," . $limit; // . $where;
+        $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$results) {
+            return null;
+        }
+        for ($index = 0; $index < sizeof($results ?? []); $index++) {
+            $results[$index] = array_merge($results[$index], array("user" => $conn->executeQuery("SELECT id, username FROM users WHERE id = :id", array("id" => $results[$index]["user_id"]))->fetchAssociative()));
+        }
+        return $results;
+    }
 }

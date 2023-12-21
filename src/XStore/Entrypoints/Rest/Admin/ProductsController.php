@@ -3,6 +3,10 @@
 
 class ProductsController
 {
+
+    public function executePost()
+    {
+    }
 }
 
 $controller = new ProductsController();

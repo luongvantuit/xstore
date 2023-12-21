@@ -2,6 +2,7 @@
 
 use XStore\Domains\Models\Admin;
 use XStore\ServiceLayers\UnitOfWork\DoctrineUnitOfWork;
+use XStore\Views;
 
 use function XStore\bootstrap;
 
@@ -90,12 +91,129 @@ if ($model == null) {
         </div>
     </div>
     <div class="bg-light">
+        <?php
+        // *
+        $currentPage = $_GET["page"] ?? 0;
+        if ($currentPage < 0) {
+            $currentPage = 0;
+        }
+        $limit = $_GET["limit"] ?? 10;
+        if ($limit == 0) {
+            $limit = 10;
+        }
+        $orders = Views::getOrders($bus->getUow(), limit: $limit, offset: $limit * $currentPage);
+        ?>
+        <table class="table table-striped table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Address</th>
+                    <th>Type Shipping Fee</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                for ($index = 0; $index < sizeof($orders ?? []); $index++) {
+                    echo '
+                    <tr>
+                        <td>
+                            ' . $index . '
+                        </td>
+                        <td>' . ($orders[$index]["user"]["username"] ?? "") . '</td>
+                        <td>' . $orders[$index]["address_id"] . '</td>
+                        <td>' . $orders[$index]["type_shipping_fee"] . '</td>
+                        <td>' . $orders[$index]["status"] . '</td>
+                        <td>' . $orders[$index]["created_at"] . '</td>
+                        <td>' . $orders[$index]["updated_at"] . '</td>
+                           <td>
+                            <div class="modal fade" id="editOrderModal' . $orders[$index]["id"] . '" tabindex="-1" aria-labelledby="editOrderModalLabel' . $orders[$index]["id"] . '" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editOrderModalLabel' . $orders[$index]["id"] . '">Upgrade Status of Order?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>#:</strong>' . $index . '</p>
+                                            <p><strong>Order ID:</strong> ' . $orders[$index]["id"] . '</p>
+                                            <p><strong>Username:</strong> ' . $orders[$index]["user"]["username"] . '</p>
+                                            <select id="input-status-order-' . $orders[$index]["id"] . '" class="form-select" aria-label="Status Order" value="' . $orders[$index]["status"] . '">
+                                                <option value="incard">In Cart</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="cancelled">Cancelled</option>
+                                                <option value="delivering">Delivering</option>
+                                                <option value="delivered">Delivered</option>
+                                                <option value="returning">Returning</option>
+                                                <option value="returned">Returned</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="updateOrder(' . $orders[$index]["id"] . ')">Yes/Summit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="btn text-danger" href="#editOrderModal' . $orders[$index]["id"] . '" data-bs-toggle="modal">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                    </tr>';
+                }
+                ?>
+            </tbody>
+        </table>
+        <?php
+        // * Pagination
+        $sizeOfUsers = Views::getSizeOfOrders($bus->getUow());
+        $pageNumbers = ceil($sizeOfUsers / $limit);
+        $minRangePage = max(0, $currentPage - 2);
+        $maxRangePage = min($pageNumbers - 1, $currentPage + 2);
+        if ($pageNumbers == 0) {
+            $maxRangePage = 0;
+        }
+        ?>
+        <nav aria-label="Orders navigation">
+            <ul class="pagination">
+                <?php
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage > 0 ? "" : "btn disabled") . '" href="/admin/orders/?page=' . ($currentPage - 1) . '" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ';
+                if ($currentPage >= 3) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/orders/?page=' . ($currentPage - 3) . '">...</a></li>';
+                }
+                foreach (range($minRangePage, $maxRangePage) as $pageNumber) {
+                    echo '<li class="page-item"><a class="page-link" href="/admin/orders/?page=' . $pageNumber . '">' . $pageNumber . '</a></li>';
+                }
+                if ($currentPage < $pageNumbers - 3) {
+                    echo ' <li class="page-item"><a class="page-link" href="/admin/orders/?page=' . ($currentPage + 3) . '">...</a></li>';
+                }
+                echo '
+                <li class="page-item">
+                    <a class="page-link ' . ($currentPage < $pageNumbers - 1 ? "" : "btn disabled") . '" href="/admin/orders/?page=' . ($currentPage + 1) . '" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                '
+                ?>
+            </ul>
+        </nav>
     </div>
     <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
     <script src="/assets/admin/js/need-authentization.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>
+    <script src="/assets/admin/js/orders.js"></script>
 </body>
 
 </html>
