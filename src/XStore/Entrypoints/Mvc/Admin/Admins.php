@@ -125,11 +125,11 @@ if (isset($_COOKIE["adminAccessToken"])) {
     </div>
     <div class="bg-light">
         <!-- Modal Add New A Admin -->
-        <div class="modal fade" id="addUserModal" tabindex="0" aria-labelledby="addUserModal" aria-hidden="true">
+        <div class="modal fade" id="addUserModal" tabindex="0" aria-labelledby="addUserModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addUserModal">Add New A Admin</h5>
+                        <h5 class="modal-title" id="addUserModalLabel">Add New A Admin</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">

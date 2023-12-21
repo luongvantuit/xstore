@@ -14,12 +14,12 @@ class DeletePropertyCommand extends Command
         $this->propertyId = $propertyId;
     }
 
-    public function getProductId(): int
+    public function getPropertyId(): int
     {
         return $this->propertyId;
     }
 
-    public function setProductId(int $propertyId): void
+    public function setPropertyId(int $propertyId): void
     {
         $this->propertyId = $propertyId;
     }

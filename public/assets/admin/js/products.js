@@ -45,6 +45,10 @@ window.addEventListener("DOMContentLoaded", () => {
       },
       false
     );
+    $("#addProductModal").on("hidden.bs.modal", function () {
+      $("#addProductModal input").val("");
+      formAddNewAProduct.classList.remove("was-validated");
+    });
   })();
 });
 

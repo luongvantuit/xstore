@@ -38,8 +38,10 @@ use XStore\ServiceLayers\Exceptions\ForbiddenException;
 use XStore\Domains\Commands\AddAddressCommand;
 use XStore\Domains\Commands\AdminUpdateOrderCommand;
 use XStore\Domains\Commands\CreateNewProductCommand;
+use XStore\Domains\Commands\CreateNewPropertyCommand;
 use XStore\Domains\Commands\DeleteAddressCommand;
 use XStore\Domains\Commands\DeleteProductCommand;
+use XStore\Domains\Commands\DeletePropertyCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
 use XStore\Domains\Models\Product;
 use XStore\ServiceLayers\Exceptions\CannotRemoveRootException;
@@ -543,12 +545,46 @@ function removeProduct(DeleteProductCommand $command, AbstractUnitOfWork $uow): 
 {
     $repo = $uow->getRepository();
     /** @var Product $model */
-    $model = $repo->get(Product::class, array("id" => strtolower($command->getProductId())));
+    $model = $repo->get(Product::class, array("id" => $command->getProductId()));
     if ($model == null) {
         throw new NotFoundException();
     }
     $uow->beginTransaction();
-    $repo->remove(Product::class, array("id" => strtolower($command->getProductId())));
+    $repo->remove(Product::class, array("id" => $command->getProductId()));
+    $uow->commit();
+}
+
+function createNewProperty(CreateNewPropertyCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Product $model */
+    $model = $repo->get(Product::class, array("id" => $command->getProductId()));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $uow->beginTransaction();
+    $property = new Property(
+        product: $model,
+        number: $command->getNumber(),
+        price: $command->getPrice(),
+        sizeId: $command->getSizeId(),
+        path: $command->getPath(),
+        color: $command->getColor()
+    );
+    $repo->add($property);
+    $uow->commit();
+}
+
+function removeProperty(DeletePropertyCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Property $model */
+    $model = $repo->get(Property::class, array("id" => $command->getPropertyId()));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $uow->beginTransaction();
+    $repo->remove(Property::class, array("id" => $command->getPropertyId()));
     $uow->commit();
 }
 
@@ -572,4 +608,6 @@ const COMMAND_HANDLERS = array(
     AdminUpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\adminUpdateOrder",
     CreateNewProductCommand::class => "XStore\ServiceLayers\Handlers\createProduct",
     DeleteProductCommand::class => "XStore\ServiceLayers\Handlers\\removeProduct",
+    CreateNewPropertyCommand::class => "XStore\ServiceLayers\Handlers\createNewProperty",
+    DeletePropertyCommand::class => "XStore\ServiceLayers\Handlers\\removeProperty",
 );

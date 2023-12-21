@@ -19,24 +19,24 @@ class Property extends BaseModel
     private string $color;
 
     #[ORM\Column(name: "number", type: 'integer')]
-    private string $number;
+    private int $number;
 
     #[ORM\Column(name: "price", type: 'float')]
-    private string $price;
+    private float $price;
 
     #[ORM\Column(name: "size_id", type: 'integer')]
-    private string $sizeId;
+    private int $sizeId;
 
-    #[ORM\Column(name: "path", type: 'string')]
-    private string $path;
+    #[ORM\Column(name: "path", type: 'string', nullable: true)]
+    private string|null $path;
 
     public function __construct(
         Product $product,
         string $color,
-        string $number,
-        string $price,
-        string $sizeId,
-        string $path
+        int $number,
+        float $price,
+        int $sizeId,
+        string|null $path
     ) {
         parent::__construct();
         $this->product = $product;
@@ -69,24 +69,24 @@ class Property extends BaseModel
         return $this->color;
     }
 
-    public function setNumber(string $number): void
+    public function setNumber(int $number): void
     {
         $this->number = $number;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getNumber(): string
+    public function getNumber(): int
     {
         return $this->number;
     }
 
-    public function setPrice(string $price): void
+    public function setPrice(float $price): void
     {
         $this->price = $price;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getPrice(): string
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -102,13 +102,13 @@ class Property extends BaseModel
         return $this->sizeId;
     }
 
-    public function setPath(string $path): void
+    public function setPath(string|null $path): void
     {
         $this->path = $path;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getPath(): string
+    public function getPath(): string|null
     {
         return $this->path;
     }

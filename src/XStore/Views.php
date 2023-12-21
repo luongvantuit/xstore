@@ -254,7 +254,7 @@ class Views
         $sql = "SELECT COUNT(*) as count FROM admins " . $where;
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
-            return null;
+            return 0;
         }
         return $result["count"];
     }
@@ -286,7 +286,7 @@ class Views
         $sql = "SELECT COUNT(*) as count FROM users " . $where;
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
-            return null;
+            return 0;
         }
         return $result["count"];
     }
@@ -302,9 +302,21 @@ class Views
         $sql = "SELECT COUNT(*) as count FROM products ";
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
-            return null;
+            return 0;
         }
         return $result["count"];
+    }
+
+    public static function getProductById(DoctrineUnitOfWork $uow, int $productId): array|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = ["id" => $productId];
+        $sql = "SELECT id, name, description, created_at, updated_at, path FROM products id = :id";
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return null;
+        }
+        return $result;
     }
 
 
@@ -331,10 +343,11 @@ class Views
         $sql = "SELECT COUNT(*) as count FROM orders "; // . $where;
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
         if (!$result) {
-            return null;
+            return 0;
         }
         return $result["count"];
     }
+
     public static function getOrders(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null
     {
         $conn = $uow->getEntityManager()->getConnection();
@@ -348,5 +361,33 @@ class Views
             $results[$index] = array_merge($results[$index], array("user" => $conn->executeQuery("SELECT id, username FROM users WHERE id = :id", array("id" => $results[$index]["user_id"]))->fetchAssociative()));
         }
         return $results;
+    }
+
+    public static function getProperties(DoctrineUnitOfWork $uow, int $productId, string|null $search = null, int $limit = 10, int $offset = 0): array|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "product_id" => $productId
+        ];
+        $sql = "SELECT id, product_id, color, number, price,size_id, path, created_at, updated_at FROM properties WHERE product_id = :product_id " . " LIMIT " . $offset . "," . $limit; // . $where;
+        $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
+        if (!$results) {
+            return null;
+        }
+        return $results;
+    }
+
+    public static function getSizeOfProperties(DoctrineUnitOfWork $uow, int $productId, string|null $search = null, int $limit = 10, int $offset = 0): int|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "product_id" => $productId
+        ];
+        $sql = "SELECT COUNT(*) as count FROM properties WHERE product_id = :product_id"; // . $where;
+        $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return 0;
+        }
+        return $result["count"];
     }
 }

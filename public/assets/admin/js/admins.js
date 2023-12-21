@@ -77,6 +77,10 @@ window.addEventListener("DOMContentLoaded", () => {
           "Require username length greater than 6!";
       }
     });
+    $("#addUserModal").on("hidden.bs.modal", function () {
+      $("#addUserModal input").val("");
+      formAddNewAAdmin.classList.remove("was-validated");
+    });
   })();
 });
 
