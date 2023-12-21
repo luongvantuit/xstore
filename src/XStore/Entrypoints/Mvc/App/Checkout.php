@@ -7,26 +7,16 @@
     <meta name="keywords" content="Yoga, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Violet | Template</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/magnific-popup.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="./assets/css/style.css" type="text/css">
+    <title>Violet | Checkout</title>
+    <?php
+    require_once __DIR__ . "/../Common/Links.php";
+    ?>
 </head>
-<?php
-require_once __DIR__ . "/../Common/Header.php";
-?>
 
 <body>
+    <?php
+    require_once __DIR__ . "/../Common/Header.php";
+    ?>
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -284,14 +274,10 @@ require_once __DIR__ . "/../Common/Header.php";
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/main.js"></script>
+    <?php
+    require_once __DIR__ . "/../Common/Footer.php";
+    require_once __DIR__ . "/../Common/Scripts.php";
+    ?>
 </body>
 
 </html>
