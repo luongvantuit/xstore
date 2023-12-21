@@ -1,6 +1,7 @@
 <?php
 
 use XStore\Adapters\Rest\Controller;
+use XStore\Services\ProductService;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;

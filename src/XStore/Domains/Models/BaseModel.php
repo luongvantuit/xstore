@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\MappedSuperclass]
 class BaseModel
 {
-
     #[ORM\Id]
     #[ORM\Column(name: "id", type: 'integer', updatable: false)]
     #[ORM\GeneratedValue]

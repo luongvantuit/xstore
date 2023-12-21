@@ -46,6 +46,7 @@ function bootstrap(): MessageBus
     ], $mysql_info), $config);
     // obtaining the entity manager
     $entity_manager = new EntityManager($connection, $config);
+
     $uow = new DoctrineUnitOfWork($entity_manager);
     // Extend unit of work
     $dependencies = array_merge($dependencies, array("uow" => $uow));

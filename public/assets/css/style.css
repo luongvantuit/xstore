@@ -1551,6 +1551,12 @@ ol {
 	cursor: pointer;
 }
 
+.cart-table table .product-select {
+	width: 6%;
+	font-size: 18px;
+	font-weight: 600;
+}
+
 .cart-btn {
 	background: #F9FBFB;
 	padding: 50px 0;

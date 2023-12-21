@@ -21,14 +21,7 @@ class Admin extends BaseModel
     #[ORM\Column(name: "is_root", type: 'string')]
     private bool $isRoot = false;
 
-    public function __construct(string $username, string $password, string $email = null, bool $isRoot = false)
-    {
-        parent::__construct();
-        $this->username = $username;
-        $this->password = $password;
-        $this->email = $email;
-        $this->isRoot = $isRoot;
-    }
+
 
     public function setEmail(string $email): void
     {
@@ -73,4 +66,6 @@ class Admin extends BaseModel
     {
         return $this->isRoot;
     }
+
+
 }

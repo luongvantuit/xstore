@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Yoga Studio Template">
-    <meta name="keywords" content="Yoga, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>XStore</title>
@@ -31,30 +30,30 @@
                     <img src="./assets/img/logo.png" alt="">
                 </div>
                 <div class="header-right">
-                    <img src="./assets/img/icons/search.png" alt="" class="search-trigger">
+                    <!-- <img src="./assets/img/icons/search.png" alt="" class="search-trigger"> -->
                     <img src="public/assets/img/icons/man.png" alt="">
-                    <a href="#">
+                    <a href="/shops">
                         <img src="./assets/img/icons/bag.png" alt="">
                         <span>2</span>
                     </a>
                 </div>
                 <div class="user-access">
-                    <a href="/register">Đăng ký</a>
-                    <a href="/login" class="in">Đăng nhập</a>
+                    <a href="/register">Sign up</a>
+                    <a href="/login" class="in">Sign in</a>
                 </div>
                 <nav class="main-menu mobile-menu">
                     <ul>
-                        <li><a href="/">Trang chủ</a></li>
-                        <li><a href="/products">Sản phẩm </a>
-                            <ul class="sub-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/products">Products </a>
+                            <!-- <ul class="sub-menu">
                                 <li><a href="">Top</a></li>
                                 <li><a href="">Bottom</a></li>
                                 <li><a href="">Accessory</a></li>
-                            </ul>
+                            </ul> -->
                         </li>
 
-                        <li><a href="/shops">Giỏ hàng</a></li>
-                        <li><a href="/contact">Liên hệ</a></li>
+                        <li><a href="#">Orders</a></li>
+                        <li><a href="/contact">Contact</a></li>
                     </ul>
                 </nav>
             </div>
