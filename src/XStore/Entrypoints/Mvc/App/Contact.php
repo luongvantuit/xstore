@@ -37,22 +37,19 @@
                         <div class="cw-item">
                             <h5>Location</h5>
                             <ul>
-                                <li>1525 Awesome Lane, </li>
-                                <li>Los Angeles, CA</li>
+                                <li>334 Nguyen Trai, Thanh Xuan, Ha Noi, Viet Nam </li>
                             </ul>
                         </div>
                         <div class="cw-item">
                             <h5>Phone</h5>
                             <ul>
-                                <li>+1 (603)535-4592</li>
-                                <li>+1 (603)535-4556</li>
+                                <li>+84 (0)123456789</li>
                             </ul>
                         </div>
                         <div class="cw-item">
                             <h5>E-mail</h5>
                             <ul>
-                                <li>contact@violetstore.com</li>
-                                <li>www.violetstore.com</li>
+                                <li>contact@web.com</li>
                             </ul>
                         </div>
                     </div>
@@ -61,7 +58,7 @@
             <div class="map">
                 <div class="row">
                     <div class="col-lg-12">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3724.533100306759!2d105.8301722!3d21.011345!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab8037bc73b7%3A0xe40320bcf0158cf5!2sClownZ%20Streetwear!5e0!3m2!1sen!2s!4v1702570592275!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://www.google.com/maps/embed/v1/search?q=334+Nguyễn+Trãi,+Thanh+Xuân+Trung,+Thanh+Xuân,+Hà+Nội,+Vietnam&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
