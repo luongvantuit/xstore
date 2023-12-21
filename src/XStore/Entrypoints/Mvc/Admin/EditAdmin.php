@@ -78,7 +78,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Admin Dashboard</title>
+    <title>Edit Admin</title>
     <link rel="stylesheet" href="/assets/admin/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/fontawesome.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/admin/css/home.css" type="text/css">
