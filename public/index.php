@@ -4,9 +4,12 @@ use XStore\X\Path;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
 use XStore\X\Response\HttpStatusCode;
+//use function XStore\bootstrap;
 
 require_once __DIR__ . "/../vendor/autoload.php";
+//require_once __DIR__ . "/../src/XStore/Bootstrap.php";
 
+//$bus = bootstrap();
 
 
 # Path mapping
@@ -16,6 +19,7 @@ $path_mapping = array(
     "/register" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Register.php",
     "/login" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Login.php",
     "/products" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Products.php",
+    "/product-detail" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Detail.php",
     "/shops" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Shops.php",
     "/contact" => __DIR__ . "/../src/XStore/Entrypoints/Mvc/App/Contact.php",
     # MVC Admin
