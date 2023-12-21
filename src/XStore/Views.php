@@ -125,6 +125,8 @@ class Views
         return $result;
     }
 
+
+
     public static function getOrdersByUserId(DoctrineUnitOfWork $uow, int $userId): array|null
     {
         $sql = "SELECT id , status FROM orders WHERE user_id = :user_id and status != :status_order;";

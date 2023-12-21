@@ -144,7 +144,6 @@ require_once __DIR__ . "/../Common/Header.php";
                 function handleAddressChange() {
                     var dropdown = document.getElementById('addressDropdown');
                     var popupForm = document.getElementById('popupForm');
-
                     if (dropdown.value === 'Another Address') {
                         popupForm.style.display = 'block';
                     } else {

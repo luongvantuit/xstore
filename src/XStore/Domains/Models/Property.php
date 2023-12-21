@@ -22,21 +22,21 @@ class Property extends BaseModel
     private string $number;
 
     #[ORM\Column(name: "price", type: 'float')]
-    private string $price;
+    private float $price;
 
     #[ORM\Column(name: "size_id", type: 'integer')]
     private string $sizeId;
 
-    #[ORM\Column(name: "path", type: 'string')]
-    private string $path;
+    #[ORM\Column(name: "path", type: 'string', nullable: true)]
+    private ?string $path;
 
     public function __construct(
         Product $product,
         string $color,
         string $number,
-        string $price,
+        float $price,
         string $sizeId,
-        string $path
+        ?string $path
     ) {
         parent::__construct();
         $this->product = $product;
@@ -80,13 +80,13 @@ class Property extends BaseModel
         return $this->number;
     }
 
-    public function setPrice(string $price): void
+    public function setPrice(float $price): void
     {
         $this->price = $price;
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getPrice(): string
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -108,7 +108,7 @@ class Property extends BaseModel
         $this->setUpdatedAt(new DateTime('now'));
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }

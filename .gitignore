@@ -4,5 +4,7 @@
 /logs/
 .vscode
 .idea
+/public/static/
+
 
 .DS_Store

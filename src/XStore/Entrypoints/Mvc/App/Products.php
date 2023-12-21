@@ -8,18 +8,18 @@
 </head>
 
 <body>
-<?php
+    <?php
     require_once __DIR__ . "/../Common/Header.php";
 
-//    echo phpinfo();
+    //    echo phpinfo();
     use XStore\Services\ProductService;
 
     $products = new ProductService();
 
     $products = $products->getProducts();
 
-?>
-<section class="related-product spad">
+    ?>
+    <section class="related-product spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -29,17 +29,17 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($products as $product): ?>
+                <?php foreach ($products as $product) : ?>
                     <div class="col-lg-3 col-sm-6">
                         <div class="single-product-item">
                             <figure>
                                 <a href="http://localhost:3000/product-detail?id=<?php echo $product->getID() ?>">
                                     <img src="<?php echo $product->getPath() ?>" alt="">
                                 </a>
-                                <div class="p-status"><?php echo $product->getName() ?></div>
+
                             </figure>
                             <div class="product-text">
-                                <h6><?php echo $product->getDescription() ?></h6>
+                                <h6><?php echo $product->getName() ?></h6>
                                 <p></p>
                             </div>
                         </div>
@@ -48,9 +48,9 @@
             </div>
         </div>
     </section>
-<?php
+    <?php
     require_once __DIR__ . "/../Common/Footer.php"
-?>
+    ?>
 </body>
 
 </html>
