@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-lg-3 col-sm-6">
                     <?php foreach ($products as $product) : ?>
-                        <div class="single-product-item p-3 shadow-sm rounded">
+                        <div class="single-product-item p-3">
                             <figure>
                                 <a href="/product?id=<?php echo $product["id"] ?>">
                                     <img src="<?php echo $product["path"] ?>" alt="" />
