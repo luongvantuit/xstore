@@ -15,9 +15,9 @@ class Configs
     {
         $host = Env::getEnv("MYSQL_HOST", "127.0.0.1");
         $port = Env::getEnv("MYSQL_PORT", 3306);
-        $username = Env::getEnv("MYSQL_USERNAME", "root");
-        $password = Env::getEnv("MYSQL_PASSWORD", "");
-        $dbname = Env::getEnv("MYSQL_DATABASE", "xshop");
+        $username = Env::getEnv("MYSQL_USERNAME", "admin");
+        $password = Env::getEnv("MYSQL_PASSWORD", "adminpw");
+        $dbname = Env::getEnv("MYSQL_DATABASE", "db");
         return array(
             "host" => $host,
             "port" => $port,
@@ -33,5 +33,3 @@ class Configs
         return $key;
     }
 }
-
-

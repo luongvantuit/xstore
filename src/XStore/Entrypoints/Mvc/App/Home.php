@@ -2,18 +2,19 @@
 <html lang="en">
 
 </head>
-    <title>Home - XStore</title>
+<title>Home - XStore</title>
 </head>
 
 <body>
     <?php
     require_once __DIR__ . "/../Common/Header.php";
+
     use XStore\Services\ProductService;
 
     $products = new ProductService();
 
     $products = $products->getProducts();
-    $product = $products[2];
+    // $product = $products[2];
     ?>
     <section class="features-section spad">
         <div class="features-ads">
