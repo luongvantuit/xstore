@@ -81,9 +81,10 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function deleteAdmin(adminId) {
-  const bootstrapModal = bootstrap.Modal.getInstance(
+  let model = bootstrap.Modal.getInstance(
     document.getElementById(`deleteAdminModal${adminId}`)
   );
+  model.hide();
   const response = await fetch("/api/admins", {
     method: "DELETE",
     headers: {

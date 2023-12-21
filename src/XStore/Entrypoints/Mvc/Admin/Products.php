@@ -261,7 +261,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
-                                            <button type="button" class="btn btn-danger" onclick="deleteProduct(' . $admins[$index]["id"] . ')">Yes/Delete</button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteProduct(' . $products[$index]["id"] . ')">Yes/Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -320,8 +320,21 @@ if (isset($_COOKIE["adminAccessToken"])) {
                 ?>
             </ul>
         </nav>
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="toast-delete-product-failed" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="/assets/admin/svgs/solid/layer-group.svg" class="rounded me-2" style="width: 24px;" alt="...">
+                    <strong class="me-auto">XStore</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div id="toast-delete-product-failed-message" class="toast-body">
+
+                </div>
+            </div>
+        </div>
+
     </div>
-    <script src="/assets/admin/js/bootstrap.min.js"></script>
     <script src="/assets/admin/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>

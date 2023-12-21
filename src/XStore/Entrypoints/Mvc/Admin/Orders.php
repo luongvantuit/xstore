@@ -239,7 +239,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
             </ul>
         </nav>
     </div>
-    <script src="/assets/admin/js/bootstrap.min.js"></script>
+    <script src="/assets/admin/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/admin/js/jquery.min.js"></script>
     <script src="/assets/admin/js/left-navbar.js"></script>

@@ -39,6 +39,7 @@ use XStore\Domains\Commands\AddAddressCommand;
 use XStore\Domains\Commands\AdminUpdateOrderCommand;
 use XStore\Domains\Commands\CreateNewProductCommand;
 use XStore\Domains\Commands\DeleteAddressCommand;
+use XStore\Domains\Commands\DeleteProductCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
 use XStore\Domains\Models\Product;
 use XStore\ServiceLayers\Exceptions\CannotRemoveRootException;
@@ -538,6 +539,19 @@ function createProduct(CreateNewProductCommand $command, AbstractUnitOfWork $uow
     $uow->commit();
 }
 
+function removeProduct(DeleteProductCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Product $model */
+    $model = $repo->get(Product::class, array("id" => strtolower($command->getProductId())));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    $uow->beginTransaction();
+    $repo->remove(Product::class, array("id" => strtolower($command->getProductId())));
+    $uow->commit();
+}
+
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -557,4 +571,5 @@ const COMMAND_HANDLERS = array(
     UpdateAddressCommand::class => "XStore\ServiceLayers\Handlers\updateAddress",
     AdminUpdateOrderCommand::class => "XStore\ServiceLayers\Handlers\adminUpdateOrder",
     CreateNewProductCommand::class => "XStore\ServiceLayers\Handlers\createProduct",
+    DeleteProductCommand::class => "XStore\ServiceLayers\Handlers\\removeProduct",
 );

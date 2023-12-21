@@ -49,16 +49,31 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 async function deleteProduct(productId) {
+  let model = bootstrap.Modal.getInstance(
+    document.getElementById(`deleteProductModal${productId}`)
+  );
+  model.hide();
   const response = await fetch("/api/admin/products", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id: productId,
+      id: Number(productId),
     }),
   });
   if (response.ok) {
     window.location.reload();
+  } else {
+    const json = await response.json();
+    document.getElementById("toast-delete-product-failed-message").textContent =
+      json["message"];
+    let toastDeleteProductFailed = document.getElementById(
+      "toast-delete-product-failed"
+    );
+    if (toastDeleteProductFailed) {
+      var toast = new bootstrap.Toast(toastDeleteProductFailed);
+      toast.show();
+    }
   }
 }
