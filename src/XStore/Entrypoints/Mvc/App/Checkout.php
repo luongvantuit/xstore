@@ -9,8 +9,56 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Violet | Checkout</title>
     <?php
+
+    use XStore\Domains\Models\Property;
+    use XStore\Views;
+    use XStore\Domains\Models\User;
+    use XStore\X\Jw\Jwt;
+    use XStore\Configs;
+    use function XStore\bootstrap;
+
     require_once __DIR__ . "/../Common/Links.php";
+    require_once __DIR__ . "/../../../Bootstrap.php";
+
+    $bus = bootstrap();
+    /**
+     * @var DoctrineUnitOfWork $uow
+     */
+    $uow = $bus->getUow();
+    $repo = $uow->getRepository();
+
+
+    if (isset($_COOKIE["accessToken"])) {
+        /**
+         * @var string $accessToken
+         */
+        $accessToken = $_COOKIE["accessToken"];
+        try {
+            $payload = (new Jwt(Configs::getSecretKey()))->decode($accessToken);
+            $id = (int)$payload["id"];
+            /**
+             * @var User $currentUser
+             */
+            $currentUser = $repo->get(User::class, array("id" => $id));
+            if ($currentUser == null) {
+                http_response_code(302);
+                header("Location: /login");
+                exit;
+            }
+            define("CURRENT_USER", $currentUser->getUsername());
+            define("CURRENT_USER_ID", $currentUser->getId());
+        } catch (Exception $e) {
+            http_response_code(302);
+            header("Location: /login");
+            exit;
+        }
+    } else {
+        header("Location: /login");
+        exit();
+    }
     ?>
+
+
 </head>
 
 <body>
@@ -37,9 +85,9 @@
                         <h2>Checkout<span>.</span></h2>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <!-- <div class="col-lg-8">
                     <img src="img/add.jpg" alt="">
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -155,36 +203,59 @@
 
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="product-col">
-                                    <img src="./assets/img/product/product-1.jpg" alt="">
+                            <?php
+                            $product_in_cart = Views::getCartProductByUserId($bus->getUow(), (int) CURRENT_USER_ID);
+                            error_log(json_encode($product_in_cart), LOG_INFO);
+                            $product_dict = [];
+                            foreach ($product_in_cart as $cart_product) {
+                                $property_id = $cart_product["property_id"];
+                                $product_dict[$property_id] = $cart_product;
+                            }
+                            $property_id_select = isset($_GET['product_is_select']) ? explode(',', $_GET['product_is_select']) : [];
+                            $sum_total_cart = 0;
+                            for ($index = 0; $index < sizeof($property_id_select ?? []); $index++) {
 
-                                    <div class="p-title">
-                                        <h5>Blue Dotted Shirt</h5>
-                                    </div>
-                                </td>
-                                <td class="price-col">99000</td>
-                                <td class="quantity-col">
-                                    <div class="pro-qty">
-                                        <input type="text" value=1>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="product-col">
-                                    <img src="./assets/img/products/img-1.jpg" alt="">
+                                $property_id = $property_id_select[$index];
+                                /**
+                                 * @var Property $property
+                                 */
+                                $property = $repo->get(Property::class, array("id" => $property_id));;
+                                $product = $product_dict[$property_id];
 
+                                $sum_total_cart += ($property->getPrice()) * ($product['number']);
+                                $sizeId = $property->getSizeId();
+                                $size = '';
+                                if ($sizeId == 1) {
+                                    $size = 'M';
+                                } else if ($sizeId == 2) {
+                                    $size = 'L';
+                                } else if ($sizeId == 3) {
+                                    $size = 'XL';
+                                } else {
+                                    $size = 'Free Size';
+                                }
+
+                                echo '
+                                <tr>
+                                <td class="product-col">
+                                    <img src="' . ($property->getPath() ?? $property->getProduct()->getPath()) . '" alt=""/>
                                     <div class="p-title">
-                                        <h5>Blue Dotted Shirt</h5>
+                                        <h5>' . ($property->getProduct()->getName() ?? "") . '</h5>
                                     </div>
                                 </td>
-                                <td class="price-col">99000</td>
-                                <td class="quantity-col">
+                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) . '</strong></td>
+                                <td class="quantity-col table-space">
                                     <div class="pro-qty">
-                                        <input type="text" value=1>
-                                    </div>
+                                        <input type="text" value=' . ($product["number"]) . ' disabled>
+                                        </div>
                                 </td>
-                            </tr>
+                                <td class="table-space"><i class="fa-solid fa-circle" style="color: ' . $property->getColor() . ';"></i></td>
+                                <td class="table-space">' . $size . '</td>
+                                
+                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($product['number']) . '</strong></td>
+                            </tr>';
+                            }
+                            ?>
                             <tr>
                                 <td class="product-col">
                                     <img src="./assets/img/icons/ship.jpg" alt="">
@@ -250,7 +321,9 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="total-cart">198000</td>
+                                        <?php
+                                        echo '<td class="total-cart">' . $sum_total_cart + 25000 . '</td>'
+                                        ?>
                                     </tr>
                                 </thead>
                             </table>

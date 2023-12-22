@@ -161,7 +161,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-right">
-                            <a href="/checkout" class="primary-btn chechout-btn">Purchase</a>
+                            <a class="primary-btn chechout-btn">Purchase</a>
                         </div>
                     </div>
                 </div>
@@ -173,6 +173,22 @@
     require_once __DIR__ . "/../Common/Scripts.php";
     ?>
     <script src="/assets/app/js/cart.js"></script>
-</body>
+    <script>
+        $(document).ready(function() {
+            var product_is_select = [];
 
-</html>
+            $('.product-select-checkout').change(function() {
+                if ($(this).is(':checked')) {
+                    var propertyId = $(this).attr('id').replace('checkbox-select-', '');
+                    product_is_select.push(propertyId);
+                }
+            });
+
+            $('.chechout-btn').click(function(e) {
+                e.preventDefault();
+                localStorage.setItem('product_is_select', JSON.stringify(product_is_select));
+                window.location.href = '/checkout?product_is_select=' + product_is_select.join(',');
+            });
+        });
+    </script>
+    < /html>
