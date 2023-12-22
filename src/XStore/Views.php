@@ -12,7 +12,7 @@ class Views
     {
     }
 
-    public static function getAdminById(DoctrineUnitOfWork $uow, int $id): array | null
+    public static function getAdminById(DoctrineUnitOfWork $uow, int $id): array|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE id = :id;";
         $conn = $uow->getEntityManager()->getConnection();
@@ -28,7 +28,7 @@ class Views
     }
 
 
-    public static function getUserById(DoctrineUnitOfWork $uow, int $id): array | null
+    public static function getUserById(DoctrineUnitOfWork $uow, int $id): array|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE id = :id;";
         $conn = $uow->getEntityManager()->getConnection();
@@ -57,7 +57,7 @@ class Views
         return $result;
     }
 
-    public static function getUserByIdentify(DoctrineUnitOfWork $uow, string $identify): array | null
+    public static function getUserByIdentify(DoctrineUnitOfWork $uow, string $identify): array|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM users WHERE email = :email OR username = :username;";
         $conn = $uow->getEntityManager()->getConnection();
@@ -86,7 +86,7 @@ class Views
         return $jwt->encode($result);
     }
 
-    public static function getAdminByIdentify(DoctrineUnitOfWork $uow, string $identify): array | null
+    public static function getAdminByIdentify(DoctrineUnitOfWork $uow, string $identify): array|null
     {
         $sql = "SELECT id, email, username, created_at, updated_at FROM admins WHERE username = :username;";
         $conn = $uow->getEntityManager()->getConnection();
@@ -155,7 +155,7 @@ class Views
         if (!$orders) {
             return null;
         }
-        $ids = array_map(fn ($order) => $order['id'], $orders);
+        $ids = array_map(fn($order) => $order['id'], $orders);
         $sql = "SELECT order_products.id, order_products.property_id, order_products.number, order_products.order_id
         FROM order_products
         WHERE order_id in (" . join(",", $ids) . ");";
@@ -330,7 +330,11 @@ class Views
         }
         $conn = $uow->getEntityManager()->getConnection();
         $params = [];
-        $sql = "SELECT id, name, description, path, created_at, updated_at FROM products " . $where . " LIMIT " . $offset . "," . $limit;
+
+        $sql = "SELECT id, name, description, path, created_at, updated_at FROM products ";
+        if ($limit != -1) {
+            $sql = $sql . $where . " LIMIT " . $offset . "," . $limit;
+        }
         $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
         if (!$results) {
             return null;

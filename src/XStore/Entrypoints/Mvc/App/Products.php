@@ -31,10 +31,7 @@
     if ($currentPage < 0) {
         $currentPage = 0;
     }
-    $limit = $_GET["limit"] ?? 10;
-    if ($limit == 0) {
-        $limit = 10;
-    }
+    $limit = -1;
     $products = Views::getProductsAgent($bus->getUow(), limit: $limit, offset: $limit * $currentPage);
     ?>
     <section class="related-product spad">
