@@ -379,7 +379,7 @@ class Views
         return $results;
     }
 
-    public static function getSizeOfProperties(DoctrineUnitOfWork $uow, int $productId, string|null $search = null, int $limit = 10, int $offset = 0): int|null
+    public static function getSizeOfProperties(DoctrineUnitOfWork $uow, int $productId, string|null $search = null): int|null
     {
         $conn = $uow->getEntityManager()->getConnection();
         $params = [
@@ -387,6 +387,24 @@ class Views
         ];
         $sql = "SELECT COUNT(*) as count FROM properties WHERE product_id = :product_id"; // . $where;
         $result = $conn->executeQuery($sql, $params)->fetchAssociative();
+        if (!$result) {
+            return 0;
+        }
+        return $result["count"];
+    }
+
+    public static function getTotalInCartOfUser(DoctrineUnitOfWork $uow, int $userId): int|null
+    {
+        $conn = $uow->getEntityManager()->getConnection();
+        $params = [
+            "user_id" => $userId
+        ];
+        $result = $conn->executeQuery("SELECT id FROM orders WHERE user_id = :user_id", $params)->fetchAssociative();
+        if (!$result) {
+            return 0;
+        }
+        $sql = "SELECT COUNT(*) as count FROM order_products WHERE order_id = :order_id";
+        $result = $conn->executeQuery($sql, ["order_id" => $result["id"]])->fetchAssociative();
         if (!$result) {
             return 0;
         }

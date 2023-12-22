@@ -34,7 +34,7 @@ $repo = $uow->getRepository();
     ?>
     <div class="d-flex align-items-center justify-content-center h-75">
         <form id="form-login" class="rounded shadow bg-white d-flex flex-column p-3 justify-content-center gap-3 w-form-login needs-validation" novalidate>
-            <div class="w-100 d-flex align-items-center justify-content-center">
+            <div class="w-100 d-flex align-items-center justify-content-center my-3">
                 <img src="/assets/admin/svgs/solid/layer-group.svg" class="w-25">
             </div>
             <p class="font-weight-bold h3 text-center">Welcome to <strong>XStore</strong></p>
@@ -72,7 +72,9 @@ $repo = $uow->getRepository();
                     </div>
                 </div>
             </div>
-            <button id="btn-form-login" type="submit" class="btn btn-primary">Submit</button>
+            <button id="btn-form-login" type="submit" class="btn btn-primary">Login</button>
+            <p align="center" class="my-2">You haven't account?<a href="/register" class="link-primary px-1"><strong>Register</strong></a>
+            </p>
         </form>
     </div>
     <?php

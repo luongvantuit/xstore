@@ -20,9 +20,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1>2019</h1>
-                            <h2>Lookbook.</h2>
-                            <a href="#" class="primary-btn">See More</a>
+                            <h1>HUS</h1>
+                            <h2>XStore.</h2>
+                            <a href="/products" class="primary-btn">See More</a>
                         </div>
                     </div>
                 </div>
@@ -31,9 +31,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1>2019</h1>
-                            <h2>Lookbook.</h2>
-                            <a href="#" class="primary-btn">See More</a>
+                            <h1>HUS</h1>
+                            <h2>XStore.</h2>
+                            <a href="/products" class="primary-btn">See More</a>
                         </div>
                     </div>
                 </div>
@@ -42,9 +42,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1>2019</h1>
-                            <h2>Lookbook.</h2>
-                            <a href="#" class="primary-btn">See More</a>
+                            <h1>HUS</h1>
+                            <h2>XStore.</h2>
+                            <a href="/products" class="primary-btn">See More</a>
                         </div>
                     </div>
                 </div>
@@ -58,15 +58,15 @@
         <div class="features-ads">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col">
                         <div class="single-features-ads first">
-                            <img src="./assets/img/icons/f-delivery.png" alt="">
+                            <img src="/assets/img/icons/f-delivery.png" alt="">
                             <h4>Free shipping</h4>
                             <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal
                                 esuada aliquet libero viverra cursus. </p>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col">
                         <div class="single-features-ads second">
                             <img src="./assets/img/icons/coin.png" alt="">
                             <h4>100% Money back </h4>
@@ -74,7 +74,7 @@
                                 aliquet libero viverra cursus. </p>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col">
                         <div class="single-features-ads">
                             <img src="./assets/img/icons/chat.png" alt="">
                             <h4>Online support 24/7</h4>
@@ -86,7 +86,7 @@
             </div>
         </div>
         <!-- Features Box -->
-        <div class="features-box">
+        <!-- <div class="features-box">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
@@ -127,11 +127,11 @@
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Features Section End -->
+    </section> -->
+        <!-- Features Section End -->
 
-    <!-- Latest Product Begin -->
-    <section class="latest-products spad">
+        <!-- Latest Product Begin -->
+        <!-- <section class="latest-products spad">
         <div class="container">
             <div class="product-filter">
                 <div class="row">
@@ -247,11 +247,11 @@
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Latest Product End -->
+    </section> -->
+        <!-- Latest Product End -->
 
-    <!-- Lookbok Section Begin -->
-    <section class="lookbok-section">
+        <!-- Lookbok Section Begin -->
+        <!-- <section class="lookbok-section">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4 offset-lg-1">
@@ -277,11 +277,11 @@
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Lookbok Section End -->
+    </section> -->
+        <!-- Lookbok Section End -->
 
-    <!-- Logo Section Begin -->
-    <div class="logo-section spad">
+        <!-- Logo Section Begin -->
+        <!-- <div class="logo-section spad">
         <div class="logo-items owl-carousel">
             <div class="logo-item">
                 <img src="./assets//img/logos/logo-1.png" alt="">
@@ -299,11 +299,11 @@
                 <img src="./assets/img/logos/logo-5.png" alt="">
             </div>
         </div>
-    </div>
-    <?php
-    require_once __DIR__ . "/../Common/Footer.php";
-    require_once __DIR__ . "/../Common/Scripts.php";
-    ?>
+    </div> -->
+        <?php
+        require_once __DIR__ . "/../Common/Footer.php";
+        require_once __DIR__ . "/../Common/Scripts.php";
+        ?>
 </body>
 
 </html>

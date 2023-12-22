@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>XStore - Carts</title>
     <?php
     require_once __DIR__ . "/../Common/Links.php";
     ?>
@@ -53,7 +53,6 @@
                 exit;
             }
             define("CURRENT_USER", $currentUser->getUsername());
-
             define("CURRENT_USER_ID", $currentUser->getId());
         } catch (Exception $e) {
             http_response_code(302);
@@ -73,7 +72,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Select</th>
                             <th class="product-h">Product</th>
                             <th>Price</th>
                             <th class="quan">Quantity</th>
@@ -85,7 +84,7 @@
                     </thead>
                     <tbody>
                         <?php
-                        $product_in_cart = Views::getCartProductByUserId($bus->getUow(), CURRENT_USER_ID);
+                        $product_in_cart = Views::getCartProductByUserId($bus->getUow(), (int) CURRENT_USER_ID);
                         $sum_total_cart = 0;
                         for ($index = 0; $index < sizeof($product_in_cart ?? []); $index++) {
                             $product = $product_in_cart[$index];
@@ -98,38 +97,34 @@
                             $sum_total_cart += ($property->getPrice()) * ($product['number']);
                             echo '
                             <tr>
-                            <td class="product-select">
+                            <td class="table-space px-3">
                                 <label>
-                                    <input type="checkbox">
-                                    <span></span>
+                                    <input type="checkbox" id="checkbox-select-' . $property->getId() . '" class="product-select-checkout">
                                 </label>
                             </td>
                             <td class="product-col">
-
                                 <img src="' . ($property->getPath() ?? $property->getProduct()->getPath()) . '" alt=""/>
-
                                 <div class="p-title">
                                     <h5>' . ($property->getProduct()->getName() ?? "") . '</h5>
                                 </div>
                             </td>
-                            <td class="price-col">' . ($property->getPrice()) . '</td>
-                            <td class="quantity-col">
+                            <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) . '</strong></td>
+                            <td class="quantity-col table-space">
                                 <div class="pro-qty">
-                                    <button class=" btn minus" style="font-size: 24px;" onclick="minusCart(' . $property_id . ',' . $product['number'] . ')">-</button>
-                                    <input type="text" value=' . ($product["number"]) . '>
-                                    <button class=" btn plus" style="font-size: 24px;" onclick="plusCart(' . $property_id . ',' . $product['number'] . ')">+</button>
+                                    <button class="btn minus" style="font-size: 24px;" onclick="minusCart(' . $property_id . ',' . ($product['number']) . ')">-</button>
+                                    <input type="text" value=' . ($product["number"]) . ' disabled>
+                                    <button class="btn plus" style="font-size: 24px;" onclick="plusCart(' . $property_id . ',' . ($product['number']) . ')">+</button>
                                 </div>
                             </td>
-                            <td class="color-col">' . $property->getColor() . '</td>
-                            <td class="size-col">' . $property->getSizeId() . '</td>
-                            <td class="total">' . ($property->getPrice()) * ($product['number']) . '</td>
-                            <td class="product-close">
-                                <button class=" btn close" style="font-size: 24px;" onclick="removeFromCart(' . $property_id . ')">x</button>
+                            <td class="table-space"><i class="fa-solid fa-circle" style="color: ' . $property->getColor() . ';"></i></td>
+                            <td class="table-space">' . $property->getSizeId() . '</td>
+                            <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($product['number']) . '</strong></td>
+                            <td class="table-space">
+                                <button class="btn text-gray-600" onclick="removeFromCart(' . $property_id . ')"><i class="fa-solid fa-xmark"></i></button>
                             </td>
                         </tr>';
                         }
                         ?>
-
                     </tbody>
                 </table>
             </div>
@@ -143,7 +138,6 @@
                                 <tr>
                                     <td class="total-cart">Total Cart</td>
                                 </tr>
-
                                 <tr>
                                     <?php
                                     echo '<td class="total-cart">' . $sum_total_cart . '</td>'

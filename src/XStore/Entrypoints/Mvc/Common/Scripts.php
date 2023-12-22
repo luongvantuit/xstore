@@ -5,4 +5,15 @@
 <script src="/assets/js/owl.carousel.min.js"></script>
 <script src="/assets/js/jquery.nice-select.min.js"></script>
 <script src="/assets/js/mixitup.min.js"></script>
+<script src="/assets/admin/js/fontawesome.min.js"></script>
 <script src="/assets/js/main.js"></script>
+<script>
+    $("#btn-sign-out").on("click", () => {
+        localStorage.clear();
+        document.cookie =
+            "accessToken=; expires=" +
+            new Date(0).toUTCString() +
+            ";path=/";
+        window.location.href = "/login";
+    });
+</script>

@@ -1511,7 +1511,7 @@ ol {
 }
 
 .cart-table table .quantity-col {
-	width: 28%;
+	/* padding: 0 */
 }
 
 .cart-table table .quantity-col .pro-qty {

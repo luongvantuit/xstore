@@ -17,11 +17,6 @@
     <?php
     require_once __DIR__ . "/../Common/Header.php";
     ?>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
     <!-- Search model -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
