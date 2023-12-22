@@ -10,6 +10,7 @@
     <title>Violet | Checkout</title>
     <?php
 
+    use Doctrine\DBAL\Schema\View;
     use XStore\Domains\Models\Property;
     use XStore\Views;
     use XStore\Domains\Models\User;
@@ -100,8 +101,17 @@
                 <h3>Your Information</h3>
 
                 <select id="addressDropdown" onchange="handleAddressChange()" class="form-control">
-                    <option value="1">Thuy Dung, +84123456789, 334 Nguyen Trai, Thanh Xuan, Ha Noi, Viet Nam</option>
-                    <option value="2">A, +84123456789, 334 Nguyen Trai, Thanh Xuan, Ha Noi, Viet Nam</option>
+                    <?php
+                    $address_user = Views::getAddressByUserId($bus->getUow(), (int) CURRENT_USER_ID);
+                    foreach ($address_user as $address) {
+                        $fullname = $address['first_name'] . ' ' . $address['last_name'];
+                        $phone = $address['phone_number'];
+                        $location = $address['address'];
+                        error_log(json_encode($fullname), LOG_INFO);
+                        echo '<option value="' . $address['id'] . '">' . $fullname . ', ' . $phone . ', ' . $location . '</option>';
+                    }
+
+                    ?>
                     <option value="Another Address">Another Address</option>
                 </select>
 
@@ -186,7 +196,50 @@
 
                 function saveAddress() {
                     var popupForm = document.getElementById('popupForm');
+                    // console.log(popupForm);
                     popupForm.style.display = 'none';
+
+                    // var first_name = popupForm.getElementsByTagName('input')[0].value;
+                    // var last_name = popupForm.getElementsByTagName('input')[1].value;
+                    // var city = popupForm.getElementsByTagName('input')[2].value;
+                    // var street_address = popupForm.getElementsByTagName('input')[3].value;
+                    // var email = popupForm.getElementsByTagName('input')[5].value;
+                    // var phone_number = popupForm.getElementsByTagName('input')[6].value;
+
+                    // var address = {
+                    //     first_name: first_name,
+                    //     last_name: last_name,
+                    //     email: email,
+                    //     phone_number: phone_number,
+                    //     address: street_address + ', ' + city,
+                    //     default_address: false,
+                    // }
+
+                    // fetch('/api/address', {
+                    //         method: 'POST',
+                    //         headers: {
+                    //             'Content-Type': 'application/json',
+                    //             'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
+
+                    //         },
+                    //         body: JSON.stringify(address),
+                    //     })
+                    //     .then(
+                    //         response => response.json()
+                    //     )
+                    //     .then(data => {
+
+                    //         console.log('Success:', data);
+                    //         var dropdown = document.getElementById('addressDropdown');
+                    //         var option = document.createElement("option");
+                    //         option.text = data.first_name + ' ' + data.last_name + ', ' + data.phone_number + ', ' + data.address;
+                    //         option.value = data.id;
+                    //         dropdown.add(option);
+                    //         dropdown.value = data.id;
+                    //     })
+                    //     .catch((error) => {
+                    //         console.error('Error:', error);
+                    //     });
                 }
             </script>
         </div>
@@ -330,7 +383,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <a href="/checkout" class="primary-btn chechout-btn">Purchase</a>
+                                <a href="/" class="primary-btn chechout-btn">Purchase</a>
                             </div>
                         </div>
                     </div>
