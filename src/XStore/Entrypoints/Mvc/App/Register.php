@@ -106,7 +106,7 @@ $repo = $uow->getRepository();
                 </div>
             </div>
             <button id="btn-form-register" type="submit" class="btn btn-primary">Register</button>
-            <p align="center" class="my-2">Back to<a href="/register" class="link-primary px-1"><strong>Login</strong></a>
+            <p align="center" class="my-2">Back to<a href="/login" class="link-primary px-1"><strong>Login</strong></a>
             </p>
         </form>
     </div>
