@@ -36,7 +36,7 @@
         $accessToken = $_COOKIE["accessToken"];
         try {
             $payload = (new Jwt(Configs::getSecretKey()))->decode($accessToken);
-            $id = (int)$payload["id"];
+            $id = (int) $payload["id"];
             /**
              * @var User $currentUser
              */
@@ -116,9 +116,9 @@
                 </select>
 
             </div>
-            <form action="#" class="checkout-form w-100">
+            <form id="popupFormContainer" class="checkout-form w-100">
                 <div class="row">
-                    <div id="popupForm" style="display: none; margin-top: 20px;">
+                    <div id="popupForm" class="container" style="display: none; margin-top: 20px;">
                         <div class="col-lg-9">
                             <div class="row">
                                 <div class="col-lg-2">
@@ -135,7 +135,7 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">Country*</p>
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="col-lg-5">
                                     <select class="cart-select country-usa form-control">
                                         <option>Viet Nam</option>
                                     </select>
@@ -145,7 +145,7 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">City*</p>
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="col-lg-5">
                                     <input type="text">
                                 </div>
                             </div>
@@ -153,8 +153,7 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">Street Address*</p>
                                 </div>
-                                <div class="col-lg-10">
-                                    <input type="text">
+                                <div class="col-lg-5">
                                     <input type="text">
                                 </div>
                             </div>
@@ -162,7 +161,7 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">Email</p>
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="col-lg-5">
                                     <input type="text">
                                 </div>
                             </div>
@@ -170,13 +169,13 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">Phone*</p>
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="col-lg-5">
                                     <input type="text">
                                 </div>
                             </div>
                             <div class="row justify-content-end">
                                 <div class="col-lg-12">
-                                    <button onclick="saveAddress()">Save</button>
+                                    <button type="submit">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -194,53 +193,66 @@
                     }
                 }
 
-                function saveAddress() {
-                    var popupForm = document.getElementById('popupForm');
-                    // console.log(popupForm);
-                    popupForm.style.display = 'none';
+                window.addEventListener('DOMContentLoaded', () => {
 
-                    // var first_name = popupForm.getElementsByTagName('input')[0].value;
-                    // var last_name = popupForm.getElementsByTagName('input')[1].value;
-                    // var city = popupForm.getElementsByTagName('input')[2].value;
-                    // var street_address = popupForm.getElementsByTagName('input')[3].value;
-                    // var email = popupForm.getElementsByTagName('input')[5].value;
-                    // var phone_number = popupForm.getElementsByTagName('input')[6].value;
+                    const popupFormContainer = document.getElementById('popupFormContainer')
+                    const popupForm = document.getElementById('popupForm')
 
-                    // var address = {
-                    //     first_name: first_name,
-                    //     last_name: last_name,
-                    //     email: email,
-                    //     phone_number: phone_number,
-                    //     address: street_address + ', ' + city,
-                    //     default_address: false,
-                    // }
+                    popupFormContainer.addEventListener('submit', (e) => {
+                        e.preventDefault();
 
-                    // fetch('/api/address', {
-                    //         method: 'POST',
-                    //         headers: {
-                    //             'Content-Type': 'application/json',
-                    //             'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
+                        popupForm.style.display = 'none';
 
-                    //         },
-                    //         body: JSON.stringify(address),
-                    //     })
-                    //     .then(
-                    //         response => response.json()
-                    //     )
-                    //     .then(data => {
+                        var first_name = popupForm.getElementsByTagName('input')[0].value;
+                        var last_name = popupForm.getElementsByTagName('input')[1].value;
+                        var city = popupForm.getElementsByTagName('input')[2].value;
+                        var street_address = popupForm.getElementsByTagName('input')[3].value;
+                        var email = popupForm.getElementsByTagName('input')[4].value;
+                        var phone_number = popupForm.getElementsByTagName('input')[5].value;
 
-                    //         console.log('Success:', data);
-                    //         var dropdown = document.getElementById('addressDropdown');
-                    //         var option = document.createElement("option");
-                    //         option.text = data.first_name + ' ' + data.last_name + ', ' + data.phone_number + ', ' + data.address;
-                    //         option.value = data.id;
-                    //         dropdown.add(option);
-                    //         dropdown.value = data.id;
-                    //     })
-                    //     .catch((error) => {
-                    //         console.error('Error:', error);
-                    //     });
-                }
+                        var address = {
+                            first_name: first_name,
+                            last_name: last_name,
+                            email: email,
+                            phone_number: phone_number,
+                            address: street_address + ', ' + city,
+                            default_address: true
+                        }
+
+
+                        console.log(address);
+                        fetch('/api/address', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
+
+                            },
+                            body: JSON.stringify(address),
+                        })
+                            .then(
+                                response => response.json()
+                            )
+                            .then(data => {
+                                // var dropdown = document.getElementById('addressDropdown');
+                                // var option = document.createElement("option");
+                                // option.text = data.first_name + ' ' + data.last_name + ', ' + data.phone_number + ', ' + data.address;
+                                // option.value = data.id;
+                                // dropdown.add(option);
+                                // dropdown.value = data.id;
+                                window.location.reload();
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                    })
+                })
+
+                // function saveAddress() {
+                //     var popupForm = document.getElementById('popupForm');
+                //     console.log(popupForm);
+
+                // }
             </script>
         </div>
 
@@ -258,7 +270,6 @@
                         <tbody>
                             <?php
                             $product_in_cart = Views::getCartProductByUserId($bus->getUow(), (int) CURRENT_USER_ID);
-                            error_log(json_encode($product_in_cart), LOG_INFO);
                             $product_dict = [];
                             foreach ($product_in_cart as $cart_product) {
                                 $property_id = $cart_product["property_id"];
@@ -266,14 +277,18 @@
                             }
                             $property_id_select = isset($_GET['product_is_select']) ? explode(',', $_GET['product_is_select']) : [];
                             $sum_total_cart = 0;
-                            for ($index = 0; $index < sizeof($property_id_select ?? []); $index++) {
 
+                            $products = [];
+                            for ($index = 0; $index < sizeof($property_id_select ?? []); $index++) {
                                 $property_id = $property_id_select[$index];
                                 /**
                                  * @var Property $property
                                  */
-                                $property = $repo->get(Property::class, array("id" => $property_id));;
+                                $property = $repo->get(Property::class, array("id" => $property_id));
+                                ;
                                 $product = $product_dict[$property_id];
+                                array_push($products, $product);
+                                error_log(json_encode($products), LOG_INFO);
 
                                 $sum_total_cart += ($property->getPrice()) * ($product['number']);
                                 $sizeId = $property->getSizeId();
@@ -308,6 +323,7 @@
                                 <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($product['number']) . '</strong></td>
                             </tr>';
                             }
+
                             ?>
                             <tr>
                                 <td class="product-col">
@@ -323,6 +339,12 @@
                         </tbody>
                     </table>
                 </div>
+                <script>
+                    var products = <?php echo json_encode($products); ?>; // Assuming $products is an array in PHP
+
+                    // Convert the PHP array to a JavaScript array and store it in localStorage
+                    localStorage.setItem('products', JSON.stringify(products));
+                </script>
                 <!-- <div class="cart-btn">
                 <div class="row">
                     <div class="col-lg-6">
@@ -376,20 +398,20 @@
                                     <tr>
                                         <?php
                                         echo '<td class="total-cart">' . $sum_total_cart + 25000 . '</td>'
-                                        ?>
+                                            ?>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-right">
-                                <a href="/" class="primary-btn chechout-btn">Purchase</a>
+                                <button id="btn-purchase" class="primary-btn chechout-btn">Purchase</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+        </div>
     </section>
     <!-- Cart Total Page End -->
     <!-- Footer Section End -->
@@ -399,6 +421,41 @@
     require_once __DIR__ . "/../Common/Footer.php";
     require_once __DIR__ . "/../Common/Scripts.php";
     ?>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('btn-purchase').addEventListener('click', () => {
+                var addressId = $('#addressDropdown').val();
+                var products = localStorage.getItem('products')
+
+                fetch('/api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
+                    },
+                    body: JSON.stringify(
+                        {
+                            address_id: Number(addressId),
+                            products: JSON.parse(products)
+                        }
+                    ),
+                }).then(
+                    response => response.json()
+                )
+                    .then(data => {
+                        console.log(data)
+                        window.location.href = '/orders';
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+
+                console.log(products, addressId)
+            })
+        })
+    </script>
+
 </body>
 
 </html>

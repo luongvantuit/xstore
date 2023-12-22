@@ -329,6 +329,8 @@ function createOrder(CreateOrderCommand $command, AbstractUnitOfWork $uow): void
     );
     $repo->add($order);
 
+    $order_incart = $repo->getAll(Order::class, array("user" => $user, "status" => OrderStatus::INCARD));
+
     foreach ($command->getProducts() as $product) {
         /** @var Property $property */
         $property = $repo->get(Property::class, array("id" => $product['property_id']));
@@ -346,7 +348,11 @@ function createOrder(CreateOrderCommand $command, AbstractUnitOfWork $uow): void
         );
         $repo->add($order_product);
         $property->setNumber($property->getNumber() - $product['number']);
+
+
         $repo->add($property);
+        /** @var OrderProduct $order_product */
+        $repo->remove(OrderProduct::class, array("property" => $property, "order" => $order_incart));
     }
     $uow->commit();
 }

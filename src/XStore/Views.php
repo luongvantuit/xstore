@@ -226,7 +226,7 @@ class Views
         if (!$result) {
             return null;
         }
-        return $result;
+        return array_reverse($result);
     }
 
     public static function getAdmins(DoctrineUnitOfWork $uow, string|null $search = null, int $limit = 10, int $offset = 0): array|null

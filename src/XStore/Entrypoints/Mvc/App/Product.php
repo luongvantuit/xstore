@@ -42,7 +42,7 @@
         $accessToken = $_COOKIE["accessToken"];
         try {
             $payload = (new Jwt(Configs::getSecretKey()))->decode($accessToken);
-            $id = (int)$payload["id"];
+            $id = (int) $payload["id"];
             /**
              * @var User $currentUser
              */
@@ -60,7 +60,7 @@
         /**
          * @var Product $currentProduct
          */
-        $currentProduct = $repo->get(Product::class, array("id" => (int)$_GET["id"]));
+        $currentProduct = $repo->get(Product::class, array("id" => (int) $_GET["id"]));
         if ($currentProduct == null) {
             http_response_code(302);
             header("Location: /products");
@@ -69,7 +69,7 @@
     }
     $sizeId = 0;
     if (isset($_GET["size_id"]) && is_numeric($_GET["size_id"])) {
-        $sizeId = (int)$_GET["size_id"];
+        $sizeId = (int) $_GET["size_id"];
         if ($sizeId > 3) {
             $sizeId = 0;
         }
@@ -107,15 +107,15 @@
                     $propertyGlobal = $propertiesBySizeIds[0];
                     if (isset($_GET["property_id"]) && is_numeric($_GET["property_id"])) {
                         foreach ($propertiesBySizeIds as $property) {
-                            if ($property->getId() == (int)$_GET["property_id"]) {
-                                $propertyId = (int)$_GET["property_id"];
+                            if ($property->getId() == (int) $_GET["property_id"]) {
+                                $propertyId = (int) $_GET["property_id"];
                                 $propertyGlobal = $property;
                             }
                         }
                     }
                 }
-                echo '<img src="' . ($propertyGlobal == null ? $currentProduct->getPath() : $propertyGlobal->getPath()) . '" alt="" srcset="">'
-                ?>
+                echo '<img src="' . ($propertyGlobal == null || $propertyGlobal->getPath() == null ? $currentProduct->getPath() : $propertyGlobal->getPath()) . '" alt="" srcset="">'
+                    ?>
             </div>
             <div class="col d-none d-lg-block">
                 <?php
@@ -135,8 +135,8 @@
                     }
                     ?>
                 </div>
-                <div class="mt-2"">Size</div>
-                <div class=" d-flex flex-row mt-1" style="gap: 4px;">
+                <div class="mt-2">Size</div>
+                <div class="d-flex flex-row mt-1" style="gap: 4px;">
                     <?php
 
                     foreach (range(0, 3) as $sId) {
@@ -161,8 +161,8 @@
                 </div>
                 <?php
                 echo '<div class="mt-2"">Quantity <strong>' . ($propertyGlobal == null ? "0" : $propertyGlobal->getNumber()) . '</strong></div>'
-                ?>
-                <button class=" btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button>
+                    ?>
+                <!-- <button class=" btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button> -->
                 <?php
                 if ($currentUser == null) {
                     echo '<button class="btn btn-dark w-100 py-2 mt-2" onclick="goToLogin()">Add To Cart</button>';
@@ -176,13 +176,15 @@
                 ?>
                 <nav class="mt-2">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
+                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab"
+                            href="#nav-description" role="tab" aria-controls="nav-home"
+                            aria-selected="true">Description</button>
                     </div>
                 </nav>
                 <div class="tab-content mt-2" id="nav-tabContent">
                     <?php
                     echo '<div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">' . ($currentProduct->getDescription()) . '</div>'
-                    ?>
+                        ?>
 
                 </div>
 
@@ -192,18 +194,20 @@
             <div class="col">
                 <?php
                 echo '<strong class="h4">' . ($currentProduct->getName()) . '</strong>'
-                ?>
+                    ?>
                 <button class="btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button>
                 ?>
                 <nav class="mt-2">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
+                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab"
+                            href="#nav-description" role="tab" aria-controls="nav-home"
+                            aria-selected="true">Description</button>
                     </div>
                 </nav>
                 <div class="tab-content mt-2" id="nav-tabContent">
                     <?php
                     echo '<div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">' . ($currentProduct->getDescription()) . '</div>'
-                    ?>
+                        ?>
 
                 </div>
 

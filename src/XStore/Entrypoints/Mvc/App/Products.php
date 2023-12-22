@@ -47,8 +47,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <?php foreach ($products as $product) : ?>
+                <?php foreach ($products as $product): ?>
+                    <div class="col-lg-3 col-sm-6">
                         <div class="single-product-item p-3">
                             <figure>
                                 <a href="/product?id=<?php echo $product["id"] ?>">
@@ -57,9 +57,11 @@
 
                             </figure>
                             <div class="product-text">
-                                <h6><?php echo $product["name"] ?></h6>
+                                <h6>
+                                    <?php echo $product["name"] ?>
+                                </h6>
                                 <?php
-                                $properties = Views::getProperties($bus->getUow(), (int)$product["id"]);
+                                $properties = Views::getProperties($bus->getUow(), (int) $product["id"]);
                                 if ($properties != null && sizeof($properties) > 0) {
                                     echo '<p>' . $properties[0]["price"] . '</p>';
                                 } else {
@@ -68,9 +70,10 @@
                                 ?>
                             </div>
                         </div>
-                </div>
-            <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
+        </div>
         </div>
     </section>
     <?php

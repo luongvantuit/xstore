@@ -31,7 +31,7 @@ class AddressController extends Controller
                 ->key("phone_number", Validator::stringType()->notEmpty())
                 ->key("address", Validator::stringType()->notEmpty())
                 ->key("email", Validator::stringType()->notEmpty())
-                ->key("default_address", Validator::boolType()->notEmpty());
+                ->key("default_address", Validator::boolType(), false);
             try {
                 $validator->assert($body);
                 $first_name = $body['first_name'];
@@ -50,6 +50,7 @@ class AddressController extends Controller
                         $email,
                         $default_address
                     ));
+
                     $response->statusCode(HttpStatusCode::OK)->json(
                         new HttpResponseJson(data: array())
                     );
