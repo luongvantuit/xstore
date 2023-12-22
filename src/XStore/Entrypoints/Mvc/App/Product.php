@@ -99,7 +99,7 @@
             <div class="col">
                 <?php
 
-                $propertiesBySizeIds = $repo->getAll(Property::class, array("sizeId" => $sizeId));
+                $propertiesBySizeIds = $repo->getAll(Property::class, array("sizeId" => $sizeId, "product" => (int) $_GET["id"]));
                 $propertyId = null;
                 $propertyGlobal = null;
                 if (sizeof($propertiesBySizeIds) > 0) {
