@@ -161,7 +161,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-right">
-                            <a class="primary-btn chechout-btn">Purchase</a>
+                            <button id="checkout-btn" class="primary-btn chechout-btn">Purchase</button>
                         </div>
                     </div>
                 </div>
@@ -176,7 +176,6 @@
     <script>
         $(document).ready(function() {
             var product_is_select = [];
-
             $('.product-select-checkout').change(function() {
                 if ($(this).is(':checked')) {
                     var propertyId = $(this).attr('id').replace('checkbox-select-', '');
@@ -188,12 +187,14 @@
                     }
                 }
             });
-
             $('.chechout-btn').click(function(e) {
                 e.preventDefault();
-                localStorage.setItem('product_is_select', JSON.stringify(product_is_select));
-                window.location.href = '/checkout?product_is_select=' + product_is_select.join(',');
+                if (product_is_select.length !== 0) {
+                    window.location.href = '/checkout?product_is_select=' + product_is_select.join(',');
+                }
             });
         });
     </script>
-    < /html>
+</body>
+
+</html>

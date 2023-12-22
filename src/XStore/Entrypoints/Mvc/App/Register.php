@@ -45,7 +45,7 @@ $repo = $uow->getRepository();
                     Congratulations, you have successfully registered
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No/Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No/Close</button>
                     <a href="/login" class="btn btn-success">Yes/Redirect</a>
                 </div>
             </div>

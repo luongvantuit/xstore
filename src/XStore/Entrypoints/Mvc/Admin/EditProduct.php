@@ -297,7 +297,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addPropertyModal">Add Property</button>
+        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#addPropertyModal">Add
+            Property</button>
         <?php
         // *
         $currentPage = $_GET["page"] ?? 0;
@@ -317,6 +318,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
                     <th>Color</th>
                     <th>Quantity</th>
                     <th>Price</th>
+                    <th>Size ID</th>
                     <th>Photo</th>
                     <th>Created At</th>
                     <th>Updated At</th>
@@ -326,6 +328,21 @@ if (isset($_COOKIE["adminAccessToken"])) {
             <tbody>
                 <?php
                 for ($index = 0; $index < sizeof($properties ?? []); $index++) {
+                    $size = 'Free Size';
+                    switch ($properties[$index]["size_id"]) {
+                        case 1:
+                            $size = "M";
+                            break;
+                        case 2:
+                            $size = "L";
+                            break;
+                        case 3:
+                            $size = "XL";
+                            break;
+                        default:
+                            $size = 'Free Size';
+                            break;
+                    }
                     echo '
                     <tr>
                             <td>
@@ -334,6 +351,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
                         <td><i class="fa-solid fa-circle" style="color: ' . $properties[$index]["color"] . ';"></i></td>
                         <td>' . $properties[$index]["number"] . '</td>
                         <td>' . $properties[$index]["price"] . '</td>
+                        <td>' . $size . '</td>
                         <div class="modal fade" id="photoPropertyModal' . $properties[$index]["id"] . '" tabindex="-1" aria-labelledby="photoPropertyModalLabel' . $properties[$index]["id"] . '" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">

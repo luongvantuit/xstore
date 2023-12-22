@@ -81,7 +81,6 @@ $repo = $uow->getRepository();
     require_once __DIR__ . "/../Common/Footer.php";
     require_once __DIR__ . "/../Common/Scripts.php";
     ?>
-    <script src="/assets/admin/js/fontawesome.min.js"></script>
     <script src="/assets/app/js/login.js"></script>
 </body>
 
