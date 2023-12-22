@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($products as $product): ?>
+                <?php foreach ($products as $product) : ?>
                     <div class="col-lg-3 col-sm-6">
                         <div class="single-product-item p-3">
                             <figure>

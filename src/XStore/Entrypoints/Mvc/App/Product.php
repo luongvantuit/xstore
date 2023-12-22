@@ -115,7 +115,7 @@
                     }
                 }
                 echo '<img src="' . ($propertyGlobal == null || $propertyGlobal->getPath() == null ? $currentProduct->getPath() : $propertyGlobal->getPath()) . '" alt="" srcset="">'
-                    ?>
+                ?>
             </div>
             <div class="col d-none d-lg-block">
                 <?php
@@ -161,7 +161,7 @@
                 </div>
                 <?php
                 echo '<div class="mt-2"">Quantity <strong>' . ($propertyGlobal == null ? "0" : $propertyGlobal->getNumber()) . '</strong></div>'
-                    ?>
+                ?>
                 <!-- <button class=" btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button> -->
                 <?php
                 if ($currentUser == null) {
@@ -176,15 +176,13 @@
                 ?>
                 <nav class="mt-2">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab"
-                            href="#nav-description" role="tab" aria-controls="nav-home"
-                            aria-selected="true">Description</button>
+                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
                     </div>
                 </nav>
                 <div class="tab-content mt-2" id="nav-tabContent">
                     <?php
                     echo '<div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">' . ($currentProduct->getDescription()) . '</div>'
-                        ?>
+                    ?>
 
                 </div>
 
@@ -194,20 +192,18 @@
             <div class="col">
                 <?php
                 echo '<strong class="h4">' . ($currentProduct->getName()) . '</strong>'
-                    ?>
+                ?>
                 <button class="btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button>
                 ?>
                 <nav class="mt-2">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab"
-                            href="#nav-description" role="tab" aria-controls="nav-home"
-                            aria-selected="true">Description</button>
+                        <button class="nav-item nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-controls="nav-home" aria-selected="true">Description</button>
                     </div>
                 </nav>
                 <div class="tab-content mt-2" id="nav-tabContent">
                     <?php
                     echo '<div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">' . ($currentProduct->getDescription()) . '</div>'
-                        ?>
+                    ?>
 
                 </div>
 
