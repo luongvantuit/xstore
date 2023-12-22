@@ -181,6 +181,11 @@
                 if ($(this).is(':checked')) {
                     var propertyId = $(this).attr('id').replace('checkbox-select-', '');
                     product_is_select.push(propertyId);
+                } else {
+                    var propertyId = $(this).attr('id').replace('checkbox-select-', '');
+                    if (product_is_select.includes(propertyId)) {
+                        product_is_select.splice(product_is_select.indexOf(propertyId), 1);
+                    }
                 }
             });
 
