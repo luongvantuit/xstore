@@ -95,34 +95,47 @@
                             $property = $repo->get(Property::class, array("id" => $property_id));
 
                             $sum_total_cart += ($property->getPrice()) * ($product['number']);
+                            $sizeId = $property->getSizeId();
+                            $size = '';
+                            if ($sizeId == 1) {
+                                $size = 'M';
+                            } else if ($sizeId == 2) {
+                                $size = 'L';
+                            } else if ($sizeId == 3) {
+                                $size = 'XL';
+                            } else {
+                                $size = 'Free Size';
+                            }
+
                             echo '
-                            <tr>
-                            <td class="table-space px-3">
-                                <label>
-                                    <input type="checkbox" id="checkbox-select-' . $property->getId() . '" class="product-select-checkout">
-                                </label>
-                            </td>
-                            <td class="product-col">
-                                <img src="' . ($property->getPath() ?? $property->getProduct()->getPath()) . '" alt=""/>
-                                <div class="p-title">
-                                    <h5>' . ($property->getProduct()->getName() ?? "") . '</h5>
-                                </div>
-                            </td>
-                            <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) . '</strong></td>
-                            <td class="quantity-col table-space">
-                                <div class="pro-qty">
-                                    <button class="btn minus" style="font-size: 24px;" onclick="minusCart(' . $property_id . ',' . ($product['number']) . ')">-</button>
-                                    <input type="text" value=' . ($product["number"]) . ' disabled>
-                                    <button class="btn plus" style="font-size: 24px;" onclick="plusCart(' . $property_id . ',' . ($product['number']) . ')">+</button>
-                                </div>
-                            </td>
-                            <td class="table-space"><i class="fa-solid fa-circle" style="color: ' . $property->getColor() . ';"></i></td>
-                            <td class="table-space">' . $property->getSizeId() . '</td>
-                            <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($product['number']) . '</strong></td>
-                            <td class="table-space">
-                                <button class="btn text-gray-600" onclick="removeFromCart(' . $property_id . ')"><i class="fa-solid fa-xmark"></i></button>
-                            </td>
-                        </tr>';
+                                <tr>
+                                <td class="table-space px-3">
+                                    <label>
+                                        <input type="checkbox" id="checkbox-select-' . $property->getId() . '" class="product-select-checkout">
+                                    </label>
+                                </td>
+                                <td class="product-col">
+                                    <img src="' . ($property->getPath() ?? $property->getProduct()->getPath()) . '" alt=""/>
+                                    <div class="p-title">
+                                        <h5>' . ($property->getProduct()->getName() ?? "") . '</h5>
+                                    </div>
+                                </td>
+                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) . '</strong></td>
+                                <td class="quantity-col table-space">
+                                    <div class="pro-qty">
+                                        <button class="btn minus" style="font-size: 24px;" onclick="minusCart(' . $property_id . ',' . ($product['number']) . ')">-</button>
+                                        <input type="text" value=' . ($product["number"]) . ' disabled>
+                                        <button class="btn plus" style="font-size: 24px;" onclick="plusCart(' . $property_id . ',' . ($product['number']) . ')">+</button>
+                                    </div>
+                                </td>
+                                <td class="table-space"><i class="fa-solid fa-circle" style="color: ' . $property->getColor() . ';"></i></td>
+                                <td class="table-space">' . $size . '</td>
+                                
+                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($product['number']) . '</strong></td>
+                                <td class="table-space">
+                                    <button class="btn text-gray-600" onclick="removeFromCart(' . $property_id . ')"><i class="fa-solid fa-xmark"></i></button>
+                                </td>
+                            </tr>';
                         }
                         ?>
                     </tbody>

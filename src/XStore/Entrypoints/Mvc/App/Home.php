@@ -86,7 +86,7 @@
             </div>
         </div>
         <!-- Features Box -->
-        <!-- <div class="features-box">
+        <div class="features-box">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
@@ -95,10 +95,10 @@
                                 <div class="single-box-item first-box">
                                     <img src="./assets/img/f-box-1.jpg" alt="">
                                     <div class="box-text">
-                                        <span class="trend-year">2019 Party</span>
-                                        <h2>Jewelry</h2>
+                                        <!-- <span class="trend-year">2023</span> -->
+                                        <h2>Shirt</h2>
                                         <span class="trend-alert">Trend Allert</span>
-                                        <a href="#" class="primary-btn">See More</a>
+                                        <!-- <a href="#" class="primary-btn">See More</a> -->
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                 <div class="single-box-item second-box">
                                     <img src="./assets/img/f-box-2.jpg" alt="">
                                     <div class="box-text">
-                                        <span class="trend-year">2019 Trend</span>
+                                        <span class="trend-year">2023 Trend</span>
                                         <h2>Footwear</h2>
                                         <span class="trend-alert">Bold & Black</span>
                                     </div>
@@ -118,7 +118,7 @@
                         <div class="single-box-item large-box">
                             <img src="./assets/img/f-box-3.jpg" alt="">
                             <div class="box-text">
-                                <span class="trend-year">2019 Party</span>
+                                <span class="trend-year">2023 Trend</span>
                                 <h2>Collection</h2>
                                 <div class="trend-alert">Trend Allert</div>
                             </div>
@@ -127,11 +127,11 @@
                 </div>
             </div>
         </div>
-    </section> -->
-        <!-- Features Section End -->
+    </section>
+    <!-- Features Section End -->
 
-        <!-- Latest Product Begin -->
-        <!-- <section class="latest-products spad">
+    <!-- Latest Product Begin -->
+    <!-- <section class="latest-products spad">
         <div class="container">
             <div class="product-filter">
                 <div class="row">
@@ -248,10 +248,10 @@
             </div>
         </div>
     </section> -->
-        <!-- Latest Product End -->
+    <!-- Latest Product End -->
 
-        <!-- Lookbok Section Begin -->
-        <!-- <section class="lookbok-section">
+    <!-- Lookbok Section Begin -->
+    <!-- <section class="lookbok-section">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4 offset-lg-1">
@@ -278,10 +278,10 @@
             </div>
         </div>
     </section> -->
-        <!-- Lookbok Section End -->
+    <!-- Lookbok Section End -->
 
-        <!-- Logo Section Begin -->
-        <!-- <div class="logo-section spad">
+    <!-- Logo Section Begin -->
+    <!-- <div class="logo-section spad">
         <div class="logo-items owl-carousel">
             <div class="logo-item">
                 <img src="./assets//img/logos/logo-1.png" alt="">
@@ -300,10 +300,10 @@
             </div>
         </div>
     </div> -->
-        <?php
-        require_once __DIR__ . "/../Common/Footer.php";
-        require_once __DIR__ . "/../Common/Scripts.php";
-        ?>
+    <?php
+    require_once __DIR__ . "/../Common/Footer.php";
+    require_once __DIR__ . "/../Common/Scripts.php";
+    ?>
 </body>
 
 </html>
