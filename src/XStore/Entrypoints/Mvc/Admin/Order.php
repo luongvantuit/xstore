@@ -12,7 +12,6 @@
 
 <body>
     <?php
-    require_once __DIR__ . "/../Common/Header.php";
     function convertOrderStatus(string $orderStatus): string
     {
         switch ($orderStatus) {
@@ -40,13 +39,11 @@
     <?php
 
     use XStore\Domains\Models\OrderStatus;
-    use XStore\Domains\Models\User;
-    use XStore\Views;
     use XStore\X\Jw\Jwt;
     use XStore\Configs;
     use XStore\Domains\Models\Order;
     use \XStore\Domains\Models\OrderProduct;
-    use \XStore\Domains\Models\Property;
+    use \XStore\Domains\Models\Admin;
 
     use function XStore\bootstrap;
 
@@ -58,32 +55,43 @@
      */
     $uow = $bus->getUow();
     $repo = $uow->getRepository();
-    $currentUser = null;
-    if (isset($_COOKIE["accessToken"])) {
+    /**
+     * @var Admin $model
+     */
+    $model = $repo->get(Admin::class, array("username" => "root"));
+    if ($model == null) {
+        http_response_code(302);
+        header("Location: /admin/initial-root-password");
+        exit;
+    }
+
+    if (isset($_COOKIE["adminAccessToken"])) {
         /**
          * @var string $accessToken
          */
-        $accessToken = $_COOKIE["accessToken"];
+        $accessToken = $_COOKIE["adminAccessToken"];
         try {
-            $payload = (new Jwt(Configs::getSecretKey()))->decode($accessToken);
-            $id = (int) $payload["id"];
+            $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
+            $adminId = (int) $payload["id"];
             /**
-             * @var User $currentUser
+             * @var Admin $currentAdmin
              */
-            $currentUser = $repo->get(User::class, array("id" => $id));
-            if ($currentUser == null) {
+            $currentAdmin = $repo->get(Admin::class, array("id" => $adminId));
+            if ($currentAdmin == null) {
                 http_response_code(302);
-                header("Location: /login");
+                header("Location: /admin/login");
                 exit;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+            error_log($e, LOG_INFO);
             http_response_code(302);
-            header("Location: /login");
+            header("Location: /admin/login");
             exit;
         }
     } else {
-        header("Location: /login");
-        exit();
+        http_response_code(302);
+        header("Location: /admin/order");
+        exit;
     }
     if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
         http_response_code(302);
@@ -102,9 +110,6 @@
     }
     ?>
 
-    <?php
-    require_once __DIR__ . "/../Common/Header.php";
-    ?>
     <!-- Search model -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
@@ -140,19 +145,13 @@
     <section class="cart-total-page spad">
         <div class="container">
             <div class="col-lg-12">
-                <h3>Your Address</h3>
+                <h3>Order Address</h3>
                 <?php
                 $order_id = (int) $_GET["id"];
                 /**
                  * @var Order $order
                  */
-                $order = $repo->get(Order::class, array(
-                    "id" => (int) $order_id, "user" => $currentUser->getId()));
-                if ($order == null) {
-                    http_response_code(302);
-                    header("Location: /orders");
-                    exit;
-                }
+                $order = $currentOrder;
                 $address = $order->getAddress();
                 ?>
                 <div class="d-flex flex-column ml-3 text-secondary">
@@ -167,7 +166,7 @@
                         <?php echo $address->getPhoneNumber(); ?>
                     </span>
                     <span>
-                        <?php echo $address->getEmail() ?? $currentUser->getEmail(); ?>
+                        <?php echo $address->getEmail() ?? $order->getUser()->getEmail(); ?>
                     </span>
 
                 </div>
@@ -299,18 +298,7 @@
                                 </thead>
                             </table>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12 text-right">
-                                <?php
-                                if ($order->getStatus() == OrderStatus::PENDING): ?>
-                                    <button id="btn-cancel" class="primary-btn chechout-btn">Cancel Order</button>
-                                <?php elseif ($order->getStatus() == OrderStatus::DELIVERED): ?>
-                                    <button id="btn-return" class="primary-btn chechout-btn">Return Order</button>
-                                <?php else: ?>
 
-                                <?php endif; ?>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

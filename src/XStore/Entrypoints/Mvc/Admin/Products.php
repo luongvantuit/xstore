@@ -34,7 +34,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
     $accessToken = $_COOKIE["adminAccessToken"];
     try {
         $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
-        $adminId = (int)$payload["id"];
+        $adminId = (int) $payload["id"];
         /**
          * @var Admin $currentAdmin
          */
@@ -73,13 +73,15 @@ if (isset($_COOKIE["adminAccessToken"])) {
 <body id="body-pd" class="bg-light">
     <header class="xstore-header" id="header">
         <div class="xstore-header-toggle" id="header-toggle"> <i class='fa-solid fa-bars'></i></div>
-        <div class="xstore-header-img"> <img src="https://gravatar.com/avatar/9942e2bf3f700a029b748508b1043c43?d=identicon" alt=""> </div>
+        <div class="xstore-header-img"> <img
+                src="https://gravatar.com/avatar/9942e2bf3f700a029b748508b1043c43?d=identicon" alt=""> </div>
     </header>
     <div class="xstore-l-navbar" id="nav-bar">
         <nav class="xstore-nav">
             <div>
                 <a href="/" class="xstore-nav-logo">
-                    <i class='fa-solid fa-layer-group xstore-nav-logo-icon'></i> <span class="xstore-nav-logo-name">XStore</span>
+                    <i class='fa-solid fa-layer-group xstore-nav-logo-icon'></i> <span
+                        class="xstore-nav-logo-name">XStore</span>
                 </a>
                 <div class="xstore-nav-list">
                     <a href="/admin" class="xstore-nav-link">
@@ -95,7 +97,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                         <i class="fa-solid fa-box-open xstore-nav-icon"></i> <span class="xstore-nav-name">Orders</span>
                     </a>
                     <a href="/admin/admins" class="xstore-nav-link">
-                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span class="xstore-nav-name">Admins</span>
+                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span
+                            class="xstore-nav-name">Admins</span>
                     </a>
                 </div>
             </div>
@@ -132,8 +135,10 @@ if (isset($_COOKIE["adminAccessToken"])) {
                     </div>
                     <div class="modal-body">
                         <div class="modal-body">
-                            <form id="form-add-new-a-product" class="d-flex flex-column justify-content-center gap-3 needs-validation" novalidate>
-                                <div id="form-add-new-a-product-alert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+                            <form id="form-add-new-a-product"
+                                class="d-flex flex-column justify-content-center gap-3 needs-validation" novalidate>
+                                <div id="form-add-new-a-product-alert"
+                                    class="alert alert-danger alert-dismissible fade show d-none" role="alert">
                                     <strong>Error!</strong>
                                     <p id="form-add-new-a-product-alert-message">You should check in on some of those
                                         fields below.</p>
@@ -144,7 +149,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-signature"></i>
                                         </span>
-                                        <input type="text" class="form-control" id="input-name" name="name" placeholder="name" required>
+                                        <input type="text" class="form-control" id="input-name" name="name"
+                                            placeholder="name" required>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -159,7 +165,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-mortar-pestle"></i>
                                         </span>
-                                        <input type="text" class="form-control" id="input-description" name="description" placeholder="description">
+                                        <input type="text" class="form-control" id="input-description"
+                                            name="description" placeholder="description">
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -174,7 +181,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                         <span class="input-group-text">
                                             <i class="fa-solid fa-file"></i>
                                         </span>
-                                        <input type="file" class="form-control" id="input-photo" placeholder="photo" name="file" accept="image/png, image/jpeg" required>
+                                        <input type="file" class="form-control" id="input-photo" placeholder="photo"
+                                            name="file" accept="image/png, image/jpeg" required>
                                         <div class="valid-feedback">
                                             Looks good!
                                         </div>
@@ -183,11 +191,13 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                         </div>
                                     </div>
                                 </div>
-                                <button id="btn-form-add-new-a-product" type="submit" class="btn btn-primary">Submit</button>
+                                <button id="btn-form-add-new-a-product" type="submit"
+                                    class="btn btn-primary">Submit</button>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel/Close</button>
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancel/Close</button>
                         </div>
                     </div>
                 </div>
@@ -270,6 +280,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton' . $products[$index]["id"] . '" data-bs-toggle="dropdown" aria-expanded="false">
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton' . $products[$index]["id"] . '">
+            
                                     <li><a class="dropdown-item" href="/admin/product/edit?id=' . $products[$index]["id"] . '">Edit</a></li>
                                     <li><a class="dropdown-item text-danger" href="#deleteProductModal' . $products[$index]["id"] . '" data-bs-toggle="modal">Delete</a></li>
                                 </ul>
@@ -317,14 +328,16 @@ if (isset($_COOKIE["adminAccessToken"])) {
                     </a>
                 </li>
                 '
-                ?>
+                    ?>
             </ul>
         </nav>
 
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-            <div id="toast-delete-product-failed" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div id="toast-delete-product-failed" class="toast hide" role="alert" aria-live="assertive"
+                aria-atomic="true">
                 <div class="toast-header">
-                    <img src="/assets/admin/svgs/solid/layer-group.svg" class="rounded me-2" style="width: 24px;" alt="...">
+                    <img src="/assets/admin/svgs/solid/layer-group.svg" class="rounded me-2" style="width: 24px;"
+                        alt="...">
                     <strong class="me-auto">XStore</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>

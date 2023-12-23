@@ -358,7 +358,7 @@ class Views
     {
         $conn = $uow->getEntityManager()->getConnection();
         $params = [];
-        $sql = "SELECT id,address_id,user_id, type_shipping_fee, status,created_at,updated_at FROM orders " . " LIMIT " . $offset . "," . $limit; // . $where;
+        $sql = "SELECT id,address_id,user_id, type_shipping_fee, status,created_at,updated_at FROM orders WHERE status != 'incard' " . " LIMIT " . $offset . "," . $limit; // . $where;
         $results = $conn->executeQuery($sql, $params)->fetchAllAssociative();
         if (!$results) {
             return null;

@@ -366,6 +366,7 @@ function updateOrder(UpdateOrderCommand $command, AbstractUnitOfWork $uow): void
     if ($user == null) {
         throw new NotFoundException();
     }
+
     /** @var Address $address */
     $address = $repo->get(Address::class, array("id" => $command->getAddressId(), "user" => $user));
     if ($address == null) {

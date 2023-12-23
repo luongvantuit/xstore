@@ -96,7 +96,7 @@ class OrdersController extends Controller
             $address_id = $_GET['address_id'];
             $order_id = $_GET['order_id'];
             try {
-                $this->bus->handle(new UpdateOrderCommand($user_id, $order_id, $address_id,));
+                $this->bus->handle(new UpdateOrderCommand($user_id, $order_id, $address_id, ));
                 $response->statusCode(HttpStatusCode::OK)->json(
                     new HttpResponseJson(data: array())
                 );

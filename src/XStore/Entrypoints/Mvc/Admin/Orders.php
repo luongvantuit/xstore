@@ -34,7 +34,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
     $accessToken = $_COOKIE["adminAccessToken"];
     try {
         $payload = (new Jwt("admin" . Configs::getSecretKey()))->decode($accessToken);
-        $adminId = (int)$payload["id"];
+        $adminId = (int) $payload["id"];
         /**
          * @var Admin $currentAdmin
          */
@@ -72,13 +72,15 @@ if (isset($_COOKIE["adminAccessToken"])) {
 <body id="body-pd" class="bg-light">
     <header class="xstore-header" id="header">
         <div class="xstore-header-toggle" id="header-toggle"> <i class='fa-solid fa-bars'></i></div>
-        <div class="xstore-header-img"> <img src="https://gravatar.com/avatar/9942e2bf3f700a029b748508b1043c43?d=identicon" alt=""> </div>
+        <div class="xstore-header-img"> <img
+                src="https://gravatar.com/avatar/9942e2bf3f700a029b748508b1043c43?d=identicon" alt=""> </div>
     </header>
     <div class="xstore-l-navbar" id="nav-bar">
         <nav class="xstore-nav">
             <div>
                 <a href="#/" class="xstore-nav-logo">
-                    <i class='fa-solid fa-layer-group xstore-nav-logo-icon'></i> <span class="xstore-nav-logo-name">XStore</span>
+                    <i class='fa-solid fa-layer-group xstore-nav-logo-icon'></i> <span
+                        class="xstore-nav-logo-name">XStore</span>
                 </a>
                 <div class="xstore-nav-list">
                     <a href="/admin" class="xstore-nav-link">
@@ -94,7 +96,8 @@ if (isset($_COOKIE["adminAccessToken"])) {
                         <i class="fa-solid fa-box-open xstore-nav-icon"></i> <span class="xstore-nav-name">Orders</span>
                     </a>
                     <a href="/admin/admins" class="xstore-nav-link">
-                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span class="xstore-nav-name">Admins</span>
+                        <i class="fa-solid fa-shield-halved xstore-nav-icon"></i> <span
+                            class="xstore-nav-name">Admins</span>
                     </a>
                 </div>
             </div>
@@ -190,9 +193,14 @@ if (isset($_COOKIE["adminAccessToken"])) {
                                     </div>
                                 </div>
                             </div>
+                            <div>
                             <a class="btn text-danger" href="#editOrderModal' . $orders[$index]["id"] . '" data-bs-toggle="modal">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
+                            <a class="btn text-primary" href="/admin/order?id=' . $orders[$index]["id"] . '">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+                            </div>
                         </td>
                     </tr>';
                 }
@@ -235,7 +243,7 @@ if (isset($_COOKIE["adminAccessToken"])) {
                     </a>
                 </li>
                 '
-                ?>
+                    ?>
             </ul>
         </nav>
     </div>
