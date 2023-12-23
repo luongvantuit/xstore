@@ -191,7 +191,8 @@
                              * @var array  $product_in_order
                              */
                             $product_in_order = $repo->getAll(OrderProduct::class, array(
-                                "order" => (int) $order_id));
+                                "order" => (int) $order_id
+                            ));
 
                             error_log("" . $product_in_order[0]->getProperty()->getProduct()->getName(), LOG_INFO);
                             error_log(sizeof($product_in_order), LOG_INFO);
@@ -241,7 +242,7 @@
                             ?>
                             <tr>
                                 <td class="product-col">
-                                    <img src="./assets/img/icons/ship.jpg" alt="">
+                                    <img src="/assets/img/icons/ship.jpg" alt="">
 
                                     <div class="p-title">
                                         <h5>Shipping Fee</h5>
@@ -256,32 +257,6 @@
             </div>
             <div class="shopping-method">
                 <div class="container">
-                    <!-- <div class="row">
-                    <div class="col-lg-12">
-                        <div class="shipping-info">
-                            <h5>Choose a shipping</h5>
-                            <div class="chose-shipping">
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="one">
-                                    <label for="one" class="active">
-                                        Free Standard shhipping
-                                        <span>Estimate for New York</span>
-                                    </label>
-                                </div>
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="two">
-                                    <label for="two">
-                                        Next Day delievery $10
-                                    </label>
-                                </div>
-                                <div class="cs-item last">
-                                    <input type="radio" name="cs" id="three">
-                                    <label for="three">
-                                        In Store Pickup - Free
-                                    </label>
-                                </div>
-                            </div>
-                        </div> -->
                     <div class="total-info">
                         <div class="total-table">
                             <table>
@@ -291,9 +266,7 @@
                                     </tr>
 
                                     <tr>
-                                        <?php
-                                        echo '<td class="total-cart">' . $sum_total_cart + 25000 . '</td>'
-                                            ?>
+                                        <td class="total-cart"><?php echo ($sum_total_cart + 25000) ?></td>
                                     </tr>
                                 </thead>
                             </table>
@@ -314,41 +287,6 @@
     require_once __DIR__ . "/../Common/Scripts.php";
     ?>
 
-    <script>
-        $(document).ready(function () {
-
-            $("#btn-cancel").click(function () {
-                fetch("/api/orders?order_id=<?php echo $order->getId() ?>", {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
-                    }
-                }).then(function (response) {
-                    if (response.ok) {
-                        window.location.reload();
-                    }
-                });
-            });
-            $("#btn-return").click(function () {
-                fetch("/api/admin/orders", {
-                    method: "PUT",
-                    body: JSON.stringify({
-                        id: Number(<?php echo $order->getId() ?>),
-                        status: "returning"
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
-                    }
-                }).then(function (response) {
-                    if (response.ok) {
-                        window.location.reload();
-                    }
-                });
-            });
-        });
-    </script>
 
 </body>
 

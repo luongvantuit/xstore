@@ -102,7 +102,7 @@
 
                 <select id="addressDropdown" onchange="handleAddressChange()" class="form-control">
                     <?php
-                    $address_user = Views::getAddressByUserId($bus->getUow(), (int) CURRENT_USER_ID);
+                    $address_user = Views::getAddressByUserId($bus->getUow(), (int) CURRENT_USER_ID) ?? [];
                     foreach ($address_user as $address) {
                         $fullname = $address['first_name'] . ' ' . $address['last_name'];
                         $phone = $address['phone_number'];
@@ -110,25 +110,42 @@
                         error_log(json_encode($fullname), LOG_INFO);
                         echo '<option value="' . $address['id'] . '">' . $fullname . ', ' . $phone . ', ' . $location . '</option>';
                     }
-
                     ?>
                     <option value="Another Address">Another Address</option>
                 </select>
 
             </div>
-            <form id="popupFormContainer" class="checkout-form w-100">
+            <form id="popupFormContainer" class="checkout-form w-100  needs-validation" novalidate>
                 <div class="row">
-                    <div id="popupForm" class="container" style="display: none; margin-top: 20px;">
+                    <div id="popupForm" class="container" style="display: <?php
+                                                                            if (sizeof($address_user) == 0) {
+                                                                                echo 'block';
+                                                                            } else {
+                                                                                echo 'none';
+                                                                            }
+                                                                            ?>; margin-top: 20px;">
                         <div class="col-lg-9">
                             <div class="row">
                                 <div class="col-lg-2">
                                     <p class="in-name">Name*</p>
                                 </div>
-                                <div class="col-lg-5">
-                                    <input type="text" placeholder="First Name">
+                                <div class="col-lg-5 input-group has-validation">
+                                    <input type="text" class="form-control" placeholder="First Name" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter you first name!
+                                    </div>
                                 </div>
-                                <div class="col-lg-5">
-                                    <input type="text" placeholder="Last Name">
+                                <div class="col-lg-5 input-group has-validation">
+                                    <input type="text" class="form-control" placeholder="Last Name" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter you last name!
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -136,8 +153,8 @@
                                     <p class="in-name">Country*</p>
                                 </div>
                                 <div class="col-lg-5">
-                                    <select class="cart-select country-usa form-control">
-                                        <option>Viet Nam</option>
+                                    <select class="cart-select country-usa form-control" required>
+                                        <option selected>Viet Nam</option>
                                     </select>
                                 </div>
                             </div>
@@ -145,16 +162,28 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">City*</p>
                                 </div>
-                                <div class="col-lg-5">
-                                    <input type="text">
+                                <div class="col-lg-5 input-group has-validation">
+                                    <input type="text" class="form-control" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter you city!
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-2">
                                     <p class="in-name">Street Address*</p>
                                 </div>
-                                <div class="col-lg-5">
-                                    <input type="text">
+                                <div class="col-lg-5 input-group has-validation">
+                                    <input type="text" class="form-control" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter you street address!
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -169,13 +198,19 @@
                                 <div class="col-lg-2">
                                     <p class="in-name">Phone*</p>
                                 </div>
-                                <div class="col-lg-5">
-                                    <input type="text">
+                                <div class="col-lg-5 input-group has-validation">
+                                    <input type="text" class="form-control" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please enter you phone number!
+                                    </div>
                                 </div>
                             </div>
                             <div class="row justify-content-end">
                                 <div class="col-lg-12">
-                                    <button type="submit">Save</button>
+                                    <button class="btn btn-primary" type="submit">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -199,60 +234,52 @@
                     const popupForm = document.getElementById('popupForm')
 
                     popupFormContainer.addEventListener('submit', (e) => {
-                        e.preventDefault();
+                        if (!popupFormContainer.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        } else {
+                            event.preventDefault();
+                            popupForm.style.display = 'none';
 
-                        popupForm.style.display = 'none';
+                            var first_name = popupForm.getElementsByTagName('input')[0].value;
+                            var last_name = popupForm.getElementsByTagName('input')[1].value;
+                            var city = popupForm.getElementsByTagName('input')[2].value;
+                            var street_address = popupForm.getElementsByTagName('input')[3].value;
+                            var email = popupForm.getElementsByTagName('input')[4].value;
+                            var phone_number = popupForm.getElementsByTagName('input')[5].value;
+                            var address = {
+                                first_name: first_name,
+                                last_name: last_name,
+                                email: email,
+                                phone_number: phone_number,
+                                address: street_address + ', ' + city,
+                                default_address: true
+                            }
+                            console.log(address);
+                            fetch('/api/address', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
 
-                        var first_name = popupForm.getElementsByTagName('input')[0].value;
-                        var last_name = popupForm.getElementsByTagName('input')[1].value;
-                        var city = popupForm.getElementsByTagName('input')[2].value;
-                        var street_address = popupForm.getElementsByTagName('input')[3].value;
-                        var email = popupForm.getElementsByTagName('input')[4].value;
-                        var phone_number = popupForm.getElementsByTagName('input')[5].value;
-
-                        var address = {
-                            first_name: first_name,
-                            last_name: last_name,
-                            email: email,
-                            phone_number: phone_number,
-                            address: street_address + ', ' + city,
-                            default_address: true
+                                    },
+                                    body: JSON.stringify(address),
+                                })
+                                .then(
+                                    response => response.json()
+                                )
+                                .then(data => {
+                                    window.location.reload();
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
                         }
+                        popupFormContainer.classList.add("was-validated");
 
 
-                        console.log(address);
-                        fetch('/api/address', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
-
-                            },
-                            body: JSON.stringify(address),
-                        })
-                            .then(
-                                response => response.json()
-                            )
-                            .then(data => {
-                                // var dropdown = document.getElementById('addressDropdown');
-                                // var option = document.createElement("option");
-                                // option.text = data.first_name + ' ' + data.last_name + ', ' + data.phone_number + ', ' + data.address;
-                                // option.value = data.id;
-                                // dropdown.add(option);
-                                // dropdown.value = data.id;
-                                window.location.reload();
-                            })
-                            .catch((error) => {
-                                console.error('Error:', error);
-                            });
                     })
                 })
-
-                // function saveAddress() {
-                //     var popupForm = document.getElementById('popupForm');
-                //     console.log(popupForm);
-
-                // }
             </script>
         </div>
 
@@ -284,8 +311,7 @@
                                 /**
                                  * @var Property $property
                                  */
-                                $property = $repo->get(Property::class, array("id" => $property_id));
-                                ;
+                                $property = $repo->get(Property::class, array("id" => $property_id));;
                                 $product = $product_dict[$property_id];
                                 array_push($products, $product);
                                 error_log(json_encode($products), LOG_INFO);
@@ -340,53 +366,12 @@
                     </table>
                 </div>
                 <script>
-                    var products = <?php echo json_encode($products); ?>; // Assuming $products is an array in PHP
-
-                    // Convert the PHP array to a JavaScript array and store it in localStorage
+                    var products = <?php echo json_encode($products); ?>;
                     localStorage.setItem('products', JSON.stringify(products));
                 </script>
-                <!-- <div class="cart-btn">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="coupon-input">
-                            <input type="text" placeholder="Enter cupone code">
-                        </div>
-                    </div>
-                    <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
-                        <div class="site-btn clear-btn">Clear Cart</div>
-                        <div class="site-btn update-btn">Purchase</div>
-                    </div>
-                </div>
-            </div> -->
             </div>
             <div class="shopping-method">
                 <div class="container">
-                    <!-- <div class="row">
-                    <div class="col-lg-12">
-                        <div class="shipping-info">
-                            <h5>Choose a shipping</h5>
-                            <div class="chose-shipping">
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="one">
-                                    <label for="one" class="active">
-                                        Free Standard shhipping
-                                        <span>Estimate for New York</span>
-                                    </label>
-                                </div>
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="two">
-                                    <label for="two">
-                                        Next Day delievery $10
-                                    </label>
-                                </div>
-                                <div class="cs-item last">
-                                    <input type="radio" name="cs" id="three">
-                                    <label for="three">
-                                        In Store Pickup - Free
-                                    </label>
-                                </div>
-                            </div>
-                        </div> -->
                     <div class="total-info">
                         <div class="total-table">
                             <table>
@@ -398,7 +383,7 @@
                                     <tr>
                                         <?php
                                         echo '<td class="total-cart">' . $sum_total_cart + 25000 . '</td>'
-                                            ?>
+                                        ?>
                                     </tr>
                                 </thead>
                             </table>
@@ -429,20 +414,18 @@
                 var products = localStorage.getItem('products')
 
                 fetch('/api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
-                    },
-                    body: JSON.stringify(
-                        {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
+                        },
+                        body: JSON.stringify({
                             address_id: Number(addressId),
                             products: JSON.parse(products)
-                        }
-                    ),
-                }).then(
-                    response => response.json()
-                )
+                        }),
+                    }).then(
+                        response => response.json()
+                    )
                     .then(data => {
                         console.log(data)
                         window.location.href = '/orders';

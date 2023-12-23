@@ -32,7 +32,7 @@
         $currentPage = 0;
     }
     $limit = -1;
-    $products = Views::getProductsAgent($bus->getUow(), limit: $limit, offset: $limit * $currentPage);
+    $products = Views::getProductsAgent($bus->getUow(), limit: $limit, offset: $limit * $currentPage) ?? [];
     ?>
     <section class="related-product spad">
         <div class="container">
@@ -44,31 +44,41 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($products as $product) : ?>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="single-product-item p-3">
-                            <figure>
-                                <a href="/product?id=<?php echo $product["id"] ?>">
-                                    <img src="<?php echo $product["path"] ?>" alt="" />
-                                </a>
+                <?php if (sizeof($products) > 0) : ?>
+                    <?php foreach ($products as $product) : ?>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="single-product-item p-3">
+                                <figure>
+                                    <a href="/product?id=<?php echo $product["id"] ?>">
+                                        <img src="<?php echo $product["path"] ?>" alt="" />
+                                    </a>
 
-                            </figure>
-                            <div class="product-text">
-                                <h6>
-                                    <?php echo $product["name"] ?>
-                                </h6>
-                                <?php
-                                $properties = Views::getProperties($bus->getUow(), (int) $product["id"]);
-                                if ($properties != null && sizeof($properties) > 0) {
-                                    echo '<p>' . $properties[0]["price"] . '</p>';
-                                } else {
-                                    echo "<p>Out stock</p>";
-                                }
-                                ?>
+                                </figure>
+                                <div class="product-text">
+                                    <h6>
+                                        <?php echo $product["name"] ?>
+                                    </h6>
+                                    <?php
+                                    $properties = Views::getProperties($bus->getUow(), (int) $product["id"]);
+                                    if ($properties != null && sizeof($properties) > 0) {
+                                        echo '<p>' . $properties[0]["price"] . '</p>';
+                                    } else {
+                                        echo "<p>Out stock</p>";
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="w-100 d-flex flex-column justify-content-center align-items-center mt-5">
+                        <img src="/assets/img/svgs/undraw_pancakes.svg" alt="" class="w-50">
+                        <p class="h3 my-3">
+                            Sorry! Not found product!
+                        </p>
+                        <a href="/" class="btn btn-dark">Go Back Home</a>
                     </div>
-                <?php endforeach; ?>
+                <?php endif ?>
             </div>
         </div>
         </div>

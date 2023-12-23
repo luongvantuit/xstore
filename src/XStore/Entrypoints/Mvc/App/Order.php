@@ -147,7 +147,8 @@
                  * @var Order $order
                  */
                 $order = $repo->get(Order::class, array(
-                    "id" => (int) $order_id, "user" => $currentUser->getId()));
+                    "id" => (int) $order_id, "user" => $currentUser->getId()
+                ));
                 if ($order == null) {
                     http_response_code(302);
                     header("Location: /orders");
@@ -192,14 +193,13 @@
                              * @var array  $product_in_order
                              */
                             $product_in_order = $repo->getAll(OrderProduct::class, array(
-                                "order" => (int) $order_id));
+                                "order" => (int) $order_id
+                            ));
 
                             error_log("" . $product_in_order[0]->getProperty()->getProduct()->getName(), LOG_INFO);
                             error_log(sizeof($product_in_order), LOG_INFO);
                             $sum_total_cart = 0;
-
-
-                            foreach (($product_in_order ?? []) as $_product) {
+                            foreach (($product_in_order ?? []) as $_product) :
                                 $property = $_product->getProperty();
                                 error_log("" . $property->getProduct()->getName(), LOG_INFO);
 
@@ -215,34 +215,32 @@
                                 } else {
                                     $size = 'Free Size';
                                 }
-
-                                echo '
-                                <tr>
-                                <td class="product-col">
-                                    <img src="' . ($property->getPath() ?? $property->getProduct()->getPath()) . '" alt=""/>
-                                    <div class="p-title">
-                                        <h5>' . ($property->getProduct()->getName() ?? "") . '</h5>
-                                    </div>
-                                </td>
-                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) . '</strong></td>
-                                <td class="quantity-col table-space">
-                             
-                                    <div class="pro-qty">
-            
-                                        <input type="text" value=' . ($_product->getNumber()) . ' disabled>
-                                        </div>
-                                </td>
-                                <td class="table-space"><i class="fa-solid fa-circle" style="color: ' . $property->getColor() . ';"></i></td>
-                                <td class="table-space">' . $size . '</td>
-                                
-                                <td class="table-space"><strong style="font-size: 18px;">' . ($property->getPrice()) * ($_product->getNumber()) . '</strong></td>
-                            </tr>';
-                            }
-
                             ?>
+                                <tr>
+                                    <td class="product-col">
+                                        <img src="<?php echo ($property->getPath() ?? $property->getProduct()->getPath()) ?>" alt="" />
+                                        <div class="p-title">
+                                            <h5><?php echo $property->getProduct()->getName() ?? "" ?></h5>
+                                        </div>
+                                    </td>
+                                    <td class="table-space"><strong style="font-size: 18px;"><?php echo ($property->getPrice())  ?></strong></td>
+                                    <td class="quantity-col table-space">
+
+                                        <div class="pro-qty">
+
+                                            <input type="text" value="<?php echo $_product->getNumber() ?>" disabled>
+                                        </div>
+                                    </td>
+                                    <td class="table-space"><i class="fa-solid fa-circle" style="color: <?php echo $property->getColor() ?>;"></i></td>
+                                    <td class="table-space"><?php echo $size ?></td>
+
+                                    <td class="table-space"><strong style="font-size: 18px;"><?php ($property->getPrice()) * ($_product->getNumber()) ?></strong></td>
+                                </tr>
+
+                            <?php endforeach; ?>
                             <tr>
                                 <td class="product-col">
-                                    <img src="./assets/img/icons/ship.jpg" alt="">
+                                    <img src="/assets/img/icons/ship.jpg" alt="">
 
                                     <div class="p-title">
                                         <h5>Shipping Fee</h5>
@@ -257,32 +255,6 @@
             </div>
             <div class="shopping-method">
                 <div class="container">
-                    <!-- <div class="row">
-                    <div class="col-lg-12">
-                        <div class="shipping-info">
-                            <h5>Choose a shipping</h5>
-                            <div class="chose-shipping">
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="one">
-                                    <label for="one" class="active">
-                                        Free Standard shhipping
-                                        <span>Estimate for New York</span>
-                                    </label>
-                                </div>
-                                <div class="cs-item">
-                                    <input type="radio" name="cs" id="two">
-                                    <label for="two">
-                                        Next Day delievery $10
-                                    </label>
-                                </div>
-                                <div class="cs-item last">
-                                    <input type="radio" name="cs" id="three">
-                                    <label for="three">
-                                        In Store Pickup - Free
-                                    </label>
-                                </div>
-                            </div>
-                        </div> -->
                     <div class="total-info">
                         <div class="total-table">
                             <table>
@@ -292,9 +264,7 @@
                                     </tr>
 
                                     <tr>
-                                        <?php
-                                        echo '<td class="total-cart">' . $sum_total_cart + 25000 . '</td>'
-                                            ?>
+                                        <td class="total-cart"><?php echo ($sum_total_cart + 25000) ?></td>
                                     </tr>
                                 </thead>
                             </table>
@@ -302,11 +272,11 @@
                         <div class="row">
                             <div class="col-lg-12 text-right">
                                 <?php
-                                if ($order->getStatus() == OrderStatus::PENDING): ?>
+                                if ($order->getStatus() == OrderStatus::PENDING) : ?>
                                     <button id="btn-cancel" class="primary-btn chechout-btn">Cancel Order</button>
-                                <?php elseif ($order->getStatus() == OrderStatus::DELIVERED): ?>
+                                <?php elseif ($order->getStatus() == OrderStatus::DELIVERED) : ?>
                                     <button id="btn-return" class="primary-btn chechout-btn">Return Order</button>
-                                <?php else: ?>
+                                <?php else : ?>
 
                                 <?php endif; ?>
                             </div>
@@ -327,22 +297,22 @@
     ?>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-            $("#btn-cancel").click(function () {
+            $("#btn-cancel").click(function() {
                 fetch("/api/orders?order_id=<?php echo $order->getId() ?>", {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
                         'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
                     }
-                }).then(function (response) {
+                }).then(function(response) {
                     if (response.ok) {
                         window.location.reload();
                     }
                 });
             });
-            $("#btn-return").click(function () {
+            $("#btn-return").click(function() {
                 fetch("/api/admin/orders", {
                     method: "PUT",
                     body: JSON.stringify({
@@ -353,7 +323,7 @@
                         "Content-Type": "application/json",
                         'Authorization': 'Bearer ' + localStorage.getItem('accessToken') || ''
                     }
-                }).then(function (response) {
+                }).then(function(response) {
                     if (response.ok) {
                         window.location.reload();
                     }

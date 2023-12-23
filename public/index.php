@@ -55,6 +55,7 @@ $path_mapping = array(
     "/api/admin/login" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/LoginController.php",
     "/api/admin/orders" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/OrdersController.php",
     "/api/admin/products" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/ProductsController.php",
+    "/api/admin/product/update" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/UpdateProductController.php",
     "/api/admin/properties" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/PropertiesController.php",
     "/api/admin/users" => __DIR__ . "/../src/XStore/Entrypoints/Rest/Admin/UsersController.php",
 

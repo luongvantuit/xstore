@@ -98,7 +98,7 @@ class PropertiesController extends Controller
                 );
             } catch (NotFoundException $e) {
                 error_log($e, LOG_INFO);
-                $response->statusCode(HttpStatusCode::BAD_REQUEST)->json(
+                $response->statusCode(HttpStatusCode::NOT_FOUND)->json(
                     new HttpResponseJson(success: false, message: "not found property!")
                 );
             } catch (Exception $e) {

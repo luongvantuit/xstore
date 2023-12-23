@@ -43,6 +43,7 @@ use XStore\Domains\Commands\DeleteAddressCommand;
 use XStore\Domains\Commands\DeleteProductCommand;
 use XStore\Domains\Commands\DeletePropertyCommand;
 use XStore\Domains\Commands\UpdateAddressCommand;
+use XStore\Domains\Commands\UpdateProductCommand;
 use XStore\Domains\Models\Product;
 use XStore\ServiceLayers\Exceptions\CannotRemoveRootException;
 
@@ -595,6 +596,28 @@ function removeProperty(DeletePropertyCommand $command, AbstractUnitOfWork $uow)
     $uow->commit();
 }
 
+function updateProduct(UpdateProductCommand $command, AbstractUnitOfWork $uow): void
+{
+    $repo = $uow->getRepository();
+    /** @var Product $model */
+    $model = $repo->get(Product::class, array("id" => $command->getId()));
+    if ($model == null) {
+        throw new NotFoundException();
+    }
+    if ($command->getPath() != null) {
+        $model->setPath($command->getPath());
+    }
+    if ($command->getName() != null) {
+        $model->setName($command->getName());
+    }
+    if ($command->getDescription() != null) {
+        $model->setDescription($command->getDescription());
+    }
+    $uow->beginTransaction();
+    $repo->add($model);
+    $uow->commit();
+}
+
 const COMMAND_HANDLERS = array(
     CreateNewUserCommand::class => "XStore\ServiceLayers\Handlers\createNewUser",
     UserLoginCommand::class => "XStore\ServiceLayers\Handlers\loginUser",
@@ -617,4 +640,5 @@ const COMMAND_HANDLERS = array(
     DeleteProductCommand::class => "XStore\ServiceLayers\Handlers\\removeProduct",
     CreateNewPropertyCommand::class => "XStore\ServiceLayers\Handlers\createNewProperty",
     DeletePropertyCommand::class => "XStore\ServiceLayers\Handlers\\removeProperty",
+    UpdateProductCommand::class => "XStore\ServiceLayers\Handlers\updateProduct",
 );

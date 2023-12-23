@@ -9,6 +9,38 @@ window.addEventListener("DOMContentLoaded", () => {
         if (!fromEditProduct.checkValidity()) {
           event.preventDefault();
           event.stopPropagation();
+        } else {
+          event.preventDefault();
+          const btnFormEdit = document.getElementById("btn-form-edit-product");
+          btnFormEdit.disable = true;
+          const inputName = document.getElementById("input-name");
+          const inputDescription = document.getElementById("input-description");
+          const inputPhoto = document.getElementById("input-photo");
+          const urlParams = new URLSearchParams(window.location.search);
+          const formData = new FormData();
+          if (inputDescription.value != "") {
+            formData.append("description", inputDescription.value);
+          }
+          formData.append("name", inputName.value);
+          formData.append("id", urlParams.get("id"));
+          if (inputPhoto.files?.length > 0) {
+            formData.append("file", inputPhoto.files[0]);
+          }
+          const response = await fetch("/api/admin/product/update", {
+            method: "POST",
+            body: formData,
+          });
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            btnFormEdit.disable = false;
+            const resJson = await response.json();
+            document.getElementById("toast-notify-failed-message").textContent =
+              resJson["message"];
+            document
+              .getElementById("toast-notify-failed")
+              .classList.remove("d-none");
+          }
         }
         fromEditProduct.classList.add("was-validated");
       },

@@ -154,14 +154,14 @@
                                 <tr>
                                     <?php
                                     echo '<td class="total-cart">' . $sum_total_cart . '</td>'
-                                        ?>
+                                    ?>
                                 </tr>
                             </thead>
                         </table>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-right">
-                            <button id="checkout-btn" class="primary-btn chechout-btn">Purchase</button>
+                            <button id="checkout-btn" class="primary-btn chechout-btn">Checkout</button>
                         </div>
                     </div>
                 </div>
@@ -174,9 +174,9 @@
     ?>
     <script src="/assets/app/js/cart.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var product_is_select = [];
-            $('.product-select-checkout').change(function () {
+            $('.product-select-checkout').change(function() {
                 if ($(this).is(':checked')) {
                     var propertyId = $(this).attr('id').replace('checkbox-select-', '');
                     product_is_select.push(propertyId);
@@ -187,7 +187,7 @@
                     }
                 }
             });
-            $('.chechout-btn').click(function (e) {
+            $('.chechout-btn').click(function(e) {
                 e.preventDefault();
                 if (product_is_select.length !== 0) {
                     window.location.href = '/checkout?product_is_select=' + product_is_select.join(',');

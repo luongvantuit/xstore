@@ -5,6 +5,7 @@ use Respect\Validation\Validator;
 use XStore\Adapters\Rest\Controller;
 use XStore\Domains\Commands\CreateNewProductCommand;
 use XStore\Domains\Commands\DeleteProductCommand;
+use XStore\Domains\Commands\UpdateProductCommand;
 use XStore\ServiceLayers\Exceptions\NotFoundException;
 use XStore\X\Response\HttpResponse;
 use XStore\X\Response\HttpResponseJson;
