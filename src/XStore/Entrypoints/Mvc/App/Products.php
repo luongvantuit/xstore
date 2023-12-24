@@ -72,7 +72,7 @@
                     <?php endforeach; ?>
                 <?php else : ?>
                     <div class="w-100 d-flex flex-column justify-content-center align-items-center mt-5">
-                        <img src="/assets/img/svgs/undraw_pancakes.svg" alt="" class="w-50">
+                        <img src="/assets/img/svgs/undraw_not_found.svg" alt="" class="w-50">
                         <p class="h3 my-3">
                             Sorry! Not found product!
                         </p>
