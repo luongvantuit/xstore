@@ -13,7 +13,7 @@
 <body>
     <?php
     require_once __DIR__ . "/../Common/Header.php"
-    ?>
+        ?>
     <section class="hero-slider">
         <div class="hero-items owl-carousel">
             <div class="single-slider-item set-bg" data-setbg="./assets/img/slider-1.jpg">
@@ -62,16 +62,15 @@
                         <div class="single-features-ads second">
                             <img src="./assets/img/icons/coin.png" alt="">
                             <h4>100% Money back </h4>
-                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
-                                aliquet libero viverra cursus. </p>
+                            <p>We guarantee a 100% refund if the product is faulty or unsatisfactory. </p>
                         </div>
                     </div>
                     <div class="col">
                         <div class="single-features-ads">
                             <img src="./assets/img/icons/chat.png" alt="">
                             <h4>Online support 24/7</h4>
-                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
-                                aliquet libero viverra cursus. </p>
+                            <p>If you have any inquiries about the product or need assistance, please contact us at
+                                help@mail.com. </p>
                         </div>
                     </div>
                 </div>
