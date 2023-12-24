@@ -59,14 +59,6 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <div class="single-features-ads first">
-                            <img src="/assets/img/icons/f-delivery.png" alt="">
-                            <h4>Free shipping</h4>
-                            <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal
-                                esuada aliquet libero viverra cursus. </p>
-                        </div>
-                    </div>
-                    <div class="col">
                         <div class="single-features-ads second">
                             <img src="./assets/img/icons/coin.png" alt="">
                             <h4>100% Money back </h4>
