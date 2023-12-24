@@ -817,11 +817,14 @@ ol {
 
 .single-product-item .product-text {
 	text-align: center;
+	height: 72px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .single-product-item .product-text h6 {
 	color: #727272;
-	margin-bottom: 15px;
 }
 
 .single-product-item .product-text p {

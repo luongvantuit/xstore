@@ -33,6 +33,25 @@
     }
     $limit = -1;
     $products = Views::getProductsAgent($bus->getUow(), limit: $limit, offset: $limit * $currentPage) ?? [];
+    $product_in_stock = array();
+    $product_out_stock = array();
+    foreach ($products as $product) {
+
+        $properties = Views::getProperties($bus->getUow(), (int) $product["id"]);
+        if ($properties != null && sizeof($properties) > 0) {
+            $product["price"] = $properties[0]["price"];
+            array_push($product_in_stock, $product);
+        } else {
+            $product["price"] = "Out stock";
+            array_push($product_out_stock, $product);
+        }
+    }
+    $products = [];
+    // error_log($product_in_stock[0]->getName(), LOG_INFO);
+    array_push($products, ...$product_in_stock);
+    array_push($products, ...$product_out_stock);
+    // echo json_encode($product_in_stock);
+    
     ?>
     <section class="related-product spad">
         <div class="container">
@@ -44,8 +63,8 @@
                 </div>
             </div>
             <div class="row">
-                <?php if (sizeof($products) > 0) : ?>
-                    <?php foreach ($products as $product) : ?>
+                <?php if (sizeof($products) > 0): ?>
+                    <?php foreach ($products as $product): ?>
                         <div class="col-lg-3 col-sm-6">
                             <div class="single-product-item p-3">
                                 <figure>
@@ -59,18 +78,13 @@
                                         <?php echo $product["name"] ?>
                                     </h6>
                                     <?php
-                                    $properties = Views::getProperties($bus->getUow(), (int) $product["id"]);
-                                    if ($properties != null && sizeof($properties) > 0) {
-                                        echo '<p>' . $properties[0]["price"] . '</p>';
-                                    } else {
-                                        echo "<p>Out stock</p>";
-                                    }
+                                    echo '<p>' . $product["price"] . '</p>';
                                     ?>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php else : ?>
+                <?php else: ?>
                     <div class="w-100 d-flex flex-column justify-content-center align-items-center mt-5">
                         <img src="/assets/img/svgs/undraw_not_found.svg" alt="" class="w-50">
                         <p class="h3 my-3">
