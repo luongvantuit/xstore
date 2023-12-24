@@ -44,7 +44,7 @@
         $accessToken = $_COOKIE["accessToken"];
         try {
             $payload = (new Jwt(Configs::getSecretKey()))->decode($accessToken);
-            $id = (int)$payload["id"];
+            $id = (int) $payload["id"];
             /**
              * @var User $currentUser
              */
@@ -105,8 +105,8 @@
 
 
     <div class="container mt-2">
-        <?php if (sizeof($orders ?? []) > 0) : ?>
-            <?php foreach ($orders as $order_id => $order) : ?>
+        <?php if (sizeof($orders ?? []) > 0): ?>
+            <?php foreach ($orders as $order_id => $order): ?>
                 <?php
                 $total_price_order = 0;
                 $total_product = 0;
@@ -128,7 +128,7 @@
                 ?>
                 <div class="row mt-2">
                     <a href="/order?id=<?php echo $order_id ?>" class="col p-3 shadow-sm rounded">
-                        <?php foreach (($order["products"] ?? []) as $product) : ?>
+                        <?php foreach (($order["products"] ?? []) as $product): ?>
                             <?php
                             /**
                              * @var Property $property
@@ -138,25 +138,35 @@
                             ?>
                         <?php endforeach; ?>
                         <div class="d-flex w-100 justify-content-between">
-                            <p class=""><?php echo $origin_order->getCreatedAt()->format('l jS \o\f F Y h:i:s A') ?></p>
-                            <p class="h3 btn rounded-fill btn-primary"><?php echo convertOrderStatus($order["status"]) ?></p>
+                            <p class="">
+                                <?php echo $origin_order->getCreatedAt()->format('l jS \o\f F Y h:i:s A') ?>
+                            </p>
+                            <p class="h3 btn rounded-fill btn-primary">
+                                <?php echo convertOrderStatus($order["status"]) ?>
+                            </p>
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <div class="w-50 d-flex flex-row align-items-center justify-content-between">
                                 <img class="w-25" src="<?php echo $first_product->getPath() ?>" alt="">
-                                <div class="h4" style="color: black;"><?php echo $first_product->getName() ?></div>
-                                <p><?php echo 'x' . $product["number"] ?></p>
+                                <div class="h4" style="color: black;">
+                                    <?php echo $first_product->getName() ?>
+                                </div>
+                                <p>
+                                    <?php echo 'x' . $product["number"] ?>
+                                </p>
                             </div>
 
                             <div class=" w-50 d-flex flex-row align-items-center justify-content-center">
-                                <div class="h4" style="color: black;"><?php echo $total_price_order ?></div>
+                                <div class="h4" style="color: black;">
+                                    <?php echo $total_price_order ?>
+                                </div>
                             </div>
                         </div>
 
                     </a>
                 </div>
             <?php endforeach; ?>
-        <?php else : ?>
+        <?php else: ?>
             <div class="w-100 d-flex flex-column justify-content-center align-items-center mt-5">
                 <img src="/assets/img/svgs/undraw_pancakes.svg" alt="" class="w-50">
                 <p class="h3 my-3">

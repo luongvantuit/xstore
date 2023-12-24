@@ -13,7 +13,7 @@ class Product extends BaseModel
     #[ORM\Column(name: "name", type: 'string')]
     private string $name;
 
-    #[ORM\Column(name: "description", type: 'string', nullable: true)]
+    #[ORM\Column(name: "description", type: 'text', nullable: true)]
     private string|null $description;
 
     #[ORM\Column(name: "path", type: 'string')]
