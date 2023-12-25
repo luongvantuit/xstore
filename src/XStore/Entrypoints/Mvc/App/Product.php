@@ -191,9 +191,60 @@
         <div class="row d-lg-none d-block">
             <div class="col">
                 <?php
-                echo '<strong class="h4">' . ($currentProduct->getName()) . '</strong>'
+                echo '<strong class="h4">' . ($currentProduct->getName()) . '</strong>';
+
                 ?>
-                <button class="btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button>
+                <div class="mt-2">Color</div>
+                <div class="d-flex flex-row mt-1" style="gap: 4px;">
+
+                    <?php
+                    if (sizeof($propertiesBySizeIds) == 0) {
+                        echo '<a href="#" class="btn btn-outline-dark"><i class="fa-solid fa-xmark"></i></a>';
+                    } else {
+                        foreach ($propertiesBySizeIds as $property) {
+                            echo '<a href="/product?id=' . ($_GET["id"]) . '&size_id=' . ($sizeId) . '&property_id=' . ($property->getId()) . '" class="btn ' . ($property->getId() == $propertyId ? "rounded-circle" : "") . '" style="background-color:' . ($property->getColor()) . ';"><i class="fa-solid fa-xmark" style="color: transparent;"></i></a>';
+                        }
+                    }
+                    ?>
+                </div>
+                <div class="mt-2">Size</div>
+                <div class="d-flex flex-row mt-1" style="gap: 4px;">
+                    <?php
+
+                    foreach (range(0, 3) as $sId) {
+                        $size = 'Free Size';
+                        switch ($sId) {
+                            case 1:
+                                $size = "M";
+                                break;
+                            case 2:
+                                $size = "L";
+                                break;
+                            case 3:
+                                $size = "XL";
+                                break;
+                            default:
+                                $size = 'Free Size';
+                                break;
+                        }
+                        echo '<a href="/product?id=' . ($_GET["id"]) . '&size_id=' . ($sId) . '" class="btn ' . ($sId == $sizeId ? "btn-dark" : "") . '">' . ($size) . '</a>';
+                    }
+                    ?>
+                </div>
+                <?php
+                echo '<div class="mt-2"">Quantity <strong>' . ($propertyGlobal == null ? "0" : $propertyGlobal->getNumber()) . '</strong></div>'
+                ?>
+                <!-- <button class=" btn btn-outline-dark w-100 py-2 mt-2">Buy Now</button> -->
+                <?php
+                if ($currentUser == null) {
+                    echo '<button class="btn btn-dark w-100 py-2 mt-2" onclick="goToLogin()">Add To Cart</button>';
+                } else {
+                    if ($propertyGlobal != null && $propertyGlobal->getNumber() > 0) {
+                        echo '<button class="btn btn-dark w-100 py-2 mt-2" onclick="addToCart(' . ($propertyGlobal->getId()) . ')">Add To Cart</button>';
+                    } else {
+                        echo '<button class="btn btn-dark w-100 py-2 mt-2">Add To Cart</button>';
+                    }
+                }
                 ?>
                 <nav class="mt-2">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -208,7 +259,9 @@
                 </div>
 
             </div>
+
         </div>
+    </div>
     </div>
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
         <div id="toast-notify-failed" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
